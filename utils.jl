@@ -39,10 +39,6 @@ function hfun_list_posts(folders)
         # Get the date
         dt = pagevar(pages[i], :date)
         push!(dates, dt)
-
-        # Get the title
-        title = pagevar(pages[i], :title)
-        push!(titles, title)
     end
 
     # Print some debugging info
@@ -55,15 +51,33 @@ function hfun_list_posts(folders)
     # Make the buffer
     io = IOBuffer()
     for i in eachindex(pages)
-        title = titles[i]
-        date = dates[i]
+        title = pagevar(pages[i], :title)
+        date = pagevar(pages[i], :date)
+        page = pages[i]
+        @info "Page $i" title date page
         println(io, "<li>")
         println(io, "<span class=\"date\">$date</span>")
-        println(io, "<a href=\"/$pages[i]\">$title</a>")
+        println(io, "<a href=\"/$page\">$title</a>")
         println(io, "</li>")
     end
 
-    return String(take!(io))
+    # function pages_to_list(pages)
+    #     io = IOBuffer()
+    #     for page in pages
+    #         title = pagevar(page, :title)
+    #         date = pagevar(page, :date)
+    #         println(io, "<li>")
+    #         println(io, "<span class=\"date\">$date</span>")
+    #         println(io, "<a href=\"/$page\">$title</a>")
+    #         println(io, "</li>")
+    #     end
+    #     return String(take!(io))
+    # end
+
+
+    final_string = String(take!(io))
+    println(final_string)
+    return final_string
 end
 
 """

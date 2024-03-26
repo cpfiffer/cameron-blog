@@ -3,7 +3,7 @@ title= "Rust & More"
 date= Date(2018,06,03)
 +++
 
-For the past two or so weeks I've been spending a lot of time writing [Rust](https://www.rust-lang.org/). Rust is a really spectacularly designed language with perhaps the greatest package manager`r tufte::margin_note("It's called [Cargo](https://crates.io/).")` I have ever experienced. 
+For the past two or so weeks I've been spending a lot of time writing [Rust](https://www.rust-lang.org/). Rust is a really spectacularly designed language with perhaps the greatest package manager.It's called [Cargo](https://crates.io/). I've been continuously blown away by how lovely it is to write stuff in!
 
 Rust is fascinating to me because it's one of my first true compiled languages. In contrast to the other languages I'm somewhat good at:
 
