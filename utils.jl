@@ -23,7 +23,6 @@ function hfun_list_posts(folders)
     @info "" folders
     pages = String[]
     dates = []
-    titles = []
     root = Franklin.PATHS[:folder]
     for folder in folders
         startswith(folder, "/") && (folder = folder[2:end])
@@ -34,10 +33,13 @@ function hfun_list_posts(folders)
     filter!(x -> endswith(x, ".md"), pages)
     for i in eachindex(pages)
         @info pages[i]
+        dt1 = pagevar(pages[i], :date)
         pages[i] = replace(pages[i], r"\.md$" => "")
 
         # Get the date
         dt = pagevar(pages[i], :date)
+
+        @info "" dt dt1
         push!(dates, dt)
     end
 
