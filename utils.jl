@@ -20,66 +20,43 @@ string_to_date(d::Date) = d
 string_to_date(s) = Date(s, "yyyy-mm-dd")
 
 function hfun_list_posts(folders)
-    @info "" folders
-    pages = String[]
-    dates = []
-    root = Franklin.PATHS[:folder]
+    posts = []
     for folder in folders
-        startswith(folder, "/") && (folder = folder[2:end])
-        cd(root) do
-            foreach(((r, _, fs),) -> append!(pages, joinpath.(r, fs)), walkdir(folder))
-        end # do
+        for file in readdir(folder, join=true)
+            if endswith(file, ".md")
+                # Get title and date
+                title = pagevar(file, :title)
+                date = string_to_date(pagevar(file, :date))
+                if isnothing(title)
+                    @warn "No title found in $file"
+                    continue
+                end
+                if isnothing(date)
+                    @warn "No date found in $file"
+                    continue
+                end
+                push!(posts, (file, title, date))
+            end
+        end
     end
-    filter!(x -> endswith(x, ".md"), pages)
-    for i in eachindex(pages)
-        @info pages[i]
-        dt1 = pagevar(pages[i], :date)
-        pages[i] = replace(pages[i], r"\.md$" => "")
 
-        # Get the date
-        dt = pagevar(pages[i], :date)
+    # Sort by date
+    sort!(posts, by=x -> x[3], rev=true)
 
-        @info "" dt dt1
-        push!(dates, dt)
-    end
-
-    # Print some debugging info
-    println("pages: ", pages)
-    println("dates: ", dates)
-
-    # sort by date
-    pages = sort!(pages, by=x -> string_to_date(pagevar(x, :date)), rev=true)
-
-    # Make the buffer
+    # Make the list. Need to do raw HTML here.
     io = IOBuffer()
-    for i in eachindex(pages)
-        title = pagevar(pages[i], :title)
-        date = pagevar(pages[i], :date)
-        page = pages[i]
-        @info "Page $i" title date page
+    for (file, title, date) in posts
+        # Create relative path with no .md
+        file = replace(file, r"\.md$" => "")
+        @info file
+
         println(io, "<li>")
-        println(io, "<span class=\"date\">$date</span>")
-        println(io, "<a href=\"/$page\">$title</a>")
+        println(io, "<span class=\"date\">$(date)</span>")
+        println(io, "<a href=\"/$(file)\">$(title)</a>")
         println(io, "</li>")
     end
 
-    # function pages_to_list(pages)
-    #     io = IOBuffer()
-    #     for page in pages
-    #         title = pagevar(page, :title)
-    #         date = pagevar(page, :date)
-    #         println(io, "<li>")
-    #         println(io, "<span class=\"date\">$date</span>")
-    #         println(io, "<a href=\"/$page\">$title</a>")
-    #         println(io, "</li>")
-    #     end
-    #     return String(take!(io))
-    # end
-
-
-    final_string = String(take!(io))
-    println(final_string)
-    return final_string
+    return String(take!(io))
 end
 
 """

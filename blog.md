@@ -10,4 +10,4 @@ tags = ["syntax", "code", "image"]
 
 # Blog posts
 
-{{ list_posts /posts/ }}
+{{ list_posts blog }}
