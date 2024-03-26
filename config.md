@@ -19,7 +19,7 @@ ignore = ["node_modules/"]
 generate_rss = true
 website_title = "Cameron Pfiffer"
 website_descr = "Some stuff I think about"
-website_url   = "https://cameron.pfiffer.org"
+website_url   = "https://cameron.pfiffer.org/"
 +++
 
 <!--

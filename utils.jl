@@ -36,6 +36,10 @@ function hfun_list_posts(folders)
         push!(dates, dt)
     end
 
+    # Print some debugging info
+    println("pages: ", pages)
+    println("dates: ", dates)
+
     # sort by date
     pages = sort!(pages, by=x -> string_to_date(pagevar(x, :date)), rev=true)
 
