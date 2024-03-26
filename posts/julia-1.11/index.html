@@ -1,0 +1,51 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/styles/github.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/hypertext.css"> <link rel=icon  href="/assets/favicon.png"> <title>Cool Julia 1.11 features</title> <header> <nav> <a href="/">cameron pfiffer</a> ∘ <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/links/">links</a> <hr/> </nav> </header> <div class=franklin-content > <p>There&#39;s some cool Julia features in the <a href="https://github.com/JuliaLang/julia/blob/v1.11.0-alpha2/NEWS.md">NEWS files</a> I thought I&#39;d highlight. Very brief stuff but good to note.</p> <h2 id=the_memory_type_for_arrays ><a href="#the_memory_type_for_arrays" class=header-anchor >The <code>Memory</code> type for arrays</a></h2> <p>You can read more about the design of this feature <a href="https://hackmd.io/NnLXBeoyRymWgPtHYlW7-A?view#New-Builtin-functions">here</a>. It&#39;s a really good design doc and I&#39;d recommend taking a look. I&#39;ve summarized it here, but please check it out for a much more thoughtful treatment. Thanks to <a href="https://github.com/oscardssmith">Oscar Smith</a> for the work. </p> <p>Array types are powerful &#43; general, but have a few shortcomings:</p> <ul> <li><p>They use a lot of C, which means the Julia/LLVM compiler can&#39;t work magic</p> <li><p>There&#39;s lots of overhead &#40;also due to C calls&#41;</p> <li><p><code>push&#33;</code> is slow</p> <li><p>No element-wise atomic operations</p> </ul> <p>The <code>Memory</code> type is out, which is a low-level type that is intended to address some of this stuff. Some performance improvements:</p> <ul> <li><p>Array appends &#40;<code>push&#33;</code>&#41; are about 2.2x faster</p> <li><p>Empty array gen is 3x faster &#40;<code>Int&#91;&#93;</code>&#41;</p> <li><p>80&#37; faster for empty <code>Memory</code> implementers <code>Dict&#123;Int,Int&#125;</code></p> </ul> <p>The system image is a little larger.</p> <h2 id=lockable_for_carrying_locks_with_resources ><a href="#lockable_for_carrying_locks_with_resources" class=header-anchor ><code>Lockable</code> for carrying locks with resources</a></h2> <p>A common pattern when working with multithreaded code is to use a lock to <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#Data-race-freedom">protect a value</a> from multiple threads accessing it at the same time. For example, you might do something like</p> <pre><code class="julia hljs">x = [<span class=hljs-number >1</span>,<span class=hljs-number >2</span>,<span class=hljs-number >3</span>]
+lck = Threads.SpinLock()
+
+Threads.<span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:<span class=hljs-number >100</span>
+    position = i % <span class=hljs-number >3</span> + <span class=hljs-number >1</span>
+    lock(lck) <span class=hljs-keyword >do</span>
+        x[position] += <span class=hljs-number >1</span>
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <p>The above code is safe because the <code>lock</code> function ensures that only one thread can access the <code>x</code> array at a time – no data races.</p> <p><code>Lockable</code> is a super convenient feature where you can attach a lock to a resource, so you don&#39;t have to worry about managing the lock yourself. Here&#39;s an example:</p> <pre><code class="julia hljs">z = Lockable([<span class=hljs-number >1</span>,<span class=hljs-number >2</span>,<span class=hljs-number >3</span>], Threads.SpinLock())
+Threads.<span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:<span class=hljs-number >100</span>
+    position = i % <span class=hljs-number >3</span> + <span class=hljs-number >1</span>
+    lock(z) <span class=hljs-keyword >do</span> x
+        x[position] += <span class=hljs-number >1</span>
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <p>Notice that now we&#39;re just using <code>lock</code> on the raw resource <code>z</code> and the lock is managed for us. This is a nice feature because it makes the code cleaner and easier to read.</p> <h2 id=the_public_keyword ><a href="#the_public_keyword" class=header-anchor >The <code>public</code> keyword</a></h2> <p>The <code>public</code> keyword is applied to symbols that are considered part of the public API of a module, but are not exported when you call <code>using</code>. This is part of the wider discussion in the Julia community that exporting everything is not always the best idea – there&#39;s been a lot of clutter and such with people being trigger-happy about <code>export</code>s. Thanks to <a href="https://github.com/LilithHafner">Lilith Hafner</a> for the work.</p> <p>As an example, you might have a module like</p> <pre><code class="julia hljs"><span class=hljs-keyword >module</span> MyModule
+
+<span class=hljs-keyword >export</span> foo, bar
+
+foo() = println(<span class=hljs-string >&quot;foo&quot;</span>)
+bar() = println(<span class=hljs-string >&quot;bar&quot;</span>)
+baz() = println(<span class=hljs-string >&quot;baz&quot;</span>) <span class=hljs-comment ># not exported, have to use MyModule.baz()</span>
+
+<span class=hljs-keyword >end</span> <span class=hljs-comment ># module</span></code></pre> <p>when you <code>using MyModule</code>, you get <code>foo</code> and <code>bar</code> directly accessible:</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-keyword >using</span> MyModule
+
+julia&gt; foo()
+foo
+
+julia&gt; bar()
+bar
+
+julia&gt; MyModule.baz()</code></pre> <p>Now, you&#39;ll be able to use public functions like <code>foo</code> and <code>bar</code> without having to <code>export</code> them. This is a nice feature because it allows you to keep your module clean and not export everything.</p> <pre><code class="julia hljs"><span class=hljs-keyword >module</span> MyModule
+
+public foo
+<span class=hljs-keyword >export</span> bar
+
+foo() = println(<span class=hljs-string >&quot;foo&quot;</span>)
+bar() = println(<span class=hljs-string >&quot;bar&quot;</span>)
+baz() = println(<span class=hljs-string >&quot;baz&quot;</span>) <span class=hljs-comment ># not exported, have to use MyModule.baz()</span>
+
+<span class=hljs-keyword >end</span> <span class=hljs-comment ># module</span></code></pre> <p>Now you&#39;d have the following behavior:</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-keyword >using</span> MyModule
+
+julia&gt; MyModule.foo() <span class=hljs-comment ># have to use MyModule.foo() because it&#x27;s not exported</span>
+foo
+
+julia&gt; bar() <span class=hljs-comment ># can use bar() directly, as it is exported</span>
+bar
+
+julia&gt; MyModule.baz() <span class=hljs-comment ># no change</span>
+baz</code></pre> <p>I&#39;m curious to see how the community will use this stuff. I&#39;m not sure it&#39;s immediately obvious to me how I&#39;ll use it, but it seems like standard engineering practice. </p> <h2 id=the_greedy_thread_scheduler ><a href="#the_greedy_thread_scheduler" class=header-anchor >The <code>:greedy</code> thread scheduler</a></h2> <p>You can now use a greedy thread scheduler, which greedily works on iterator elements as they are produced. Greedy threads simply take the next available task in an iterator without regard to how hard the task is, how many threads there are, etc. If you have a lot of tasks that are all about the same difficulty, greedy scheduling can be a good choice. </p> <pre><code class="julia hljs">Threads.<span class=hljs-meta >@threads</span> :greedy <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:<span class=hljs-number >100</span>
+    println(i)
+<span class=hljs-keyword >end</span></code></pre> <p>Julia has the other scheduling options <code>:dynamic</code> and <code>:static</code>, which are more sophisticated and can be more efficient in some cases. <code>:static</code> will partition the iterator into chunks and assign each chunk to a thread, while <code>:dynamic</code> will dynamically allocate small chunks to threads. <code>:dynamic</code> is the default scheduler, but I suspect <code>:greedy</code> will be useful in some repeated, small multithreading tasks.</p> <p>The <a href="https://github.com/JuliaLang/julia/pull/52096">PR</a> is here. Thanks to <a href="https://seelengrab.github.io/about/">Valentin Bogad/Sukera</a>.</p> <div class=page-foot > Cameron Pfiffer. Last modified: March 26, 2024. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> <script src="/libs/highlight/highlight.min.js"></script> <script>hljs.highlightAll();hljs.configure({tabReplace: ' '});</script>

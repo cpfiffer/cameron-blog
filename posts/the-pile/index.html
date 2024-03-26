@@ -1,0 +1,149 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/styles/github.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/hypertext.css"> <link rel=icon  href="/assets/favicon.png"> <title>Getting the Pile</title> <header> <nav> <a href="/">cameron pfiffer</a> ∘ <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/links/">links</a> <hr/> </nav> </header> <div class=franklin-content > <p>I&#39;ve been interested in various NLP stuff lately, as one might imagine with all the ChatGPT stuff going on. Something I&#39;ve become interested in is methods for anlayzing large amounts of text. I&#39;ve been looking at the <a href="https://pile.eleuther.ai/">Pile</a> dataset, which is a commonly-used dataset in NLP. I believe ChatGPT has been trained on it, as have many other large <a href="https://en.wikipedia.org/wiki/Foundation_models">foundation models</a>. </p> <p>I&#39;m trying to download it to tinker with <a href="https://arxiv.org/abs/1905.10347">discrete normalizing flows</a> for token prediction. It&#39;s a big dataset – about 825GB uncompressed. Being a hardo, I wrote my only little cloning script to pull in all the new data. It&#39;s not very efficient, but it works. I&#39;ll probably write a better one later. </p> <p>If you want to use this code, make sure to change the <code>data_dir</code> variable to wherever you want to store the data.</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> HTTP
+<span class=hljs-keyword >using</span> ProgressMeter
+<span class=hljs-keyword >import</span> SHA
+<span class=hljs-keyword >import</span> Downloads
+
+<span class=hljs-comment ># Pile root directory</span>
+pile_root = <span class=hljs-string >&quot;https://the-eye.eu/public/AI/pile/&quot;</span>
+data_dir = <span class=hljs-string >&quot;/data/the-pile/mirror/&quot;</span>
+
+<span class=hljs-comment ># Links path</span>
+links_path = joinpath(data_dir, <span class=hljs-string >&quot;links.txt&quot;</span>)
+
+<span class=hljs-keyword >function</span> update_progress(meter, total, now)
+    meter.n = total
+    <span class=hljs-keyword >if</span> now == total
+        <span class=hljs-comment ># println(&quot;Done!&quot;)</span>
+    <span class=hljs-keyword >else</span>
+        update!(meter, now)
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-string >&quot;&quot;&quot;
+Extract the links from a url and return them as a vector. Remove any any links that include
+&quot;..&quot; in the path.
+&quot;&quot;&quot;</span>
+<span class=hljs-keyword >function</span> extract_links(url)
+    <span class=hljs-comment ># Send simple get query to pile root directory</span>
+    response = HTTP.get(url)
+    body = <span class=hljs-built_in >String</span>(response.body)
+
+    <span class=hljs-comment ># Extract hrefs from html</span>
+    hrefs = eachmatch(<span class=hljs-string >r&quot;(?&lt;=href=\&quot;)[^\&quot;]+&quot;</span>, body)
+    links = map(x -&gt; url * x.match, hrefs)
+    filter!(x -&gt; basename(dirname(x)) != <span class=hljs-string >&quot;..&quot;</span>, links)
+
+    <span class=hljs-comment ># # Write links to file</span>
+    <span class=hljs-comment ># open(links_path, &quot;w&quot;) do f</span>
+    <span class=hljs-comment >#     for link in links</span>
+    <span class=hljs-comment >#         println(f, link)</span>
+    <span class=hljs-comment >#     end</span>
+    <span class=hljs-comment ># end</span>
+
+    <span class=hljs-comment ># Find all the links that are directories</span>
+    dirs = filter(x -&gt; endswith(x, <span class=hljs-string >&quot;/&quot;</span>), links)
+
+    <span class=hljs-comment ># Call extract_links on each directory and concatenate the results</span>
+    <span class=hljs-keyword >for</span> dir <span class=hljs-keyword >in</span> dirs
+        links = vcat(links, extract_links(dir))
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># Remove duplicates</span>
+    <span class=hljs-keyword >return</span> unique(links)
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-keyword >if</span> !isfile(links_path)
+    <span class=hljs-comment ># Send simple get query to pile root directory</span>
+    links = extract_links(pile_root)
+
+    <span class=hljs-comment ># Write links to file</span>
+    open(links_path, <span class=hljs-string >&quot;w&quot;</span>) <span class=hljs-keyword >do</span> f
+        <span class=hljs-keyword >for</span> link <span class=hljs-keyword >in</span> links
+            println(f, link)
+        <span class=hljs-keyword >end</span>
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># Fink the link that contains SHA</span>
+    sha_link = links[findfirst(x -&gt; occursin(<span class=hljs-string >&quot;SHA&quot;</span>, x), links)]
+
+    <span class=hljs-comment ># Download the SHA file if it doesn&#x27;t exist</span>
+    ddir = joinpath(data_dir, basename(sha_link))
+    !isdir(dirname(ddir)) &amp;&amp; mkdir(dirname(ddir))
+    <span class=hljs-keyword >if</span> !isfile(ddir)
+        download(sha_link, ddir)
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># Read the SHA file</span>
+sha = open(ddir) <span class=hljs-keyword >do</span> f
+    read(f, <span class=hljs-built_in >String</span>)
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># Split the SHA file into lines</span>
+lines = split(sha, <span class=hljs-string >&quot;\n&quot;</span>)
+
+<span class=hljs-comment ># Split each line into SHA and file name</span>
+lines = map(x -&gt; split(x, <span class=hljs-string >&quot; &quot;</span>), lines)
+
+<span class=hljs-comment ># Filter out empty lines</span>
+lines = filter(x -&gt; length(x) &gt; <span class=hljs-number >0</span>, [filter(x -&gt; length(x) &gt; <span class=hljs-number >0</span>, line) <span class=hljs-keyword >for</span> line <span class=hljs-keyword >in</span> lines])
+
+<span class=hljs-comment ># Separate into filename and sha</span>
+filenames = [joinpath(line[<span class=hljs-number >2</span>]) <span class=hljs-keyword >for</span> line <span class=hljs-keyword >in</span> lines]
+shas = [line[<span class=hljs-number >1</span>] <span class=hljs-keyword >for</span> line <span class=hljs-keyword >in</span> lines]
+
+<span class=hljs-comment ># Create a dictionary of filenames and shas</span>
+sha_dict = <span class=hljs-built_in >Dict</span>(zip(filenames, shas))
+
+<span class=hljs-comment ># Open links file</span>
+links = open(links_path) <span class=hljs-keyword >do</span> f
+    readlines(f)
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># Filter out links ending in /</span>
+filter!(x -&gt; !endswith(x, <span class=hljs-string >&quot;/&quot;</span>), links)
+
+<span class=hljs-comment ># For each link, check if it&#x27;s been downloaded</span>
+<span class=hljs-keyword >for</span> link <span class=hljs-keyword >in</span> links
+    <span class=hljs-comment ># Get the filename</span>
+    file_relative = replace(link, pile_root =&gt; <span class=hljs-string >&quot;&quot;</span>)
+
+    <span class=hljs-comment ># Check if the file exists</span>
+    file = joinpath(data_dir, file_relative)
+
+    <span class=hljs-comment ># Determine whether to re-download the file</span>
+    download_file = <span class=hljs-keyword >if</span> isfile(file)
+        <span class=hljs-comment ># Check if the file is the correct size</span>
+        file_size = filesize(file)
+
+        <span class=hljs-keyword >if</span> file_size == <span class=hljs-number >0</span> 
+            <span class=hljs-literal >true</span>
+        <span class=hljs-keyword >else</span>
+            sha_local = open(file) <span class=hljs-keyword >do</span> f
+                SHA.sha2_256(f)
+            <span class=hljs-keyword >end</span>
+
+            <span class=hljs-keyword >if</span> haskey(sha_dict, <span class=hljs-string >&quot;./&quot;</span> * file_relative)
+                sha_local != sha_dict[<span class=hljs-string >&quot;./&quot;</span> * file_relative]
+            <span class=hljs-keyword >else</span>
+                <span class=hljs-literal >true</span>
+            <span class=hljs-keyword >end</span>
+        <span class=hljs-keyword >end</span>
+    <span class=hljs-keyword >else</span>
+        <span class=hljs-literal >true</span>
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># Download the file if necessary</span>
+    <span class=hljs-keyword >if</span> download_file
+        <span class=hljs-comment ># Create the directory if it doesn&#x27;t exist</span>
+        !isdir(dirname(file)) &amp;&amp; mkdir(dirname(file))
+
+        <span class=hljs-comment ># Make the meter</span>
+        p = ProgressMeter.Progress(<span class=hljs-number >1</span>; desc=file_relative, dt=<span class=hljs-number >1</span>)
+        update_fun(total, now) = update_progress(p, total, now)
+
+        <span class=hljs-comment ># Download the file</span>
+        println(<span class=hljs-string >&quot;Downloading <span class=hljs-variable >$file</span>&quot;</span>)
+        Downloads.download(link, file, progress=update_fun)
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <div class=page-foot > Cameron Pfiffer. Last modified: March 26, 2024. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> <script src="/libs/highlight/highlight.min.js"></script> <script>hljs.highlightAll();hljs.configure({tabReplace: ' '});</script>
