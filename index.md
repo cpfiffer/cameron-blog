@@ -5,6 +5,8 @@
 
 Howdy, I'm Cameron Pfiffer.
 
+![A picture of my jolly face!](/assets/me.png)
+
 I'm an engineer, statistician, economist, and hammock enthusiast. I like writing code for supercomputers. I love [code](https://www.github.com/cpfiffer), statistics, rowing, and [pianos](https://www.youtube.com/channel/UCTcsdFvTCGyJ8vSp3iHuTyg?view_as=subscriber). Learning is my favorite thing.
 
 I'm a big lover of the [Julia](https://julialang.org/) programming language. I've worked on the [Turing.jl](https://turinglang.org/stable/) project for Bayesian inference. I also head up the [JuliaGenAI](http://juliagenai.org/) project along with [Jan Siml](https://siml.earth/), which is a collection of tools for using Julia in generative AI contexts.
@@ -18,7 +20,6 @@ I have a master's in finance from the [ICMA Centre](http://www.icmacentre.ac.uk/
 (which itself is part of the [University of Reading](https://www.reading.ac.uk/)), and a BSc in Technical Theater 
 from [Southern Oregon University](https://sou.edu/). I'm often a developer for [Turing.jl](https://turing.ml), a probabilistic programming tool, though have since fallen out of active development.
 
-![A picture of my jolly face!](/assets/me.png)
 
 
 I used to be an alpaca rancher and work for Cirque du Soleil. I'm really fun at parties, and I am a fantastic dancer.
