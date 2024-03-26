@@ -20,8 +20,10 @@ string_to_date(d::Date) = d
 string_to_date(s) = Date(s, "yyyy-mm-dd")
 
 function hfun_list_posts(folders)
+    @info "" folders
     pages = String[]
     dates = []
+    titles = []
     root = Franklin.PATHS[:folder]
     for folder in folders
         startswith(folder, "/") && (folder = folder[2:end])
@@ -31,9 +33,16 @@ function hfun_list_posts(folders)
     end
     filter!(x -> endswith(x, ".md"), pages)
     for i in eachindex(pages)
+        @info pages[i]
         pages[i] = replace(pages[i], r"\.md$" => "")
+
+        # Get the date
         dt = pagevar(pages[i], :date)
         push!(dates, dt)
+
+        # Get the title
+        title = pagevar(pages[i], :title)
+        push!(titles, title)
     end
 
     # Print some debugging info
@@ -43,29 +52,17 @@ function hfun_list_posts(folders)
     # sort by date
     pages = sort!(pages, by=x -> string_to_date(pagevar(x, :date)), rev=true)
 
-    return pages_to_list(pages)
-    # return list_pages_by_date(pages)
-end
-
-"""
-Accepts a vector like
-
-["posts/good-book", "posts/information-theory", "posts/julia-1.11", "posts/juliacon-2023"]
-
-and converts it into HTML list items.
-
-Titles are retrieved from `pagevar(path, :title)`.
-"""
-function pages_to_list(pages)
+    # Make the buffer
     io = IOBuffer()
-    for page in pages
-        title = pagevar(page, :title)
-        date = pagevar(page, :date)
+    for i in eachindex(pages)
+        title = titles[i]
+        date = dates[i]
         println(io, "<li>")
         println(io, "<span class=\"date\">$date</span>")
-        println(io, "<a href=\"/$page\">$title</a>")
+        println(io, "<a href=\"/$pages[i]\">$title</a>")
         println(io, "</li>")
     end
+
     return String(take!(io))
 end
 
