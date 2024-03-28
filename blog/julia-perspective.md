@@ -3,7 +3,7 @@ title= "Julia"
 date= Date(2024,03,27)
 +++
 
-I have some thoughts on the future of the Julia language, as prompted by [Mason Yahr](https://twitter.com/yahrMason/status/1772445238730084642) on X. As many of you all know I'm kind of a fanboy, but I too have noticed kind of a slowdown.
+I have some thoughts on the future of the [Julia language](https://julialang.org), as prompted by [Mason Yahr](https://twitter.com/yahrMason/status/1772445238730084642) on X. As many of you all know I'm kind of a fanboy, but I too have noticed kind of a slowdown.
 
 So, here's a few thoughts on the good + the bad.
 
