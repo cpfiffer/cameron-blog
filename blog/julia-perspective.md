@@ -3,7 +3,7 @@ title= "Julia"
 date= Date(2024,03,27)
 +++
 
-I have some thoughts on the future of @JuliaLanguage. As many of you all know I'm kind of a fanboy, but I too have noticed kind of a slowdown.
+I have some thoughts on the future of the Julia language, as prompted by [Mason Yahr](https://twitter.com/yahrMason/status/1772445238730084642) on X. As many of you all know I'm kind of a fanboy, but I too have noticed kind of a slowdown.
 
 So, here's a few thoughts on the good + the bad.
 
@@ -49,13 +49,13 @@ We tried to move everyone to Zulip, but of course many stayed in Slack, and now 
 
 All of this is a massive problem, especially now that we have all these language models that rely on having a large corpus of available text to train on. A lot of our question-answer code is locked away in a Slack history we'll never see, and that's made it harder for language models to help us write good Julia code.
 
-**People have decided that Python is fine.** Look. I hate Python. If you're reading this blog or know of me, you may know this about me. It's a bad language that's had an endless amount of shit piled on top of it. I don't like a lot of the language decisions, the package management, etc. Lots of points for me to get irrationally angry about.
+**People have decided that Python is fine, and it kind of is.** Look. I hate Python. If you're reading this blog or know of me, you may know this about me. It's a bad language that's had an endless amount of shit piled on top of it. I don't like a lot of the language decisions, the package management, etc. Lots of points for me to get irrationally angry about.
 
 However.
 
 Python is approachable. And it is such a terrible language by itself, but it is an **incredible** glue language. Most of what people use Python for these days has very little to do with Python. It's all just calling out to code written in C++ or whatever, and slapping this easy-to-read syntax on top of it. This works really well for python, because you can have hardo-numeric-engineer types go write big crazy stuff and then have users who just want to push a button and make a neural net go.
 
-Ultimately, this is what you want a lot of computing to be -- easy. If you are a user you don't want to think about the bajillion person-hours that went into making Pytorch work, because it is a miracle of modern computing. You want buttons and magic and Python gives you that.
+Ultimately, this is what you want a lot of computing to be -- easy. If you are a user you don't want to think about the bajillion person-hours that went into making Pytorch work, because it is a miracle of modern computing. You want buttons and magic and Python gives you that. We can all just settle for Python and be fine with it. Lots of people love Python, it works for them, and it gives you access to the largest ecosystem of high-quality code in the history of computing.
 
 Julia _can_ give you this, but it is harder. There's just not been the resources to make this kind of thing available. Python has been pulling ahead of basically everything for as long as I can remember. More use, more funds, more use, more funds, the loop continues. Julia, even though it _can_ do all the things that Python + good languages can do, it would take a lot of work to get there. It is very hard to compete with Python.
 
