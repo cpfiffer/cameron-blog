@@ -13,6 +13,50 @@ So, here's a few thoughts on the good + the bad.
 
 **Julia is a good language.** Once I was hooked on the beauty, I started to appreciate how good a language it is, and how much my brain *loves it*. Julia can be a functional language if you want. It can be strongly typed, but you can also mostly ignore the types as you go and let the compiler handle it. It's flexible when you want it to be and structured when you need it. It's fast, if you write it correctly, and it's full of so many fun little bells and whistles that I am still constantly learning beautiful new things about the language. [Multiple dispatch](https://docs.julialang.org/en/v1/manual/methods/), dispatching to functions based on the type of the inputs, is a really incredible tool that's a blast to use. Multiple dispatch is also why the language is composable, meaning that you can pretty easily borrow and mix things together across packages.
 
+**Julia is powerful as fuck.** You can make some really amazing things in Julia basically by just building up a type system for your problem. The per-line efficiency of the language is really high, meaning that it is easy to compose a few functions that are extremely powerful and flexible. The compiler and the type system do a lot of work for you and can get you from 0 to 100 in a very small amount of code. Go check out my favorite package, [BeautifulAlgorithms.jl](https://github.com/mossr/BeautifulAlgorithms.jl), which implements very dense algorithms.
+
+Here's an example of a dense neural net:
+
+```julia
+using LinearAlgebra
+
+function multi_layer_neural_network(x, 𝐖, φ, 𝐠)
+    𝐡ᵢ = φ(x)
+    for (i,g) in enumerate(𝐠)
+        𝐡ᵢ = map(𝐰ⱼ -> g(𝐰ⱼ ⋅ 𝐡ᵢ), 𝐖[i])
+    end
+    𝐡ᵢ ⋅ last(𝐖)
+end
+```
+
+or, as a one-liner:
+
+```julia
+neural_network(x, 𝐕, 𝐰, φ, g) = 𝐰 ⋅ map(𝐯ⱼ -> g(𝐯ⱼ ⋅ φ(x)), 𝐕)
+```
+
+Gaussian processes are similarly gorgeous:
+
+```julia
+using Distributions
+using LinearAlgebra
+
+struct GaussianProcess
+    m::Function # mean function
+    k::Function # covariance function
+end
+
+𝛍(X, m) = [m(𝐱) for 𝐱 in X]
+𝚺(X, k) = [k(𝐱,𝐱′) for 𝐱 in X, 𝐱′ in X]
+
+function Base.rand(𝒢::GaussianProcess, X, inflation=1e-6)
+    𝒩 = MvNormal(𝛍(X, 𝒢.m), 𝚺(X, 𝒢.k) + inflation*I)
+    return rand(𝒩)
+end
+```
+
+There's more, but go checkout the repo.
+
 **Julia is state-of-the-art for scientific computing.** Julia was, and still mostly is, a scientific computing language. I was one of the rarer Julia users who was not a refugee from scientific computing elsewhere. Most of the users of Julia at that time (from what I remember) were scientists -- people who hated matlab and wanted out. Think academics. People who do numerical computing at massive scale and really need the speed. There's lots of folks who do climate/ocean/physics/etc. in Julia because they can sketch out a model super quickly and get code that is reasonably performant in a fraction of the dev time it would take to write it in C++ or Fortran or whatever.
 
 **The package management is world-class.** Julia's Pkg.jl is based on Rust's `cargo`, and it is incredible. I do not worry about reproducible environments, installing packages, etc. It just happens without me thinking about it. No stupid `pip` nightmares, no managing nightmarish virtual environments, etc. It's just good shit.
