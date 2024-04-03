@@ -1,0 +1,61 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/styles/github.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/hypertext.css"> <link rel=icon  href="/assets/favicon.png"> <title>Nothingness in Julia</title> <header> <nav> <a href="/">cameron pfiffer</a> ∘ <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/links/">links</a> <hr/> </nav> </header> <div class=franklin-content > <p>If you ever work in Julia, something you&#39;ll notice is that lots of people and the language server will recommend that you use <code>isnothing&#40;x&#41;</code> or <code>x &#61;&#61;&#61; nothing</code> instead of the value comparison <code>x &#61;&#61; nothing</code>. This is also true of the <code>ismissing</code> functionality for missing values.</p> <p>Good discussion <a href="https://discourse.julialang.org/t/x-nothing-vs-x-isa-nothing/64546/13">here</a>, and a great Stack Overflow answer <a href="https://stackoverflow.com/a/38638838/6149469">here</a>.</p> <p>How meaningful is this, though? I decided to do some benchmarking to see how much of a difference this makes.</p> <p>The TLDR is that <code>x &#61;&#61; nothing</code> isn&#39;t specialized to checking <code>nothing</code>, whereas <code>isnothing</code> and <code>x &#61;&#61;&#61; nothing</code> are. <code>x &#61;&#61;&#61; nothing</code> is a core language feature &#40;I believe&#41; and <code>isnothing</code> is compile time dispatched and is thus relatively quick. <code>x &#61;&#61; nothing</code> is a value comparison and I think requires some extra stuff to happen on top.</p> <p>There&#39;s a speed component to this too – <code>isnothing</code> is the fastest on my machine, <code>x &#61;&#61;&#61; nothing</code> is the second fastest, and <code>x &#61;&#61; nothing</code> is the slowest.</p> <p><code>isnothing</code>:</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> isnothing(x)
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >1.539</span> ns … <span class=hljs-number >24.880</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >1.579</span> ns              ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >1.589</span> ns ±  <span class=hljs-number >0.269</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+   ▁▃▁          ██
+  ▃███▄▃▂▂▂▂▂▂▂███▇▆▃▂▂▂▂▁▁▂▃▅▅▃▃▂▂▂▂▂▁▁▁▂▂▂▂▂▂▂▂▁▁▁▁▁▂▂▂▂▂▂ ▃
+  <span class=hljs-number >1.54</span> ns        Histogram: frequency by time         <span class=hljs-number >1.7</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <p><code>x &#61;&#61;&#61; nothing</code>:</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> x === <span class=hljs-literal >nothing</span>
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >1.755</span> ns … <span class=hljs-number >5.381</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >1.772</span> ns             ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >1.791</span> ns ± <span class=hljs-number >0.102</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+             █▃▄▃▁
+  ▂▂▂▂▂▂▃▃▄▆▇██████▆▅▄▃▂▂▁▂▂▂▂▂▂▂▁▁▁▁▁▁▂▂▂▂▂▂▃▃▇▅▆▇▇▇▆▆▄▄▃▃ ▃
+  <span class=hljs-number >1.76</span> ns        Histogram: frequency by time       <span class=hljs-number >1.82</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <p>The bad one, <code>x &#61;&#61; nothing</code>:</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> x == <span class=hljs-literal >nothing</span>
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >2.419</span> ns … <span class=hljs-number >10.722</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >2.681</span> ns              ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >2.693</span> ns ±  <span class=hljs-number >0.235</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+    █       ▂          ▁▁      ▅▄    ▁
+  ▂▄█▂▁▅▄▃▁▆██▂▁▅▇▅▁▂▄▅██▂▅▆▂▁▅██▂▁▂██▃▂▂▂▂▂▂▂▂▁▁▂▄▃▁▁▁▂▃▂▁▁ ▃
+  <span class=hljs-number >2.42</span> ns        Histogram: frequency by time        <span class=hljs-number >3.11</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <p>This is usually why the language server will recommend that you use <code>isnothing</code> or <code>x &#61;&#61;&#61; nothing</code> instead.</p> <h2 id=missing_values ><a href="#missing_values" class=header-anchor >Missing values</a></h2> <p>The same is generally true of missing values. Missing values <a href="https://docs.julialang.org/en/v1/manual/faq/#faq-nothing">differ from <code>nothing</code></a> in that they are used to represent missing data – <code>nothing</code> is returned by default when a return value is not otherwise specified. <code>missing</code> is more for cases where you don&#39;t know a value, e.g. if you don&#39;t have data for an observation in a statistical model.</p> <p>Interestingly, on Julia 1.10.2, the fastest is not one of the strict comparisons <code>x &#61;&#61;&#61; missing</code> or <code>ismissing&#40;x&#41;</code>, but a raw comparison using <code>&#61;&#61;</code>. Not really sure what&#39;s up with that, but whatever.</p> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> x == <span class=hljs-literal >missing</span>
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >0.883</span> ns … <span class=hljs-number >7.668</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >0.890</span> ns             ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >0.896</span> ns ± <span class=hljs-number >0.107</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+         ▁ ▇ ██ ▅ ▂
+  ▂▂▁▄▁▆▁█▁█▁██▁█▁█▁▇▁▆▁▅▄▁▄▁▃▁▃▁▃▁▃▃▁▃▁▃▁▂▁▂▁▂▂▁▂▁▂▁▂▁▂▁▂▂ ▃
+  <span class=hljs-number >0.883</span> ns       Histogram: frequency by time      <span class=hljs-number >0.914</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> ismissing(x)
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >1.757</span> ns … <span class=hljs-number >5.822</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >1.776</span> ns             ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >1.783</span> ns ± <span class=hljs-number >0.088</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+           ▁▁▂█    ▂█▁▁▁▁
+  ▂▂▂▂▂▃▆▆▇████▇▆▅███████▅▂▂▂▂▂▂▂▂▂▂▁▂▂▂▂▂▂▂▂▃▃▃▃▃▃▂▃▃▃▃▃▃▃ ▃
+  <span class=hljs-number >1.76</span> ns        Histogram: frequency by time       <span class=hljs-number >1.82</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <pre><code class="julia hljs">julia&gt; <span class=hljs-meta >@benchmark</span> x === <span class=hljs-literal >missing</span>
+BenchmarkTools.Trial: <span class=hljs-number >10000</span> samples with <span class=hljs-number >1000</span> evaluations.
+ Range (min … max):  <span class=hljs-number >1.540</span> ns … <span class=hljs-number >4.822</span> ns  ┊ GC (min … max): <span class=hljs-number >0.00</span>% … <span class=hljs-number >0.00</span>%
+ Time  (median):     <span class=hljs-number >1.554</span> ns             ┊ GC (median):    <span class=hljs-number >0.00</span>%
+ Time  (mean ± σ):   <span class=hljs-number >1.561</span> ns ± <span class=hljs-number >0.081</span> ns  ┊ GC (mean ± σ):  <span class=hljs-number >0.00</span>% ± <span class=hljs-number >0.00</span>%
+
+           ▂▃▄▅▇▇█▇▅▄ ▃
+  ▂▂▂▃▄▅▅▇███████████▁█▇▅▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▂▂▂▂▂▃▂▃▃▃▃▃▃▃▃▃▃▃ ▄
+  <span class=hljs-number >1.54</span> ns        Histogram: frequency by time       <span class=hljs-number >1.59</span> ns &lt;
+
+ Memory estimate: <span class=hljs-number >0</span> bytes, allocs estimate: <span class=hljs-number >0.</span></code></pre> <div class=page-foot > Cameron Pfiffer. Last modified: April 03, 2024. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> <script src="/libs/highlight/highlight.min.js"></script> <script>hljs.highlightAll();hljs.configure({tabReplace: ' '});</script>
