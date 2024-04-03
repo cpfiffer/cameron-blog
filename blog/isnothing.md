@@ -1,6 +1,6 @@
 +++
 title= "Nothingness in Julia"
-date= Date(2024,03,27)
+date= Date(2024,04,03)
 +++
 
 If you ever work in Julia, something you'll notice is that lots of people and the language server will recommend that you use `isnothing(x)` or `x === nothing` instead of the value comparison `x == nothing`. This is also true of the `ismissing` functionality for missing values.
