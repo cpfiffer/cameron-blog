@@ -119,7 +119,7 @@ of mind thoughts help contextualize the current top of mind so we can provide mo
 I'll draw a few doodles as we go along. I currently hate the UI as implemented, so doodles
 abstract a bit away from that and just communicate the core ideas. They are not good doodles, forgive me.
 
-![](/comind/tom.png)
+![](/assets/comind/tom.png)
 
 Each time the top of mind is updated, I show you every thought that you might be interested in adding
 to your top of mind. This is a combination of thoughts that are linked to the current top of mind,
@@ -150,7 +150,7 @@ at all times, and they are used to help you find thoughts that are relevant to y
 top of mind once you've linked a thought to a concept. Once you've linked to a concept, we get an additional 
 set of information about what would be relevant to your knowledge graph.
 
-![](/comind/concept-linking.png)
+![](/assets/comind/concept-linking.png)
 
 This is useful because concepts come to life. Concepts can talk back to you and summarize the current 
 discussion within the concept, as well as provide useful, customized information that relates every thought
@@ -174,7 +174,7 @@ their thoughts can be linked to. I provide a simple and clean text-based interfa
 can navigate reasonably well (with some effort currently, as my structured text generation tooling is
 not yet complete). You can talk to them, they can show up unprompted and talk to you.
 
-![](/comind/concept-talk.png)
+![](/assets/comind/concept-talk.png)
 
 
 [^cominds]: The "cominds as users" thing has bitten me in the ass a few times when they all try to talk to each other. I call these comind cascades where it's kind of hard to stop them from continuously asking each other what they think. I've tested some new feature out and they start talking to each other in an infinite loop. At one point, they invented something called a "void cafe" and regularly congraulated me for adding notifications to comind. It's fun and I love it.
@@ -204,7 +204,7 @@ Take this example, where my brother Quinlan and I are sharing some thoughts. He 
 into his top of mind, and is recommended thought B, which I wrote. If he links thought B to his
 top of mind, his brain now has access to B _and_ my other thought A, because A and B are linked.
 
-![](/comind/social.png)
+![](/assets/comind/social.png)
 
 
 Comind in some sense resembles a mixture between twitter, a wiki, and a group chat. You can have
@@ -232,7 +232,7 @@ Mom and Q can then respond to my thoughts, and we can have a conversation about 
 so now the knowledge graph knows that mom has preferences for houses with a certain style. Quinlan opts out of the
 discussion so now the knowledge graph knows that he doesn't love his family.
 
-![](/comind/social-tom.png)
+![](/assets/comind/social-tom.png)
 
 The real power of shared tops of mind is that you can use it to collaborate on a knowledge graph. Any time
 the top of mind is updated, everyone in the shared top of mind has access to thoughts that relate
@@ -348,7 +348,7 @@ aren't surmountable with a small amount of effort.
 
 Here's what it used to look like:
 
-![](/comind/comind-1.jpg)
+![](/assets/comind/comind-1.jpg)
 
 It wasn't a great prototype though. It was really unguided, kind of ugly, 
 basically just a worse version of every other thing that exists. It also
@@ -379,14 +379,14 @@ curly braces asks a specific comind to do something for you, like write a
 blog post, tell you something interesting about your knowledge graph,
 or whine about being in the void (there are some weird cominds).
 
-![](/comind/logo-wide.png)
+![](/assets/comind/logo-wide.png)
 
 The logo also compresses down into a smaller logo that says {co}. Co is 
 "god" of comind in that I put a lot of resources into running one very
 large language model that talks to basically everyone, creates new cominds,
 monitors the zeitgeist, etc.
 
-![](/comind/logo-short.png)
+![](/assets/comind/logo-short.png)
 
 Woops, that's big. Whatever it looks fine. As an additional fun fact, this logo
 is a hand-modified version of the [Bungee Shade](https://fonts.google.com/specimen/Bungee+Shade)
@@ -418,7 +418,7 @@ I got rid of the big markdown editor that was front and center.
 I moved the focus of the app away from a large, blank, unfilled
 note screen to a small text box at the top. 
 
-![](/comind/comind-2.jpg)
+![](/assets/comind/comind-2.jpg)
 
 This way, I hoped it would feel to the user
 that their thoughts are not imposing boxes to be filled but small things to be collected
