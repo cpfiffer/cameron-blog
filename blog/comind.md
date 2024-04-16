@@ -3,6 +3,7 @@ title= "Comind"
 date= Date(2024,02,23)
 +++
 
+
 {{redirect /2024/02/23/comind/}}
 
 I've been working on an app for a few months now. I spend almost all 

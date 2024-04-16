@@ -7,9 +7,9 @@ Howdy, I'm Cameron Pfiffer.
 
 I'm an engineer, statistician, economist, and hammock enthusiast. I like writing code for supercomputers. I love [code](https://www.github.com/cpfiffer), statistics, rowing, and [pianos](https://www.youtube.com/channel/UCTcsdFvTCGyJ8vSp3iHuTyg?view_as=subscriber). Learning is my favorite thing.
 
-I'm a big lover of the [Julia](https://julialang.org/) programming language. I've worked on the [Turing.jl](https://turinglang.org/stable/) project for Bayesian inference. I also head up the [JuliaGenAI](http://juliagenai.org/) project along with [Jan Siml](https://siml.earth/), which is a collection of tools for using Julia in generative AI contexts.
+I am building a communal thinking platform called [Comind](https://blog.comind.me). You can read more about the thesis of the project [here](/posts/comind), and see the Patreon [here](https://www.patreon.com/comind).
 
-I'm building a communal thinking platform called [Comind](https://www.comind.me). You can read more about the thesis of the project [here](/2024/02/23/comind/), and see the Patreon [here](https://www.patreon.com/comind). There's a [blog for the project](https://blog.comind.me) as well.
+I'm a big lover of the [Julia](https://julialang.org/) programming language. I've worked on the [Turing.jl](https://turinglang.org/stable/) project for Bayesian inference. I also head up the [JuliaGenAI](http://juliagenai.org/) project along with [Jan Siml](https://siml.earth/), which is a collection of tools for using Julia in generative AI contexts.
 
 I am a postdoctoral researcher at [Stanford's GSB](https://www.gsb.stanford.edu/). 
 I work on industrial organization with [Shoshana Vasserman](https://shoshanavasserman.com/). 
