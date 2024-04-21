@@ -28,8 +28,22 @@ function hfun_list_posts(folders)
                 title = pagevar(file, :title)
                 date = string_to_date(pagevar(file, :date))
                 if isnothing(title)
-                    @warn "No title found in $file"
-                    continue
+                    @warn "No title found in $file, trying to use # line"
+
+                    # Try to find the first line that starts with "# "
+                    open(file) do f
+                        for line in eachline(f)
+                            if startswith(line, "# ")
+                                title = replace(line, r"^# " => "")
+                                break
+                            end
+                        end
+                    end
+
+                    if isnothing(title)
+                        @warn "No title found in $file"
+                        continue
+                    end
                 end
                 if isnothing(date)
                     @warn "No date found in $file"
