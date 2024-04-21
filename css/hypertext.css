@@ -1,1 +1,1 @@
-@charset "utf-8"; header{position:relative}header a{color:#000;text-decoration:underline}@media (min-width:940px){header{width:705px;margin-left:auto;margin-right:auto}}@media (max-width:480px){header{padding-left:6%;padding-right:6%}}
+@charset "utf-8"; header{padding-top:1rem;position:relative;width:100%}header a{color:#000;text-decoration:underline}@media (min-width:940px){header{}}@media (max-width:480px){header{padding-left:2rem;padding-right:2rem}}

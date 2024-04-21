@@ -1,0 +1,119 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/styles/github.min.css"> <link rel=stylesheet  href="/css/normalize.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/hypertext.css"> <link rel=icon  href="/assets/favicon.png"> <title>PromptingTools.jl supports Groq</title> <div class=center-column-holder > <div class=center-column > <header> <nav> <a href="/">cameron pfiffer</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/links/">links</a> <hr/> </nav> </header> <div class=franklin-content > <h1 id=promptingtoolsjl_supports_groq ><a href="#promptingtoolsjl_supports_groq" class=header-anchor >PromptingTools.jl supports Groq</a></h1> <p>PromptingTools.jl, one of my favorite Julia packages for generative AI workflows, now supports groq&#33; For those who do not know, groq is <a href="https://wow.groq.com/groq-sets-new-large-language-model-performance-record-of-300-tokens-per-second-per-user-on-meta-ai-foundational-llm-llama-2-70b/">incredibly fast</a>. Of the cloud providers for LLM generation, groq is by far the fastest.</p> <p>You&#39;ll need PromptingTools.jl version 0.22. The release notes are <a href="https://github.com/svilupp/PromptingTools.jl/releases/tag/v0.22.0">here</a>.</p> <p>Here&#39;s a little demo of how to use this. To start, you&#39;ll need a groq API key, which you can find on the website &#40;<a href="https://console.groq.com/keys">this link</a> might work?&#41;.</p> <p>Put your key in the environment variable <code>GROQ_API_KEY</code>. If you haven&#39;t done this at the system level, you can do it inside Julia like so:</p> <pre><code class="julia hljs"><span class=hljs-literal >ENV</span>[<span class=hljs-string >&quot;GROQ_API_KEY&quot;</span>] = <span class=hljs-string >&quot;your_key_here&quot;</span></code></pre>
+<p>Great. Now we can use PromptingTools:</p>
+<pre><code class="julia hljs"><span class=hljs-keyword >using</span> PromptingTools
+<span class=hljs-keyword >using</span> PromptingTools: GroqOpenAISchema
+
+
+<span class=hljs-comment ># Create the schema</span>
+schema = GroqOpenAISchema()
+some_julia_code = aigenerate(
+    schema,
+    <span class=hljs-string >&quot;&quot;&quot;
+    Give me some Julia code to calculate the n-th Fibonacci number.
+    &quot;&quot;&quot;</span>,
+    model=<span class=hljs-string >&quot;gllama370&quot;</span>
+)
+
+<span class=hljs-comment ># Show the result</span>
+println(some_julia_code.content)</code></pre>
+<p>which yielded &#40;for me&#41; the response</p>
+<hr />
+<p>Here is an example of Julia code to calculate the n-th Fibonacci number:</p>
+<pre><code class="julia hljs"><span class=hljs-keyword >function</span> fibonacci(n::<span class=hljs-built_in >Int</span>)
+    <span class=hljs-keyword >if</span> n == <span class=hljs-number >1</span>
+        <span class=hljs-keyword >return</span> <span class=hljs-number >0</span>
+    <span class=hljs-keyword >elseif</span> n == <span class=hljs-number >2</span>
+        <span class=hljs-keyword >return</span> <span class=hljs-number >1</span>
+    <span class=hljs-keyword >else</span>
+        a, b = <span class=hljs-number >0</span>, <span class=hljs-number >1</span>
+        <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >3</span>:n
+            a, b = b, a + b
+        <span class=hljs-keyword >end</span>
+        <span class=hljs-keyword >return</span> b
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre>
+<p>This function uses a simple iterative approach to calculate the n-th Fibonacci number. It takes an integer <code>n</code> as input and returns the corresponding Fibonacci number.</p>
+<p>Here&#39;s an explanation of how the code works:</p>
+<ul>
+<li><p>The function takes an integer <code>n</code> as input and returns the n-th Fibonacci number.</p>
+
+<li><p>The first two Fibonacci numbers are 0 and 1, so we handle these cases explicitly.</p>
+
+<li><p>For <code>n &gt; 2</code>, we use a loop to calculate the n-th Fibonacci number. We initialize two variables <code>a</code> and <code>b</code> to 0 and 1, respectively, which correspond to the first two Fibonacci numbers.</p>
+
+<li><p>In each iteration of the loop, we update <code>a</code> and <code>b</code> by swapping their values and adding the previous value of <code>a</code> to <code>b</code>. This is equivalent to calculating the next Fibonacci number as the sum of the previous two.</p>
+
+<li><p>After <code>n-2</code> iterations, <code>b</code> will contain the n-th Fibonacci number, which we return as the result.</p>
+
+</ul>
+<p>You can test this function with a specific value of <code>n</code>, for example:</p>
+<pre><code class="julia hljs">julia&gt; fibonacci(<span class=hljs-number >10</span>)
+<span class=hljs-number >55</span></code></pre>
+<hr />
+<p>This isn&#39;t <em>quite</em> right. Calling this function with <code>fibonacci&#40;10&#41;</code> yields 34, not 55. This seems to be due to llama3 shifting the function up by one – <code>fibonacci&#40;0&#41;</code> should be 0, but here <code>fibonacci&#40;1&#41;</code> is 0.</p>
+<p>But it&#39;s close enough for a prompt&#33;</p>
+<p>You can also use string macros to make this a bit more concise:</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># Instead, you can also do string macros. You can do this by preceding</span>
+<span class=hljs-comment ># the string with `ai` and following it with the model you want to use.</span>
+<span class=hljs-comment ># In this case, we want to use groq&#x27;s Llama3 70b (gllama370) model.</span>
+<span class=hljs-string >ai&quot;Give me some Julia code to calculate the n-th Fibonacci number.&quot;gllama370</span></code></pre>
+<p>This is in case you&#39;re working from the REPL and don&#39;t want to type out the <code>aigenerate</code> function call.</p>
+<p>You can use providers that are not groq as well. All providers available in PromptingTools.jl are available <a href="https://siml.earth/PromptingTools.jl/dev/coverage_of_model_providers">here</a>,  but the list is quite long. Providers include</p>
+<ul>
+<li><p>OpenAI</p>
+
+<li><p>vLLM</p>
+
+<li><p>Ollama</p>
+
+<li><p>Mistral</p>
+
+<li><p>Databricks</p>
+
+<li><p>Fireworks AI</p>
+
+<li><p>Together AI</p>
+
+<li><p>Anthropic</p>
+
+<li><p>Google Gemini</p>
+
+</ul>
+<p>Lastly, if you want to use other model aliases &#40;like <code>gllama370</code>&#41;, you can check them out inside <code>PromptingTools.MODEL_ALIASES</code>:</p>
+<pre><code class="julia hljs">julia&gt; PromptingTools.MODEL_ALIASES
+
+<span class=hljs-built_in >Dict</span>{<span class=hljs-built_in >String</span>, <span class=hljs-built_in >String</span>} with <span class=hljs-number >38</span> entries:
+  <span class=hljs-string >&quot;local&quot;</span>         =&gt; <span class=hljs-string >&quot;local-server&quot;</span>
+  <span class=hljs-string >&quot;gpt4v&quot;</span>         =&gt; <span class=hljs-string >&quot;gpt-4-vision-preview&quot;</span>
+  <span class=hljs-string >&quot;gpt3&quot;</span>          =&gt; <span class=hljs-string >&quot;gpt-3.5-turbo&quot;</span>
+  <span class=hljs-string >&quot;gpt4&quot;</span>          =&gt; <span class=hljs-string >&quot;gpt-4&quot;</span>
+  <span class=hljs-string >&quot;firefunction&quot;</span>  =&gt; <span class=hljs-string >&quot;accounts/fireworks/models/firefunction-v1&quot;</span>
+  <span class=hljs-string >&quot;tllama3&quot;</span>       =&gt; <span class=hljs-string >&quot;meta-llama/Llama-3-8b-chat-hf&quot;</span>
+  <span class=hljs-string >&quot;gpt4t&quot;</span>         =&gt; <span class=hljs-string >&quot;gpt-4-turbo&quot;</span>
+  <span class=hljs-string >&quot;mistral-tiny&quot;</span>  =&gt; <span class=hljs-string >&quot;mistral-tiny&quot;</span>
+  <span class=hljs-string >&quot;mistrall&quot;</span>      =&gt; <span class=hljs-string >&quot;mistral-large-latest&quot;</span>
+  <span class=hljs-string >&quot;emb3small&quot;</span>     =&gt; <span class=hljs-string >&quot;text-embedding-3-small&quot;</span>
+  <span class=hljs-string >&quot;starling&quot;</span>      =&gt; <span class=hljs-string >&quot;starling-lm&quot;</span>
+  <span class=hljs-string >&quot;tllama370&quot;</span>     =&gt; <span class=hljs-string >&quot;meta-llama/Llama-3-70b-chat-hf&quot;</span>
+  <span class=hljs-string >&quot;oh25&quot;</span>          =&gt; <span class=hljs-string >&quot;openhermes2.5-mistral&quot;</span>
+  <span class=hljs-string >&quot;mistral-large&quot;</span> =&gt; <span class=hljs-string >&quot;mistral-large-latest&quot;</span>
+  <span class=hljs-string >&quot;gemini&quot;</span>        =&gt; <span class=hljs-string >&quot;gemini-pro&quot;</span>
+  <span class=hljs-string >&quot;gl3&quot;</span>           =&gt; <span class=hljs-string >&quot;llama3-8b-8192&quot;</span>
+  <span class=hljs-string >&quot;gllama370&quot;</span>     =&gt; <span class=hljs-string >&quot;llama3-70b-8192&quot;</span>
+  <span class=hljs-string >&quot;mistralm&quot;</span>      =&gt; <span class=hljs-string >&quot;mistral-medium-latest&quot;</span>
+  <span class=hljs-string >&quot;tmixtral22&quot;</span>    =&gt; <span class=hljs-string >&quot;mistralai/Mixtral-8x22B-Instruct-v0.1&quot;</span>
+  <span class=hljs-string >&quot;ollama3&quot;</span>       =&gt; <span class=hljs-string >&quot;llama3:8b-instruct-q5_K_S&quot;</span>
+  ⋮               =&gt; ⋮</code></pre>
+<p>Anyways – thanks to <a href="https://siml.earth/">Jan</a> for more incredible work&#33;</p>
+<p>– Cameron</p>
+<div class=page-foot >
+    Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div>
+
+</div> 
+</div> 
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
