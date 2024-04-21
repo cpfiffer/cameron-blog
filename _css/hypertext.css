@@ -1,8 +1,9 @@
 /* Simple css to follow the geometry of franklin-content (see franklin.css) */
 
 header {
-  /* margin-top: 75px; */
+  padding-top: 1rem;
   position: relative;
+  width: 100%;
   /* padding-left: 12.5%; */
   /* padding-right: 12.5%; */
   /* margin-bottom: 50px; */
@@ -16,16 +17,16 @@ header a {
 /* on wide screens, fix content width to a max value */
 @media (min-width: 940px) {
   header {
-    width: 705px;
-    margin-left: auto;
-    margin-right: auto;
+    /* max-width: 705px; */
+    /* padding-left: 2rem;
+    padding-right: 2rem; */
   }
 }
 
 /* on narrow device, reduce margins */
 @media (max-width: 480px) {
   header {
-    padding-left: 6%;
-    padding-right: 6%;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }

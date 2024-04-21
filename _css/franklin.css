@@ -3,11 +3,59 @@
 ================================================================== */
 
 :root {
-  --block-background: hsl(0, 0%, 94%);
+  --block-background: hsl(0, 0%, 100%);
   --output-background: hsl(0, 0%, 98%);
   --small: 14px;
   --normal: 19px;
   --text-color: hsv(0, 0%, 20%);
+}
+
+/* ==================================================================
+    TEXT GEOMETRY
+================================================================== */
+
+.franklin-toc li {
+  /* Avoid clickable elements being too close together. */
+  /* margin: 0.6rem 0; */
+}
+
+.franklin-content {
+  position: relative;
+  width: 100%;
+  /* padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 1.35em; */
+}
+
+/* On wide screens, fix content width to a max value. */
+@media (min-width: 940px) {
+  .franklin-content {
+    max-width: 705px;
+  }
+}
+
+/* On narrow device, reduce margins. */
+@media (max-width: 480px) {
+  .franklin-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* VERY IMPORTANT */
+.center-column {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.center-column-holder {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ==================================================================
@@ -19,9 +67,9 @@
 ================================================================== */
 
 html {
-  font-family: Helvetica, Arial, sans-serif;
+  /* font-family: sans-serif;
   font-size: var(--normal);
-  color: var(--text-color);
+  color: var(--text-color); */
 }
 
 /* ==================================================================
@@ -65,46 +113,12 @@ html {
 
 .page-foot {
   font-size: 80%;
-  font-family: Arial, serif;
   color: #a6a2a0;
   text-align: center;
-  margin-top: 6em;
+  /* margin-top: 6em;
   border-top: 1px solid lightgrey;
   padding-top: 2em;
-  margin-bottom: 4em;
-}
-
-/* ==================================================================
-    TEXT GEOMETRY
-================================================================== */
-
-.franklin-toc li {
-  /* Avoid clickable elements being too close together. */
-  margin: 0.6rem 0;
-}
-
-.franklin-content {
-  position: relative;
-  padding-left: 12.5%;
-  padding-right: 12.5%;
-  line-height: 1.35em;
-}
-
-/* On wide screens, fix content width to a max value. */
-@media (min-width: 940px) {
-  .franklin-content {
-    width: 705px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* On narrow device, reduce margins. */
-@media (max-width: 480px) {
-  .franklin-content {
-    padding-left: 6%;
-    padding-right: 6%;
-  }
+  margin-bottom: 4em; */
 }
 
 /* ==================================================================
@@ -315,10 +329,11 @@ body {
 ================================================================== */
 
 code {
-  background-color: var(--block-background);
-  padding: 0.1em 0.2em;
-  border-radius: 2px;
+  /* background-color: var(--block-background); */
+  /* padding: 0.1em 0.2em; */
+  /* border-radius: 2px; */
   font-size: var(--medium);
+  font-family: monospace;
 }
 
 /* .franklin-content code { */

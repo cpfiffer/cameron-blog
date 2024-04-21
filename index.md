@@ -1,7 +1,6 @@
 @def title = "About"
-@def tags = ["syntax", "code"]
 
-## About me
+# About me
 
 Howdy, I'm Cameron Pfiffer.
 
