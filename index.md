@@ -25,7 +25,7 @@ I used to be an alpaca rancher and work for Cirque du Soleil. I'm really fun at 
 
 - You can find my blog posts [here](/blog/).
 - I have some links to things I like [here](/links/).
-- You can find my CV [here](/cv/cv.pdf).
+- You can find my CV [here](/assets/cv.pdf).
 
 ## What I like
 
