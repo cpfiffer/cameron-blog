@@ -11,21 +11,21 @@ jobs:
       contents: write
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         persist-credentials: false
     # NOTE: Python is necessary for the pre-rendering (minification) step
     - name: Install python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.10'
     # NOTE: Here you can install dependencies such as matplotlib if you use
     # packages such as PyPlot.
     # - run: pip install matplotlib
     - name: Install Julia
       uses: julia-actions/setup-julia@v1
       with:
-        version: '1' # Latest stable Julia release.
+        version: '1' # Latest- stable Julia release.
     # NOTE
     #   The steps below ensure that NodeJS and Franklin are loaded then it
     #   installs highlight.js which is needed for the prerendering step
@@ -35,10 +35,15 @@ jobs:
     #   The last line should be `optimize()` though you may want to give it
     #   specific arguments, see the documentation or ?optimize in the REPL.
     - run: julia -e '
-            using Pkg; Pkg.activate("."); Pkg.instantiate();
+            using Pkg; 
+            Pkg.activate("."); 
+            Pkg.instantiate();
+            Pkg.add(Pkg.PackageSpec(name="NodeJS"));
+            using Franklin;
+            using NodeJS;
             using NodeJS; run(`$(npm_cmd()) install highlight.js`);
             using Franklin;
-            optimize()'
+            optimize(minify=false, prerender=false)'
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
