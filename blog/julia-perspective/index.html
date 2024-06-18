@@ -1,28 +1,65 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/styles/github.min.css"> <link rel=stylesheet  href="/css/normalize.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/hypertext.css"> <link rel=icon  href="/assets/favicon.png"> <title>Julia</title> <div class=center-column-holder > <div class=center-column > <header> <nav> <a href="/">cameron pfiffer</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/links/">links</a> <hr/> </nav> </header> <div class=franklin-content > <p>I have some thoughts on the future of the <a href="https://julialang.org">Julia language</a>, as prompted by <a href="https://twitter.com/yahrMason/status/1772445238730084642">Mason Yahr</a> on X. As many of you all know I&#39;m kind of a fanboy, but I too have noticed kind of a slowdown.</p> <p>So, here&#39;s a few thoughts on the good &#43; the bad.</p> <h2 id=the_good ><a href="#the_good" class=header-anchor >The good</a></h2> <p><strong>Julia is beautiful.</strong> I started writing Julia in maybe 2015 or so. Not sure the version exactly but I think it was at or before 0.5, when the language was very new. I fell in love with the language for a pretty superficial reason to start: it is beautiful. I consider myself proficient in many languages, and few are as beautiful to my eye as Julia is.</p> <p><strong>Julia is a good language.</strong> Once I was hooked on the beauty, I started to appreciate how good a language it is, and how much my brain <em>loves it</em>. Julia can be a functional language if you want. It can be strongly typed, but you can also mostly ignore the types as you go and let the compiler handle it. It&#39;s flexible when you want it to be and structured when you need it. It&#39;s fast, if you write it correctly, and it&#39;s full of so many fun little bells and whistles that I am still constantly learning beautiful new things about the language. <a href="https://docs.julialang.org/en/v1/manual/methods/">Multiple dispatch</a>, dispatching to functions based on the type of the inputs, is a really incredible tool that&#39;s a blast to use. Multiple dispatch is also why the language is composable, meaning that you can pretty easily borrow and mix things together across packages.</p> <p><strong>Julia is powerful as fuck.</strong> You can make some really amazing things in Julia basically by just building up a type system for your problem. The per-line efficiency of the language is really high, meaning that it is easy to compose a few functions that are extremely powerful and flexible. The compiler and the type system do a lot of work for you and can get you from 0 to 100 in a very small amount of code. Go check out my favorite package, <a href="https://github.com/mossr/BeautifulAlgorithms.jl">BeautifulAlgorithms.jl</a>, which implements very dense algorithms.</p> <p>Here&#39;s an example of a dense neural net:</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> LinearAlgebra
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
+  <link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/franklin.css">
+<link rel="stylesheet" href="/css/hypertext.css">
+<link rel="icon" href="/assets/favicon.png">
 
-<span class=hljs-keyword >function</span> multi_layer_neural_network(x, 𝐖, φ, 𝐠)
-    𝐡ᵢ = φ(x)
-    <span class=hljs-keyword >for</span> (i,g) <span class=hljs-keyword >in</span> enumerate(𝐠)
-        𝐡ᵢ = map(𝐰ⱼ -&gt; g(𝐰ⱼ ⋅ 𝐡ᵢ), 𝐖[i])
-    <span class=hljs-keyword >end</span>
-    𝐡ᵢ ⋅ last(𝐖)
-<span class=hljs-keyword >end</span></code></pre> <p>or, as a one-liner:</p> <pre><code class="julia hljs">neural_network(x, 𝐕, 𝐰, φ, g) = 𝐰 ⋅ map(𝐯ⱼ -&gt; g(𝐯ⱼ ⋅ φ(x)), 𝐕)</code></pre>
+   <title>Julia</title>  
+</head>
+<body>
+<div class="center-column-holder">
+  <div class="center-column">
+  <header>
+  <nav>
+    <a href="/">cameron pfiffer</a>
+  ∘ <a href="/blog/">blog</a>
+  ∘ <a href="/links/">links</a> <hr/>
+  </nav>
+</header>
+
+<!-- Content appended here -->
+<div class="franklin-content">
+<p>I have some thoughts on the future of the <a href="https://julialang.org">Julia language</a>, as prompted by <a href="https://twitter.com/yahrMason/status/1772445238730084642">Mason Yahr</a> on X. As many of you all know I&#39;m kind of a fanboy, but I too have noticed kind of a slowdown.</p>
+<p>So, here&#39;s a few thoughts on the good &#43; the bad.</p>
+<h2 id="the_good"><a href="#the_good" class="header-anchor">The good</a></h2>
+<p><strong>Julia is beautiful.</strong> I started writing Julia in maybe 2015 or so. Not sure the version exactly but I think it was at or before 0.5, when the language was very new. I fell in love with the language for a pretty superficial reason to start: it is beautiful. I consider myself proficient in many languages, and few are as beautiful to my eye as Julia is.</p>
+<p><strong>Julia is a good language.</strong> Once I was hooked on the beauty, I started to appreciate how good a language it is, and how much my brain <em>loves it</em>. Julia can be a functional language if you want. It can be strongly typed, but you can also mostly ignore the types as you go and let the compiler handle it. It&#39;s flexible when you want it to be and structured when you need it. It&#39;s fast, if you write it correctly, and it&#39;s full of so many fun little bells and whistles that I am still constantly learning beautiful new things about the language. <a href="https://docs.julialang.org/en/v1/manual/methods/">Multiple dispatch</a>, dispatching to functions based on the type of the inputs, is a really incredible tool that&#39;s a blast to use. Multiple dispatch is also why the language is composable, meaning that you can pretty easily borrow and mix things together across packages.</p>
+<p><strong>Julia is powerful as fuck.</strong> You can make some really amazing things in Julia basically by just building up a type system for your problem. The per-line efficiency of the language is really high, meaning that it is easy to compose a few functions that are extremely powerful and flexible. The compiler and the type system do a lot of work for you and can get you from 0 to 100 in a very small amount of code. Go check out my favorite package, <a href="https://github.com/mossr/BeautifulAlgorithms.jl">BeautifulAlgorithms.jl</a>, which implements very dense algorithms.</p>
+<p>Here&#39;s an example of a dense neural net:</p>
+<pre><code class="language-julia">using LinearAlgebra
+
+function multi_layer_neural_network&#40;x, 𝐖, φ, 𝐠&#41;
+    𝐡ᵢ &#61; φ&#40;x&#41;
+    for &#40;i,g&#41; in enumerate&#40;𝐠&#41;
+        𝐡ᵢ &#61; map&#40;𝐰ⱼ -&gt; g&#40;𝐰ⱼ ⋅ 𝐡ᵢ&#41;, 𝐖&#91;i&#93;&#41;
+    end
+    𝐡ᵢ ⋅ last&#40;𝐖&#41;
+end</code></pre>
+<p>or, as a one-liner:</p>
+<pre><code class="language-julia">neural_network&#40;x, 𝐕, 𝐰, φ, g&#41; &#61; 𝐰 ⋅ map&#40;𝐯ⱼ -&gt; g&#40;𝐯ⱼ ⋅ φ&#40;x&#41;&#41;, 𝐕&#41;</code></pre>
 <p>Gaussian processes are similarly gorgeous:</p>
-<pre><code class="julia hljs"><span class=hljs-keyword >using</span> Distributions
-<span class=hljs-keyword >using</span> LinearAlgebra
+<pre><code class="language-julia">using Distributions
+using LinearAlgebra
 
-<span class=hljs-keyword >struct</span> GaussianProcess
-    m::<span class=hljs-built_in >Function</span> <span class=hljs-comment ># mean function</span>
-    k::<span class=hljs-built_in >Function</span> <span class=hljs-comment ># covariance function</span>
-<span class=hljs-keyword >end</span>
+struct GaussianProcess
+    m::Function # mean function
+    k::Function # covariance function
+end
 
-𝛍(X, m) = [m(𝐱) <span class=hljs-keyword >for</span> 𝐱 <span class=hljs-keyword >in</span> X]
-𝚺(X, k) = [k(𝐱,𝐱′) <span class=hljs-keyword >for</span> 𝐱 <span class=hljs-keyword >in</span> X, 𝐱′ <span class=hljs-keyword >in</span> X]
+𝛍&#40;X, m&#41; &#61; &#91;m&#40;𝐱&#41; for 𝐱 in X&#93;
+𝚺&#40;X, k&#41; &#61; &#91;k&#40;𝐱,𝐱′&#41; for 𝐱 in X, 𝐱′ in X&#93;
 
-<span class=hljs-keyword >function</span> Base.rand(𝒢::GaussianProcess, X, inflation=<span class=hljs-number >1e-6</span>)
-    𝒩 = MvNormal(𝛍(X, 𝒢.m), 𝚺(X, 𝒢.k) + inflation*I)
-    <span class=hljs-keyword >return</span> rand(𝒩)
-<span class=hljs-keyword >end</span></code></pre>
+function Base.rand&#40;𝒢::GaussianProcess, X, inflation&#61;1e-6&#41;
+    𝒩 &#61; MvNormal&#40;𝛍&#40;X, 𝒢.m&#41;, 𝚺&#40;X, 𝒢.k&#41; &#43; inflation*I&#41;
+    return rand&#40;𝒩&#41;
+end</code></pre>
 <p>There&#39;s more, but go checkout the repo.</p>
 <p><strong>Julia is state-of-the-art for scientific computing.</strong> Julia was, and still mostly is, a scientific computing language. I was one of the rarer Julia users who was not a refugee from scientific computing elsewhere. Most of the users of Julia at that time &#40;from what I remember&#41; were scientists – people who hated matlab and wanted out. Think academics. People who do numerical computing at massive scale and really need the speed. There&#39;s lots of folks who do climate/ocean/physics/etc. in Julia because they can sketch out a model super quickly and get code that is reasonably performant in a fraction of the dev time it would take to write it in C&#43;&#43; or Fortran or whatever.</p>
 <p><strong>The package management is world-class.</strong> Julia&#39;s Pkg.jl is based on Rust&#39;s <code>cargo</code>, and it is incredible. I do not worry about reproducible environments, installing packages, etc. It just happens without me thinking about it. No stupid <code>pip</code> nightmares, no managing nightmarish virtual environments, etc. It&#39;s just good shit.</p>
@@ -31,7 +68,7 @@
 <p>It also supports a lot of the functionality you&#39;d need for data work. <a href="https://dataframes.juliadata.org/stable/">DataFrames.jl</a> is really incredible, and we have a lot of very good stuff for working with data sources: csvs, JSON, HDF5, Arrow, Parquet, etc. All of this stuff works pretty well and I no longer notice that I don&#39;t have access to some core component of my typical data workflow.</p>
 <p>I actually use a lot of Julia for the backend of <a href="https://www.comind.me">Comind</a>, my side project. It&#39;s my server side and general compute workhorse for all kinds of generative AI stuff. We have an excellent package called <a href="https://github.com/svilupp/PromptingTools.jl">PromptingTools.jl</a> that handles an absurd amount of standard generative AI processes you might want to do, and I have heavily integrated it into the Comind tech stack. Really really wonderful to work with, and the package creator Jan is a delight to talk to.</p>
 <p>Overall I would say it&#39;s still very much a growing language. There are lots of wonderful people working on it and making amazing things, and I don&#39;t really see myself leaving the language any time soon.</p>
-<h2 id=the_bad ><a href="#the_bad" class=header-anchor >The bad</a></h2>
+<h2 id="the_bad"><a href="#the_bad" class="header-anchor">The bad</a></h2>
 <p>Okay, so I said a lot of nice things, but I&#39;ll give the critiques I have noticed.</p>
 <p><strong>Deep learning is a bit behind</strong>. The deep learning stuff tooling is behind and will take a lot of effort to catch up to the state-of-the-art. Pytorch/Tensorflow have an <strong>absurd</strong> amount of resources behind them that <a href="https://fluxml.ai">Flux.jl</a>, our deep learning toolkit, can&#39;t quite compete with. Admittedly it is <em>really good</em> for how much resources it does have, which is kind of a big endorsement of the contributers of Flux.jl and of the language it is built on. I would actually really love to spend some dev hours on it but ultimately I am very time constrained and have a job.</p>
 <p>A few of us are working on drumming up support for Julia-native language model inference. This sort of exists but is scattered across the ecosystem, and hasn&#39;t had a big focused effort to consolidate everything into one spot. It&#39;ll take a bit of work but it&#39;s doable. Some have pointed out that it&#39;s maybe not even worth doing because Python is just going to eat everyone&#39;s lunch forever, but I choose to live in a world where we can make cool shit in a language we love.</p>
@@ -53,14 +90,18 @@
 <p>I love Julia, and I&#39;m going to keep working in it, and I&#39;m going to enjoy it. Because it is <em>beautiful</em> and challening and interesting. Because the people are all really lovely. Because I want to see what it can do&#33; And maybe if I keep talking about it and showing people, maybe they&#39;ll love it as much as I do. I just think that&#39;d be a really lovely thing to share with you all.</p>
 <p>Anyways, thanks for reading. Email me your favorite Julia shit at <a href="mailto:cameron@pfiffer.org">cameron@pfiffer.org</a>.</p>
 <p>Cameron</p>
-<div class=page-foot >
+<div class="page-foot">
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
-</div>
+</div><!-- CONTENT ENDS HERE -->
 
-</div> 
-</div> 
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
     
     
         <script src="/libs/highlight/highlight.min.js"></script>
 <script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>
