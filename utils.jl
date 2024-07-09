@@ -33,6 +33,7 @@ function hfun_list_posts(folders)
                     # Try to find the first line that starts with "# "
                     open(file) do f
                         for line in eachline(f)
+                            println(line)
                             if startswith(line, "# ")
                                 title = replace(line, r"^# " => "")
                                 break
