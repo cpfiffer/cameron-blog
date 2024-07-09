@@ -58,6 +58,11 @@ function hfun_list_posts(folders)
     # Sort by date
     sort!(posts, by=x -> x[3], rev=true)
 
+    # years = unique(x -> year(x[3]), posts)
+    yrs = map(x -> year(x[3]), posts)
+    current_year = typemax(Int)
+    @info "Starting at $current_year"
+
     # Make the list. Need to do raw HTML here.
     io = IOBuffer()
     for (file, title, date) in posts
@@ -65,9 +70,17 @@ function hfun_list_posts(folders)
         file = replace(file, r"\.md$" => "")
         @info file
 
+        file_year = year(date)
+
+        @info "" file_year current_year file title
+        if file_year != current_year
+            println(io, "<h2 >$(file_year)</h2>")
+            current_year = file_year
+        end
+
         println(io, "<li>")
-        println(io, "<span class=\"date\">$(date)</span>")
         println(io, "<a href=\"/$(file)\">$(title)</a>")
+        println(io, "<span class=\"date\">$(date)</span>")
         println(io, "</li>")
     end
 

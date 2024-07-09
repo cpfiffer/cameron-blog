@@ -9,5 +9,4 @@ It's workshop day!
 
 ## Parallel processing with Dagger.jl
 
-- Have many frameworks for parallelism: distributed, threading, GPUs.
-- Dagger.jl addresses this by providing a unified framework.
+[Dagger.jl](https://github.com/JuliaParallel/Dagger.jl) is an extremely cool tool.
