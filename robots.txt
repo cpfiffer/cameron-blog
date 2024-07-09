@@ -1,4 +1,0 @@
-Sitemap: https://cameron.pfiffer.org/sitemap.xml
-
-User-agent: *
-Disallow:
