@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
   <link rel="stylesheet" href="/css/normalize.css">
 <link rel="stylesheet" href="/css/franklin.css">
 <link rel="stylesheet" href="/css/hypertext.css">
@@ -26,7 +27,62 @@
 <h1 id="juliacon_2024"><a href="#juliacon_2024" class="header-anchor">JuliaCon 2024</a></h1>
 <p>It&#39;s workshop day&#33;</p>
 <h2 id="parallel_processing_with_daggerjl"><a href="#parallel_processing_with_daggerjl" class="header-anchor">Parallel processing with Dagger.jl</a></h2>
-<p><a href="https://github.com/JuliaParallel/Dagger.jl">Dagger.jl</a> is an extremely cool tool.</p>
+<p><a href="https://github.com/JuliaParallel/Dagger.jl">Dagger.jl</a> is an extremely cool tool. I used Dagger sometime in 2018 I think, but I didn&#39;t really have a good distributed computing problem to solve. </p>
+<p>Julian Samaroo and Przemysław Szufel presented the workshop. Here&#39;s the <a href="https://github.com/jpsamaroo/DaggerWorkshop2024">workshop materials</a>.</p>
+<p>My takeaway was this: Dagger is <em>fucking crazy</em>. Essentially, it unifies a bunch of forms of parallel computation: multithread, multiprocess, and GPU. You provide Dagger a collection of resources &#40;such as threads, worker processes, or GPUs&#41; and it handles the scheduling of tasks on those resources. </p>
+<p>Dagger will pretty much auto-magically figure out things like memory movement between processes – for cheap tasks, you want to keep data within-process to minimize memory movement, but in some cases a worker may be overloaded and it may be cheaper to move memory to a different worker.</p>
+<p>The simple version of Dagger resembles Julia&#39;s <a href="https://docs.julialang.org/en/v1/base/parallel/">standard task workflow</a>:</p>
+<pre><code class="language-julia">t &#61; Dagger.@spawn 1&#43;2
+@show t
+fetch&#40;t&#41;</code></pre>
+<p><code>t</code> here is a <code>DTask</code>, which represents a task that will execute on some parallel resource. <code>fetch&#40;t&#41;</code> will block and return the result of the task.</p>
+<p>Dagger will also construct a DAG &#40;hence the name DAGger&#41; of your computation – you can construct an arbitrary set of tasks, and each task will be handed off to another process upon completion. Take this for example:</p>
+<pre><code class="language-julia"># Multiple dependencies and parallelism
+x &#61; rand&#40;5000&#41;
+a &#61; Dagger.@spawn x .&#43; 1
+b &#61; Dagger.@spawn a .* 2
+c &#61; Dagger.@spawn a ./ 2 # b and c are independent and be run parallel
+d &#61; Dagger.@spawn b .- c
+fetch&#40;d&#41;</code></pre>
+<p>Above, <code>b</code> and <code>c</code> are independent and can be run in parallel. <code>d</code> depends on both <code>b</code> and <code>c</code>, so it will block until both are complete.</p>
+<p>GPU support is quite straightforward as well. Julia&#39;s GPU support is wonderful, and you can use any device type you need &#40;CUDA, ROCm, Metal, oneAPI&#41;.</p>
+<p>Here&#39;s how to set up a GPU in Dagger:</p>
+<pre><code class="language-julia">using DaggerGPU
+using CUDA
+
+# Annoying, but we need to restart the scheduler for the below changes to take effect...
+# Will be fixed in future versions of Dagger&#33;
+Dagger.cancel&#33;&#40;;halt_sch&#61;true&#41;
+
+# Make sure that we have at least one GPU
+@assert length&#40;CUDA.devices&#40;&#41;&#41; &gt; 0 &quot;You don&#39;t have any NVIDIA GPUs&#33;&quot;
+
+# Pick the first available GPU
+GPUArray &#61; CuArray
+scope &#61; Dagger.scope&#40;;cuda_gpu&#61;1&#41;</code></pre>
+<p>Once you have the <code>scope</code> that determines Dagger&#39;s available resources &#40;in this case, a GPU&#41;, you can let Dagger handle whatever your operation is:</p>
+<pre><code class="language-julia"># Run our &#96;sum&#96; function on the GPU&#33;
+A &#61; rand&#40;Float32, 1024&#41;
+Dagger.with_options&#40;;scope&#41; do
+    @show fetch&#40;Dagger.@spawn sum&#40;A&#41;&#41;
+end</code></pre>
+<p>This also handles multiple GPUs across processes. If the GPUs are full or computations are not appropriate for a GPU, they can also be dispatched to a multithreading paradigm.</p>
+<p>There&#39;s lots of other cool stuff in the talk, including data dependencies to help the Dagger scheduler, distributed arrays, and a nifty implementation of convolutions &#43; Conway&#39;s Game of Life.</p>
+<p>Honestly I was just amazed at how far Dagger.jl has come. They have a ton of stuff on the roadmap as well, including </p>
+<ul>
+<li><p>DaggerGraphs.jl for partitioned distributed graph processing</p>
+</li>
+<li><p>Streaming data</p>
+</li>
+<li><p>Auto-GPU processing</p>
+</li>
+<li><p>Expanded data deps support</p>
+</li>
+<li><p>Operator fusion</p>
+</li>
+<li><p>Dagger &#43; Enzyme autodiff</p>
+</li>
+</ul>
 <div class="page-foot">
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
@@ -35,6 +91,10 @@
 </div> <!-- end of center-column -->
 </div> <!-- end of center-column-holder -->
     
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
     
   </body>
 </html>
