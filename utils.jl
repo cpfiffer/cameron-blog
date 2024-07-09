@@ -19,7 +19,7 @@ string_to_date(s::Nothing) = Date("2000-01-01", "yyyy-mm-dd")
 string_to_date(d::Date) = d
 string_to_date(s) = Date(s, "yyyy-mm-dd")
 
-function hfun_list_posts(folders)
+@delay function hfun_list_posts(folders)
     posts = []
     for folder in folders
         for file in readdir(folder, join=true)
