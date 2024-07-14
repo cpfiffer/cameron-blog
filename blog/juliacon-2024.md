@@ -135,11 +135,11 @@ Julia's [GraphBLAS.jl](https://github.com/JuliaSparse/SuiteSparseGraphBLAS.jl) p
 
 There were a lot of talks I couldn't get to, but I'm aware of active development in 
 
- • Bundling packages into apps
- • AD improvements
- • Various modeling in specific technical fields, like ice flows
- • Compiler plugins where you can mess with the emitted LLVM
- • Cursed-ass Python.jl. Julia is a Python superset now, so you have no excuse.
+- Bundling packages into apps
+- AD improvements
+- Various modeling in specific technical fields, like ice flows
+- Compiler plugins where you can mess with the emitted LLVM
+- Cursed-ass Python.jl. Julia is a Python superset now, so you have no excuse.
 Conclusion
 
 I'll leave it there for now with some closing comments. I came away from JuliaCon with some warm fuzzies. The people are stellar, the code is good, and the future is bright.
