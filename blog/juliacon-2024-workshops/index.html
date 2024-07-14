@@ -29,7 +29,7 @@
 <p>It&#39;s workshop day&#33;</p>
 <h2 id="parallel_processing_with_daggerjl"><a href="#parallel_processing_with_daggerjl" class="header-anchor">Parallel processing with Dagger.jl</a></h2>
 <p><a href="https://github.com/JuliaParallel/Dagger.jl">Dagger.jl</a> is an extremely cool tool. I used Dagger sometime in 2018 I think, but I didn&#39;t really have a good distributed computing problem to solve. </p>
-<p>Julian Samaroo and Przemysław Szufel presented the workshop. Here&#39;s the <a href="https://github.com/jpsamaroo/DaggerWorkshop2024">workshop materials</a>.</p>
+<p>Julian Samaroo and <a href="https://szufel.pl/">Przemysław Szufel</a> presented the workshop. Here&#39;s the <a href="https://github.com/jpsamaroo/DaggerWorkshop2024">workshop materials</a>.</p>
 <p>My takeaway was this: Dagger is <em>fucking crazy</em>. Essentially, it unifies a bunch of forms of parallel computation: multithread, multiprocess, and GPU. You provide Dagger a collection of resources &#40;such as threads, worker processes, or GPUs&#41; and it handles the scheduling of tasks on those resources. </p>
 <p>Dagger will pretty much auto-magically figure out things like memory movement between processes – for cheap tasks, you want to keep data within-process to minimize memory movement, but in some cases a worker may be overloaded and it may be cheaper to move memory to a different worker.</p>
 <p>The simple version of Dagger resembles Julia&#39;s <a href="https://docs.julialang.org/en/v1/base/parallel/">standard task workflow</a>:</p>
