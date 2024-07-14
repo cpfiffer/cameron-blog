@@ -140,8 +140,11 @@ There were a lot of talks I couldn't get to, but I'm aware of active development
 - Various modeling in specific technical fields, like ice flows
 - Compiler plugins where you can mess with the emitted LLVM
 - Cursed-ass Python.jl. Julia is a Python superset now, so you have no excuse.
-Conclusion
 
-I'll leave it there for now with some closing comments. I came away from JuliaCon with some warm fuzzies. The people are stellar, the code is good, and the future is bright.
+## Conclusion
+
+I'll leave it there for now with some closing comments. I came away from JuliaCon with some warm fuzzies. The people are stellar, the code is good, and the future is bright. Can't wait to go next year!
 
 We'll be rolling out a mentorship program soon so keep an eye out. Come on down, the water's warm.
+
+-- Cameron
