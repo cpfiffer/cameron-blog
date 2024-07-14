@@ -47,7 +47,7 @@ Anyway, here's some technical stuff that's cool too.
 
 Julia started as an MIT project (it is still housed there) and has since become quite an amazing tool. The tooling has broadened out away from the kind of stuff you might do in Matlab, Mathematica, or pure numpy. It's great at standard data science sutff, web services (Genie is an incredible service), easy and performant distributed compute (Dagger.jl), probabilistic programming, database interop, generative AI, etc. 
 
-I have a reasonably functional backend for my pet social network/second brain/AI-powered knowledge graph comind, It's written entirely in Julia and has been simple and quick to develop in. My sense thusfar is that the language and its ecosystem is pretty robust, and I rarely run into situations where the language is incapable of accomplishing some task. 
+I have a reasonably functional backend for my pet social network/second brain/AI-powered knowledge graph [comind](https://blog.comind.me), It's written entirely in Julia and has been simple and quick to develop in. My sense thusfar is that the language and its ecosystem is pretty robust, and I rarely run into situations where the language is incapable of accomplishing some task. 
 
 There are of course rough edges, as there are in any tool. One of the talks this year was about the lack of symmetric and asymmetric cryptography in Julia. There can be intermittent bugs. It doesn't support every external tool you might want -- for example, the neo4j drivers haven't been maintained in years. Anything that requires a company to support a language-specific API typically doesn't exist, so the community has to contribute it themselves.
 
