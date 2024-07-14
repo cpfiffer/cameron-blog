@@ -5,13 +5,14 @@ header {
   position: relative;
   padding-left: 12.5%;
   padding-right: 12.5%;
-  margin-bottom: 50px;
+  font-family: monospace;
+  /* margin-bottom: 50px; */
 }
 
 /* on wide screens, fix content width to a max value */
 @media (min-width: 940px) {
   header {
-    width: 750px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
   }

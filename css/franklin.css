@@ -6,6 +6,7 @@ html {
   font-family: sans-serif;
   font-size: 17px;
   color: #1c1c1c;
+  background-color: #faf0e5;
 }
 
 /* ==================================================================
@@ -72,7 +73,7 @@ html {
 /* on wide screens, fix content width to a max value */
 @media (min-width: 940px) {
   .franklin-content {
-    width: 750px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -110,17 +111,17 @@ h6 {
 }
 
 .franklin-content h1 {
-  padding-bottom: 0.5em;
+  /* padding-bottom: 0.5em; */
   /* border-bottom: 3px double lightgrey; */
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+  /* margin-top: 0.5em; */
+  /* margin-bottom: 1em; */
 }
 
 .franklin-content h2 {
-  padding-bottom: 0.3em;
+  /* padding-bottom: 0.3em; */
   /* border-bottom: 1px solid lightgrey; */
-  margin-top: 2em;
-  margin-bottom: 1em;
+  /* margin-top: 2em; */
+  /* margin-bottom: 1em; */
 }
 
 .franklin-content h1 a {
@@ -184,7 +185,6 @@ th {
 .franklin-content li p {
   margin: 0;
 }
-
 
 /* ==================================================================
   HYPERREFS AND FOOTNOTES
