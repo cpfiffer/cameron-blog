@@ -63,7 +63,7 @@ I watched a lot of talks when I had the opportunity, but unfortunately wasn't ab
 
 The stand out for me this year was from the distributed processing framework [Dagger.jl](https://github.com/JuliaParallel/Dagger.jl). Dagger is an amazing tool that handles constructing computational DAGs of an arbitrary program and will dispatch tasks to available resources, whether that be threads, processes, different machines, or GPUs. 
 
-I watched the workshop hosted by Julian Samaroo and Przemysław Szufel, and my sense was that it has come leaps and bounds since I last used the project a few years ago. It's ergonomically very simple, and not dissimilar from the existing tasks framework that Julians may be familiar with.
+I watched the workshop hosted by Julian Samaroo and [Przemysław Szufel](https://szufel.pl/), and my sense was that it has come leaps and bounds since I last used the project a few years ago. It's ergonomically very simple, and not dissimilar from the existing tasks framework that Julians may be familiar with.
 
 Dagger's ergonomic interface is striking. If you have not used Julia before, you should know that parallelism is among the easiest in Julia among the many languages I have worked with. In some cases it is sufficient to use `Threads.@threads` in front of a for loop, and in others you may only need a lock and some minor adjustments for threads safety. Distributed processing across Julia processes is also quite easy. GPUs are easy to work with as well, and kernels can be written for arbitrary backends using KernelAbstractions.jl.
 

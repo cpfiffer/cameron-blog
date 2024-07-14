@@ -11,7 +11,7 @@ It's workshop day!
 
 [Dagger.jl](https://github.com/JuliaParallel/Dagger.jl) is an extremely cool tool. I used Dagger sometime in 2018 I think, but I didn't really have a good distributed computing problem to solve. 
 
-Julian Samaroo and Przemysław Szufel presented the workshop. Here's the [workshop materials](https://github.com/jpsamaroo/DaggerWorkshop2024).
+Julian Samaroo and [Przemysław Szufel](https://szufel.pl/) presented the workshop. Here's the [workshop materials](https://github.com/jpsamaroo/DaggerWorkshop2024).
 
 My takeaway was this: Dagger is _fucking crazy_. Essentially, it unifies a bunch of forms of parallel computation: multithread, multiprocess, and GPU. You provide Dagger a collection of resources (such as threads, worker processes, or GPUs) and it handles the scheduling of tasks on those resources. 
 
