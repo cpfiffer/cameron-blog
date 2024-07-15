@@ -65,6 +65,17 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
 
     # Make the list. Need to do raw HTML here.
     io = IOBuffer()
+
+    println(
+        io,
+        """
+        <p>
+        Here's some of my blog posts. Hope you enjoy them. I write sporadically.
+        </p>
+        """
+    )
+
+    println(io, "<ul>")
     for (file, title, date) in posts
         # Create relative path with no .md
         file = replace(file, r"\.md$" => "")
@@ -74,15 +85,21 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
 
         @info "" file_year current_year file title
         if file_year != current_year
-            println(io, "<h2 >$(file_year)</h2>")
+            println(io, "</ul>")
+
+            println(io, "<h2 class=\"blog-list-year\">$(file_year)</h2>")
+            println(io, "<ul>")
             current_year = file_year
         end
 
+        formatted_date = Dates.format(date, "mm-dd")
+
         println(io, "<li>")
-        println(io, "<a href=\"/$(file)\">$(title)</a>")
-        println(io, "<span class=\"date\">$(date)</span>")
+        println(io, "<span class=\"date\">$(formatted_date)</span>")
+        println(io, "<a class=\"blog-list-title\" href=\"/$(file)\">$(title)</a>")
         println(io, "</li>")
     end
+    println(io, "</ul>")
 
     return String(take!(io))
 end

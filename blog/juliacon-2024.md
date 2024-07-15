@@ -115,11 +115,33 @@ A few of the good talks I saw were about web topics, such as running production 
 
 The one that stood out to me was how to improve Julia's primary server package HTTP.jl. HTTP.jl has struggled in the past few years with performance, and it's caused my personal project comind some issues for my websocket servers.
 
-The talk essentially highlighted that you can make it much more performance by turning off SSL and using nginx as your reverse proxy, which is standard practice in the web world. Huge speedups there, which I appreciate.
-
 They also highlighted a primary issue with HTTP.jl, which is that it does a C foreign call every time it does I/O. This is a problem because Julia essentially shuts down the thread scheduler (and other things) while waiting on the C call to return. The speaker said the words "this is a disaster" several times.
 
 I'm not sure what the fix is here, though. There are a few workarounds to increase performance, but I'd be super interested in seeing what the "greenfield" version of an HTTP interface looks like in Julia.
+
+---
+
+Edit: the speakers of this talk added some more context on this. 
+
+> Just want to clarify that the SSL c call is the disaster, and the fix is up here (apart from not using SSL). This is a disaster (because running a second Julia process and doing `using Sockets; Sockets.connect(..your SSL server..)` will freeze the server until you also send data. This is a disaster (again, sorry :sweat_smile:)). 
+
+> HTTP.jl doesn’t have other blocking C Calls, but you may have in your code (e.g. a long running LibPQ.execute). This may freeze the scheduler (which is also a disaster, smaller one, see julia’s PR 50800). 
+
+> This is less of an issue if you follow the thread usage suggestion table on our slides (and do the queries from thread 2 for example) (table courtesy of @Oscar Smith). Overall, I say “this is a disaster” a lot, it’s an emphasis thing, just to communicate that there is an unintentional consequence in the default behavior of many things out there. 
+
+> Still, for most of the use cases, most of people will be fine :sweat_smile:  (edited)
+
+> . . .
+
+> We still use [HTTP.jl] and it’s great! It’s not the package per-se, it’s mainly the language, and to be honest, it makes sense that IO is not the focus yet. Really, writing an HTTP server is a huge undertaking already, and the language’s primitives are the ones that don’t help. Despite that, HTTP is already ok for most stuff. We’re in a world of tradeoffs, limited time, priorities and life that just happens
+
+> The goal of the talk wasn’t to say HTTP is terrible. It’s more “there are ways to shoot yourself in the foot, they lurk in the defaults, and here is how to avoid them”
+
+I appreciate Panagiotis for helping me clarify! I don't want to come across as being unappreciative of HTTP.jl, I still use it heavily and will likely continue doing so for a very long time.
+
+---
+
+The talk essentially highlighted that you can make it much more performance by turning off SSL and using nginx as your reverse proxy, which is standard practice in the web world. Huge speedups there, which I appreciate.
 
 [Genie](https://genieframework.com/) was a sponsor as well, and it's worth taking a look if you have not. Genie is a sponsor of Julia and provides an entire web stack including databse interconnects, a Vue-based front end, and a drag-and-drop website builder for serving your website using standard Julia code. It's cool. Go look.
 
