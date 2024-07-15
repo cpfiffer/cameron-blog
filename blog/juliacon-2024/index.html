@@ -86,9 +86,34 @@
 <h3 id="web_stuff"><a href="#web_stuff" class="header-anchor">Web stuff</a></h3>
 <p>A few of the good talks I saw were about web topics, such as running production systems, building data-forward websites with Genie, or enhancing Julia&#39;s web performance.</p>
 <p>The one that stood out to me was how to improve Julia&#39;s primary server package HTTP.jl. HTTP.jl has struggled in the past few years with performance, and it&#39;s caused my personal project comind some issues for my websocket servers.</p>
-<p>The talk essentially highlighted that you can make it much more performance by turning off SSL and using nginx as your reverse proxy, which is standard practice in the web world. Huge speedups there, which I appreciate.</p>
 <p>They also highlighted a primary issue with HTTP.jl, which is that it does a C foreign call every time it does I/O. This is a problem because Julia essentially shuts down the thread scheduler &#40;and other things&#41; while waiting on the C call to return. The speaker said the words &quot;this is a disaster&quot; several times.</p>
 <p>I&#39;m not sure what the fix is here, though. There are a few workarounds to increase performance, but I&#39;d be super interested in seeing what the &quot;greenfield&quot; version of an HTTP interface looks like in Julia.</p>
+<hr />
+<p>Edit: the speakers of this talk added some more context on this. </p>
+<blockquote>
+<p>Just want to clarify that the SSL c call is the disaster, and the fix is up here &#40;apart from not using SSL&#41;. This is a disaster &#40;because running a second Julia process and doing <code>using Sockets; Sockets.connect&#40;..your SSL server..&#41;</code> will freeze the server until you also send data. This is a disaster &#40;again, sorry 😅&#41;&#41;. </p>
+</blockquote>
+<blockquote>
+<p>HTTP.jl doesn’t have other blocking C Calls, but you may have in your code &#40;e.g. a long running LibPQ.execute&#41;. This may freeze the scheduler &#40;which is also a disaster, smaller one, see julia’s PR 50800&#41;. </p>
+</blockquote>
+<blockquote>
+<p>This is less of an issue if you follow the thread usage suggestion table on our slides &#40;and do the queries from thread 2 for example&#41; &#40;table courtesy of @Oscar Smith&#41;. Overall, I say “this is a disaster” a lot, it’s an emphasis thing, just to communicate that there is an unintentional consequence in the default behavior of many things out there. </p>
+</blockquote>
+<blockquote>
+<p>Still, for most of the use cases, most of people will be fine 😅  &#40;edited&#41;</p>
+</blockquote>
+<blockquote>
+<p>. . .</p>
+</blockquote>
+<blockquote>
+<p>We still use &#91;HTTP.jl&#93; and it’s great&#33; It’s not the package per-se, it’s mainly the language, and to be honest, it makes sense that IO is not the focus yet. Really, writing an HTTP server is a huge undertaking already, and the language’s primitives are the ones that don’t help. Despite that, HTTP is already ok for most stuff. We’re in a world of tradeoffs, limited time, priorities and life that just happens</p>
+</blockquote>
+<blockquote>
+<p>The goal of the talk wasn’t to say HTTP is terrible. It’s more “there are ways to shoot yourself in the foot, they lurk in the defaults, and here is how to avoid them”</p>
+</blockquote>
+<p>I appreciate Panagiotis for helping me clarify&#33; I don&#39;t want to come across as being unappreciative of HTTP.jl, I still use it heavily and will likely continue doing so for a very long time.</p>
+<hr />
+<p>The talk essentially highlighted that you can make it much more performance by turning off SSL and using nginx as your reverse proxy, which is standard practice in the web world. Huge speedups there, which I appreciate.</p>
 <p><a href="https://genieframework.com/">Genie</a> was a sponsor as well, and it&#39;s worth taking a look if you have not. Genie is a sponsor of Julia and provides an entire web stack including databse interconnects, a Vue-based front end, and a drag-and-drop website builder for serving your website using standard Julia code. It&#39;s cool. Go look.</p>
 <h3 id="math"><a href="#math" class="header-anchor">Math</a></h3>
 <p>Julia&#39;s general computational math work has also been cool. </p>
