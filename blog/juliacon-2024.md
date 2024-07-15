@@ -33,7 +33,7 @@ My overall sense of the conference was how amazing everyone is, and how much coo
 
 We'll be rolling out a mentorship program and various other inclusiveness initiatives to help new folks get integrated in our (delightful) community, so stay tuned on that.
 
-Special thanks to Airbnb roommates Julian Samaroo, Annika (last name unknown), and Jacob Zelko. Additional thanks to the DEI time for including me in the dinner, Guillame for hanging out and showing me Shrodinger's chess, Patrick Altmayer for continuing to be dope, Amanda Nicotina for being delightful to talk to, fellow Oregonian Lauren for lovely discussions about power systems, Frames White for some fantastic storytelling, Lilith Hafner for the sickeningly hilarious Python.jl, Chris Rackauckas for being the greatest karaoke hype man of all time, and everyone else I got to hang out/chat with/drink with. 
+Special thanks to Airbnb roommates Julian Samaroo, Annika (last name unknown), and Jacob Zelko. Additional thanks to the DEI time for including me in the dinner, Guillaume for hanging out and showing me Shrodinger's chess, Patrick Altmayer for continuing to be dope, Amanda Nicotina for being delightful to talk to, fellow Oregonian Lauren for lovely discussions about power systems, Frames White for some fantastic storytelling, Lilith Hafner for the sickeningly hilarious Python.jl, Chris Rackauckas for being the greatest karaoke hype man of all time, and everyone else I got to hang out/chat with/drink with. 
 
 I've also been energized and want to try a few things:
 
@@ -77,9 +77,9 @@ There's also lots of work going into reducing scheduling overhead, performance, 
 
 Overall, I think it's a magnificent project. Julia and the Dagger team are really incredible engineers. They are looking for contributors for a lot of the features that need to be implemented, so please reach out to me (cameron@pfiffer.org) if you would like me to point you to a point of contact. You can also reach out on the Julia Slack.
 
-### AI
+### Generative AI
 
-Julia's AI tooling is coming along pretty well, primarily driven by [Jan Siml](https://siml.earth/). He is inhumanly productive. The main package is [PromptingTools.jl](https://github.com/svilupp/PromptingTools.jl), which supports calling arbitrary LLM services like Groq, Anthropic, Ollama, and many others. It also supports reranking, monte carlo tree search over conversational paths, and RAG.
+Julia's gen AI tooling is coming along pretty well, primarily driven by [Jan Siml](https://siml.earth/). He is inhumanly productive. The main package is [PromptingTools.jl](https://github.com/svilupp/PromptingTools.jl), which supports calling arbitrary LLM services like Groq, Anthropic, Ollama, and many others. It also supports reranking, monte carlo tree search over conversational paths, and RAG.
 
 Julia's trustworthy AI stuff is coming along quite well, thanks to [Patrick Altmayer's](https://www.patalt.org/) work in the Taija.jl ecosystem. Patrick presented several talks, including on intent classification, countefactuals, and conformal prediction.
 
@@ -149,7 +149,7 @@ The talk essentially highlighted that you can make it much more performance by t
 
 Julia's general computational math work has also been cool. 
 
-Guillame's work in [DifferentiationInterfaces.jl](https://github.com/gdalle/DifferentiationInterface.jl) has been great. AD in Julia is kind of a super power, but it's been struggling to have a common, simple inteface for getting gradients. I haven't played with it too much, but Guillame has successfully (and kindly) berated me into switching to it.
+Guillaume's work in [DifferentiationInterfaces.jl](https://github.com/gdalle/DifferentiationInterface.jl) has been great. AD in Julia is kind of a super power, but it's been struggling to have a common, simple inteface for getting gradients. I haven't played with it too much, but Guillame has successfully (and kindly) berated me into switching to it.
 
 Julia's [GraphBLAS.jl](https://github.com/JuliaSparse/SuiteSparseGraphBLAS.jl) package has been coming along nicely as well. It's an implementation of high-performance algorithms for working with sparse matrices. I still need to tinker with it but it is actively developed.
 
