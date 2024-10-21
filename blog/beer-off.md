@@ -1,6 +1,6 @@
 +++
-title= "Shitty beer statistics"
-date= Date(2024,10,20)
+title="Shitty beer statistics"
+date=Date(2024,10,20)
 +++
 
 My girlfriend Grace threw a "Shitty beer off" party, where participants were tasked with drinking a shitty beer and then rating it on a scale of 1 to 10. We provided 5 beers and double-blindly asked participants to rate them. 
