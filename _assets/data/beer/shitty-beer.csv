@@ -1,0 +1,75 @@
+name,id,drinkability,bubble,america,mouthfeel,overall,guess
+,1,10,5,4,6,6.5,PBR
+,1,6,8,9,6,7,
+,1,3,5,6,1,3,Miller
+andrew,1,7,7,5,7,7,PBR
+anna,1,5,3,2,4,4,PBR
+david,1,7,5,6,7,6,PBR
+conner,1,7,5,6,8,6,Budweiser
+emily,1,7,7,5,,7,PBR
+mark,1,8,7,5,6,9,PBR
+max,1,6,7,4,8,6,Milwaukie
+,1,10,5,10,5,8,
+grace,1,9,7,6,9,8,
+cameron,1,8,9,6,7,8,
+ashley,1,10,5,4,7,9,PBR
+,5,9,7,7,8,6,
+,5,2,3,7,4,1,Coors
+emily,4,10,7,9,8,10,Michelob
+,5,6,5,8,6,6,Miller
+andrew,5,5,5,5,5,5,Coors
+cameron,5,7,2,8,7,6,
+conner,5,6,7,9,9,9,Coors
+anna,5,9,3,8,4,9,Coors
+ashley,5,8,7,6,7,8,Coors
+summer,5,9,9.5,10,8,9,Coors
+mark,5,5,3,6,4,5,Miller
+pranay,5,10,8,10,8,10,Bud Light
+,5,10,5,10,5,5,
+grace,5,7,4,7,8,6,
+,2,6,6,6,6,6,Keystone
+emily,2,4,6,6,2,3,Natty Lite
+david,2,10,2,8,5,3,Natty Lite
+andrew,2,1,1,6,1,3,Budweiser
+,2,8,7,4,5,6,Budweiser
+,2,9,5,6,7,7,PBR
+anna,2,2,0,7,5,2,
+conner,2,2,2,8,2,3,Natty Lite
+max,2,5,2,4,2,3,Bud Light
+ashley,2,10,10,10,1,8,
+,2,5,2,9,6,3,Budweiser
+mark,2,5,3,7,2,3,Budweiser
+cameron,2,5,2,6,7,4,
+grace,2,3,4,8,2,4,
+,4,8,6,9,7,7,PBR
+pranay,4,6,5,4,5,6,Miller
+emily,4,5,4,8,7,5,Budweiser
+ashley,4,5,4,9,9,4,Rolling Rock
+mark,4,4,4,4,4,4,PBR
+anna,4,9,1,10,7,7,Heineken
+,4,8,8,4,4,8,Natty Lite
+,4,6,5,5,8,5,
+andrew,4,6,8,8,7,7,Rolling Rock
+,4,6,5,7,6,6,Keystone
+,4,10,10,10,10,10,
+max,4,7,5,6,7,7,Coors
+grace,4,7,6,7,6,7,
+cameron,4,6,4,4,2,4,
+,3,9,8,3,5,5,Natty Lite
+cameron,3,7,5,6,8,6,
+,3,10,5,10,1,5,
+david,3,6,5,5,4,3,Natty Lite
+grace,3,6,2,3,2,5,
+mark,3,3,4,5,4,4,Natty Lite
+ashley,3,6,7,,3,7,Michelob
+max,3,6,3,6,4,6,PBR
+conner,3,3,3,8,5,4,Miller
+,3,1,6,3,2,1,Coors
+,3,8,2,8,1,4,
+emily,3,2,5,7,2,2,Miller
+andrew,3,1,1,8,2,3,Keystone
+anna,3,6,3,5,5,4,Miller
+summer,3,6,6,7,6,6,Miller
+summer,2,10,7,7,10,8.5,Budweiser
+summer,1,9,10,7,7,8,Miller
+summer,4,5,5,4,5,5,Budweiser
