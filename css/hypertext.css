@@ -5,8 +5,15 @@ header {
   position: relative;
   padding-left: 12.5%;
   padding-right: 12.5%;
-  font-family: monospace;
+
+  /* font-family: monospace; */
   /* margin-bottom: 50px; */
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* on wide screens, fix content width to a max value */
@@ -24,4 +31,15 @@ header {
     padding-left: 6%;
     padding-right: 6%;
   }
+  .header-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+header hr {
+  border: none;
+  border-top: 1px solid
+    color-mix(in srgb, var(--blockquote-color) 15%, transparent);
+  margin: 1em 0;
 }
