@@ -24,9 +24,16 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
     for folder in folders
         for file in readdir(folder, join=true)
             if endswith(file, ".md")
-                # Get title and date
+                # Get title, date and draft status
                 title = pagevar(file, :title)
                 date = string_to_date(pagevar(file, :date))
+                is_draft = pagevar(file, :draft)
+
+                # Skip if it's a draft
+                if is_draft === true
+                    continue
+                end
+
                 if isnothing(title)
                     @warn "No title found in $file, trying to use # line"
 
