@@ -1,29 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
-   
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
   <link rel="stylesheet" href="/css/normalize.css">
 <link rel="stylesheet" href="/css/franklin.css">
 <link rel="stylesheet" href="/css/hypertext.css">
 <link rel="icon" href="/assets/favicon.png">
-
-   <title>Nothingness in Julia</title>  
-</head>
-<body>
-<div class="center-column-holder">
-  <div class="center-column">
-  <header>
+ 
+    <title>Nothingness in Julia</title>
+    
+  </head>
+  <body>
+    <div class="center-column-holder">
+      <div class="center-column">
+        <header>
   <span style="font-weight: bold;">cameron pfiffer</span>
   | <a href="/">about</a>
   ∘ <a href="/blog/">blog</a>
   ∘ <a href="/links/">links</a> <hr/>
 </header>
 
-<!-- Content appended here -->
+        <!-- Content appended here -->
+      </div>
+    </div>
+  </body>
+</html>
 <div class="franklin-content">
 <p>If you ever work in Julia, something you&#39;ll notice is that lots of people and the language server will recommend that you use <code>isnothing&#40;x&#41;</code> or <code>x &#61;&#61;&#61; nothing</code> instead of the value comparison <code>x &#61;&#61; nothing</code>. This is also true of the <code>ismissing</code> functionality for missing values.</p>
 <p>Good discussion <a href="https://discourse.julialang.org/t/x-nothing-vs-x-isa-nothing/64546/13">here</a>, and a great Stack Overflow answer <a href="https://stackoverflow.com/a/38638838/6149469">here</a>.</p>

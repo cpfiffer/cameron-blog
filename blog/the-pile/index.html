@@ -1,29 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
-   
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
   <link rel="stylesheet" href="/css/normalize.css">
 <link rel="stylesheet" href="/css/franklin.css">
 <link rel="stylesheet" href="/css/hypertext.css">
 <link rel="icon" href="/assets/favicon.png">
-
-   <title>Getting the Pile</title>  
-</head>
-<body>
-<div class="center-column-holder">
-  <div class="center-column">
-  <header>
+ 
+    <title>Getting the Pile</title>
+    
+  </head>
+  <body>
+    <div class="center-column-holder">
+      <div class="center-column">
+        <header>
   <span style="font-weight: bold;">cameron pfiffer</span>
   | <a href="/">about</a>
   ∘ <a href="/blog/">blog</a>
   ∘ <a href="/links/">links</a> <hr/>
 </header>
 
-<!-- Content appended here -->
+        <!-- Content appended here -->
+      </div>
+    </div>
+  </body>
+</html>
 <div class="franklin-content">
 <p>I&#39;ve been interested in various NLP stuff lately, as one might imagine with all the ChatGPT stuff going on. Something I&#39;ve become interested in is methods for anlayzing large amounts of text. I&#39;ve been looking at the <a href="https://pile.eleuther.ai/">Pile</a> dataset, which is a commonly-used dataset in NLP. I believe ChatGPT has been trained on it, as have many other large <a href="https://en.wikipedia.org/wiki/Foundation_models">foundation models</a>. </p>
 <p>I&#39;m trying to download it to tinker with <a href="https://arxiv.org/abs/1905.10347">discrete normalizing flows</a> for token prediction. It&#39;s a big dataset – about 825GB uncompressed. Being a hardo, I wrote my only little cloning script to pull in all the new data. It&#39;s not very efficient, but it works. I&#39;ll probably write a better one later. </p>
