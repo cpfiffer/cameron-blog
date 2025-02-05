@@ -29,11 +29,8 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
                 date = string_to_date(pagevar(file, :date))
                 is_draft = pagevar(file, :draft)
 
-                # Skip if it's a draft
-                if is_draft === true
-                    continue
-                end
-
+                # Only skip adding to the posts list if it's a draft
+                # but still process the file for rendering
                 if isnothing(title)
                     @warn "No title found in $file, trying to use # line"
 
@@ -57,7 +54,11 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
                     @warn "No date found in $file"
                     continue
                 end
-                push!(posts, (file, title, date))
+
+                # Only add non-draft posts to the listing
+                if is_draft !== true
+                    push!(posts, (file, title, date))
+                end
             end
         end
     end
