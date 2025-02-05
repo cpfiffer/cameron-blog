@@ -32,7 +32,7 @@ using CSV, DataFrames, Plots
 ## Average ratings
 
 ```
- Row │ beer_name  overall  drinkability  bubble   america  mouthfeel 
+ Row  │ beer_name  overall  drinkability  bubble   america  mouthfeel 
      │ String15?  Float64  Float64       Float64  Float64  Float64   
 ─────┼───────────────────────────────────────────────────────────────
    1 │ PBR        6.83333       7.46667  6.33333  5.66667    6.28571
@@ -51,7 +51,7 @@ Takeaways:
 ## Variance in ratings
 
 ```
- Row │ beer_name  overall_var  drinkability_var  bubble_var  america_var  mouthfeel_var 
+ Row  │ beer_name  overall_var  drinkability_var  bubble_var  america_var  mouthfeel_var 
      │ String15?  Float64      Float64           Float64     Float64      Float64       
 ─────┼──────────────────────────────────────────────────────────────────────────────────
    1 │ PBR            2.84524           3.98095     3.38095      3.95238        3.91209
@@ -85,7 +85,7 @@ Participants were not good at guessing the correct beer. Total accuracy was 20.3
 This did however vary by beer. Some beers were easier to guess than others.
 
 ```
- Row │ beer_name  accuracy 
+ Row  │ beer_name  accuracy 
      │ String15   Float64  
 ─────┼─────────────────────
    1 │ PBR        0.636364
@@ -100,7 +100,7 @@ Most participants identified PBR quickly, which was surprising. Miller was the o
 We can also break this down by participant. We have several observations where no name was available, so this is restricted to the participants who provided a name.
 
 ```
- Row │ name     accuracy 
+ Row  │ name     accuracy 
      │ String7  Float64  
 ─────┼───────────────────
    1 │ anna     0.5

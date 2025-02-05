@@ -13,7 +13,61 @@
       <div class="center-column">
         {{insert header.html}}
         <!-- Content appended here -->
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
       </div>
     </div>
+    <style>
+      #theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem;
+        font-size: 1.25rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        z-index: 1000;
+      }
+    </style>
+    <script>
+      // Check for saved theme preference, otherwise use system preference
+      const getPreferredTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      // Apply theme
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        // Update button text
+        document.getElementById("theme-toggle").innerText =
+          theme === "dark" ? "☼" : "☾";
+      };
+
+      // Initialize theme
+      setTheme(getPreferredTheme());
+
+      // Add toggle functionality
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        setTheme(currentTheme === "dark" ? "light" : "dark");
+      });
+
+      // Listen for system theme changes
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            setTheme(e.matches ? "dark" : "light");
+          }
+        });
+    </script>
   </body>
 </html>

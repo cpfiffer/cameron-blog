@@ -94,16 +94,13 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
         @info "" file_year current_year file title
         if file_year != current_year
             println(io, "</ul>")
-
             println(io, "<h2 class=\"blog-list-year\">$(file_year)</h2>")
             println(io, "<ul>")
             current_year = file_year
         end
 
-        formatted_date = Dates.format(date, "mm-dd")
-
         println(io, "<li>")
-        println(io, "<span class=\"date\">$(formatted_date)</span>")
+        # Remove the date span, just keep the title
         println(io, "<a class=\"blog-list-title\" href=\"/$(file)\">$(title)</a>")
         println(io, "</li>")
     end
