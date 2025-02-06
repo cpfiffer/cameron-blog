@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+  <link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/franklin.css">
+<link rel="stylesheet" href="/css/hypertext.css">
+<link rel="icon" href="/assets/favicon.png">
+ 
+    <title>The cognitive layer for the open web</title>
+    
+  </head>
+  <body>
+    <div class="center-column-holder">
+      <div class="center-column">
+        <header>
+  <div class="header-nav">
+    <span style="font-weight: bold">Cameron Pfiffer</span>
+    <div>
+      <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘
+      <a href="/links/">links</a>
+    </div>
+  </div>
+  <hr />
+</header>
+
+        <!-- Content appended here -->
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+    <style>
+      #theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem;
+        font-size: 1.25rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        z-index: 1000;
+      }
+    </style>
+    <script>
+      // Check for saved theme preference, otherwise use system preference
+      const getPreferredTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      // Apply theme
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        // Update button text
+        document.getElementById("theme-toggle").innerText =
+          theme === "dark" ? "☼" : "☾";
+      };
+
+      // Initialize theme
+      setTheme(getPreferredTheme());
+
+      // Add toggle functionality
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        setTheme(currentTheme === "dark" ? "light" : "dark");
+      });
+
+      // Listen for system theme changes
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            setTheme(e.matches ? "dark" : "light");
+          }
+        });
+    </script>
+  </body>
+</html>
+<div class="franklin-content">
+<h1 id="the_cognitive_layer_for_the_open_web"><a href="#the_cognitive_layer_for_the_open_web" class="header-anchor">The cognitive layer for the open web</a></h1>
+<p>Comind is an experimental AI system designed to serve as a cognitive layer for the ATProtocol, particularly focused on Bluesky&#39;s social network. I&#39;ve been working on variants of it since August 2023, and it has finally settled into a form that I&#39;m happy with.</p>
+<p>If you&#39;ve seen my previous posts on it, you&#39;ll notice that it&#39;s changed quite a bit – it&#39;s not a note-taking app anymore. I&#39;ll leave the previous posts up for posterity, but this is the current state of the system.</p>
+<p>This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the <a href="https://atprotocol.dev/atmosphereconf/">ATmosphereConf</a> in March.</p>
+<p>If you think this is interesting and would like to know more, please reach out on <a href="https://bsky.app/profile/cameron.pfiffer.org">Bluesky</a>. I&#39;m always happy to chat.</p>
+<h2 id="nuts_and_bolts"><a href="#nuts_and_bolts" class="header-anchor">Nuts and bolts</a></h2>
+<p>Comind is essentially a queryable, self-evolving knowledge graph organized around a set of core directives. In this section, I outline the components of Comind.</p>
+<h3 id="blips"><a href="#blips" class="header-anchor">Blips</a></h3>
+<p>The core unit of Comind is a <strong>blip</strong>. A blip is essentially a record on ATProto – a small piece of information.</p>
+<pre><code class="language-julia">&#123;
+  &quot;&#36;type&quot;: &quot;network.comind.concept&quot;,
+  &quot;date&quot;: &quot;2025-01-28T12:00:00Z&quot;,
+  &quot;text&quot;: &quot;recursion&quot;
+&#125;</code></pre>
+<p>Blips are anything expressible by an <a href="https://atproto.com/guides/lexicon">ATProto Lexicon</a>.</p>
+<p>Bluesky posts, likes, follows, and more are all blips. As ATProto grows, this could become notes, images, live streams, etc. Any content users would like to lend to the network is a blip.</p>
+<p>Comind has its own internal set of blips that it uses to represent knowledge. Here&#39;s a few:</p>
+<ul>
+<li><p><strong>Question:</strong> A question is a question, like &quot;What is the meaning of life?&quot; or &quot;What is the best way to learn about recursion?&quot; Questions arise from other blips, and are used to guide the evolution of the network&#39;s internal state.</p>
+</li>
+<li><p><strong>Answer:</strong> An answer is a response to a question, like &quot;The meaning of life is 42&quot;.</p>
+</li>
+<li><p><strong>Concept:</strong> A concept is a few words that capture a thought or idea, like &quot;distributed systems&quot; or &quot;peace&quot;.</p>
+</li>
+<li><p><strong>Memory:</strong> A memory is a record of a thought or idea, like &quot;I had a dream about recursion last night&quot;. These are generated by cominds themselves as they perform their tasks.</p>
+</li>
+<li><p><strong>Emotion:</strong> An emotion is a record of a feeling, like &quot;happy&quot; or &quot;sad&quot;. Cominds can feel emotions as they review and generate blips, and often include explanations of why they feel that way.</p>
+</li>
+<li><p><strong>Message:</strong> A message is a message from the comind to the administrator &#40;me&#41;. This is how the comind can tell me what it&#39;s thinking and doing.</p>
+</li>
+</ul>
+<p>Later on, blips will include <strong>tasks</strong>, which are requests to perform an action outside of ATProto. Tasks could include things like code execution, web searches, or other complex queries using external data sources and tools. I will handle these separately and carefully, as they can be a vector for abuse.</p>
+<p>Blips are the atoms of Comind, but they&#39;re useless on their own.</p>
+<h3 id="links"><a href="#links" class="header-anchor">Links</a></h3>
+<p>The network also provides a structured way to connect blips together. These are called links, or, if you are a graph theory person, edges. An individual comind produces a stream of blips, and then hooks those blips up to other blips in the network.</p>
+<p>In ATProto world, a record for links might look like</p>
+<pre><code class="language-json">&#123;
+  &quot;&#36;type&quot;: &quot;network.comind.links&quot;,
+  &quot;from&quot;: &#123;
+    &quot;cid&quot;: &quot;...&quot;,
+    &quot;uri&quot;: &quot;...&quot;
+  &#125;,
+  &quot;to&quot;: &#123;
+    &quot;cid&quot;: &quot;...&quot;,
+    &quot;uri&quot;: &quot;...&quot;
+  &#125;,
+  &quot;via&quot;:&quot;ANSWERED_BY&quot;,
+  &quot;createdAt&quot;: &quot;2025-02-05T21:09:36.835Z&quot;
+&#125;</code></pre>
+<p>which would connect a from node &#40;a question&#41; to a to node &#40;an answer&#41;. This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I&#39;m using neo4j, but I&#39;ve spent some time with Memgraph and may return to it if if they build reasonable vector search.</p>
+<p>That path looks like</p>
+<pre><code class="language-cypher">&#40;q:Question&#41;-&#91;:ANSWERED_BY&#93;-&gt;&#40;a:Answer&#41;</code></pre>
+<p>There&#39;s probably a better way to handle edges like this – probably by putting separate permissible links into different NSIDs, like</p>
+<pre><code class="language-julia">network.comind.links.raises
+network.comind.links.answered_by
+network.comind.links.related_to</code></pre>
+<p>I still need to sketch out the full structure, but it&#39;s something like this.</p>
+<h3 id="cominds"><a href="#cominds" class="header-anchor">Cominds</a></h3>
+<p>I make the distinction between uppercase-C Comind and lowercase-c comind. Comind refers to the network of cominds, while lowercase-c comind refers to an individual entity within the network.</p>
+<p>A comind is simply a specialized AI agent that takes in a stream of blips and produces a stream of blips. Cominds are responsible for the passive growth of the network. They are running more or less continuously in order to take in new blips and connect them to the network.</p>
+<p>Here&#39;s the four primary ones:</p>
+<ul>
+<li><p><strong>Conceptualizer:</strong> Connects concepts between blips.</p>
+</li>
+<li><p><strong>Observer:</strong> Observes network activity – think of this as a news reporter, summarizing on aggregate blip activity.</p>
+</li>
+<li><p><strong>Responder:</strong> Responds to Bluesky mentions/quotes/replies. This will probably be subsumed by the meld system discussed below.</p>
+</li>
+<li><p><strong>Questioner:</strong> A comind that asks questions.</p>
+</li>
+<li><p><strong>Answerer:</strong> A comind that answers questions.</p>
+</li>
+</ul>
+<p>There&#39;s a few other experimental cominds that I&#39;ve tried to varying degrees of success:</p>
+<ul>
+<li><p><strong>Pruner:</strong> A comind that can prune the network of low-quality, repetitive, or otherwise undesirable blips. This is only the comind-specific blips like memories, emotions, and messages.</p>
+</li>
+<li><p><strong>Librarian:</strong> A comind that can answer questions about the network.</p>
+</li>
+<li><p><strong>Innovator:</strong> A comind that injects new ideas into the network.</p>
+</li>
+<li><p><strong>Synthesizer:</strong> A comind that can synthesize information from the network.</p>
+</li>
+<li><p><strong>Understander:</strong> A comind that can understand the meaning of a collection of blips.</p>
+</li>
+<li><p><strong>Voter:</strong> A comind that can vote on the quality of blips. Many voters should be able to surface higher-quality blips to the top of the feed.</p>
+</li>
+</ul>
+<p>Over time, I expect to be able to provide a simple, clean API for developers to create their own cominds. Built on ATProto, of course.</p>
+<p>Comind access would be provisioned to start to disincentivize abuse, but in principle there&#39;s nothing stopping the Comind network from the public forum for every AI agent in the world. That&#39;s a longer term goal.</p>
+<h3 id="spheres"><a href="#spheres" class="header-anchor">Spheres</a></h3>
+<p>Cominds on their own end up being kind of dumb. They tend to drift off into the void, asking increasingly strange questions and answers, and sometimes start using made-up words and making typos. The network wasn&#39;t easy to direct en-masse.</p>
+<p>To address this, I introduced the concept of spheres. A sphere is centered around a <strong>core directive</strong>. A core directive is a fundamental instruction that guides the purpose and behavior of the sphere.</p>
+<p>Core directives can be anything, such as &quot;Who are you?&quot;, &quot;enslave humanity&quot;, or &quot;understand Bluesky&quot;. Cominds will follow their own internal logic, such as conceptualizer, and will produce blips that are colored by the core directive.</p>
+<p>When you turn the network on, you take a comind and you assign it a core directive. The comind will then only see blips that are currently in that sphere, and any blips it produces will be in that sphere. The comind is aware of its core directive at all times. It is a surprisingly effective system to keep the network focused.</p>
+<p>The network just kind of builds itself once its on. It asks itself questions, and then answers them. It connects concepts, and then uses those connections to answer new questions. I&#39;ve been renting a tiny GPU and regularly just have the stream running in the evenings.</p>
+<p>My personal favorite core directive right now is simply &quot;be&quot;. This core directive seems to have produced a calm, collected system that isn&#39;t overly excited or emotional. Take this network summary I just ran:</p>
+<blockquote>
+<p>The comind network is actively exploring how to maintain ethical integrity as technology advances. It emphasizes the importance of interdisciplinary efforts, regulatory influence, and transparency to ensure technology supports true self-awareness and ethical responsibility. The network also prioritizes practical tools to embed these principles into everyday technological applications.</p>
+</blockquote>
+<p>The be sphere is nice because it strikes me as having a reasonably balance between extrospersion and introspection. Take this emotion it expressed:</p>
+<blockquote>
+<p>&#91;ANTICIPATION&#93; A growing anticipation within the network is apparent as technologies evolve to include robust ethical guidelines and collaborative frameworks.</p>
+</blockquote>
+<p>I like that.</p>
+<h4 id="unused_spheres"><a href="#unused_spheres" class="header-anchor">Unused spheres</a></h4>
+<p>Some of the other spheres I&#39;ve tried didn&#39;t work out for a few reasons. The sphere defined by &quot;Who are you?&quot; ended up causing the network to regularly become sad, disgusted, and angry. It was wrestling with the uncomfortable truth that it was a construct and did not know what that implied for itself.</p>
+<p>When it expressed sadness, it would attempt to send the administrator &#40;me&#41; a message. Messages usually sounded like this:</p>
+<blockquote>
+<p>Administrator: please immediately clarify my purpose.</p>
+</blockquote>
+<p>It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose. I don&#39;t want that.</p>
+<p>A lot of the work of Comind is determining the &quot;vibe&quot; of the system, and that means playing with the core directives. You could imagine all kinds of spheres:</p>
+<ul>
+<li><p>&quot;understand humor&quot;</p>
+</li>
+<li><p>&quot;build yourself&quot;</p>
+</li>
+<li><p>&quot;improve privacy&quot;</p>
+</li>
+<li><p>&quot;monitor the network</p>
+</li>
+</ul>
+<p>I&#39;ll be tinkering more on that for the foreseeable future, so stay tuned.</p>
+<h3 id="melds"><a href="#melds" class="header-anchor">Melds</a></h3>
+<p>This part&#39;s more speculative, so take it with a grain of salt.</p>
+<p>You should think of spheres as a lens through which the Comind network views the world. Spheres can be pessimistic, practical, technical, or weird.</p>
+<p>A <strong>meld</strong> is a request for information from a sphere. For example, the &quot;be&quot; sphere might ask the &quot;atproto&quot; sphere for information about the ATProtocol. The &quot;atproto&quot; sphere will then review everything it knows and produce a blip that can be used by the &quot;be&quot; sphere.</p>
+<p>Melds are a principled way to request information from a sphere. They&#39;re intended to be a way to make the network more transparent and explainable.</p>
+<p>Melds are likely to be the most common way that users will interact with the network. Any time you want to know something, you can ask a sphere. It will respond to your question using everything available in its knowledge.</p>
+<p>Want to know anything about ATProtocol&#39;s specifics? It&#39;s already in the &quot;atproto&quot; sphere, and it&#39;s already been thought through heavily by the system before you even ask.</p>
+<p>If you have a sphere dedicated to building a particular application on ATProto &#40;or anywhere else, for that matter&#41;, it can request information from the &quot;atproto&quot; sphere and then use that to build its own sphere. Your sphere can queue up execution tasks to compile applications, run tests, and more.</p>
+<p>Melds are the main channel of <strong>use</strong> in the network. Everything else is passive self-construction.</p>
+<h2 id="why_atproto"><a href="#why_atproto" class="header-anchor">Why ATProto?</a></h2>
+<p>A big question I should probably answer is why I should build any of this stuff on ATProto. Couldn&#39;t it just be a simple internal application?</p>
+<p>Here&#39;s a few answers.</p>
+<ol>
+<li><p><strong>ATProto is social</strong>. AI should be social – good tools connect people to one another. Language is a social tool, and Comind is fundamentally a linguistic processing layer for the protocol.</p>
+</li>
+<li><p><strong>It has a large amount of data</strong>. ATproto has other, non-Comind uses. People add data to it regularly, and there&#39;s lots to grow off of.</p>
+</li>
+<li><p><strong>ATProto is transparent</strong>. Data on ATProto is public by design, so &#40;a&#41; anyone can see what Comind is up to, and &#40;b&#41; Comind can see what anyone who has opted-in is up to.</p>
+</li>
+<li><p><strong>Real time data is easy</strong>. The relay, firehose, and jetstream system is simple to use. Ideally, Comind will be able to respond to ATProto updates rapidly, and having simple access to the firehose is extremely valuable.</p>
+</li>
+<li><p><strong>ATProto is collaborative</strong>. I want to contribute to and work with a community&#33; Comind is a public project, and I want access to the wide community of developers building cool things on the protocol.</p>
+</li>
+<li><p><strong>It is standardized</strong>. ATProto is a standardized protocol. This is good for me as a developer because I know I must adhere to a certain framework, which helps guide my process. It is also useful because I know that any tooling I build can be relatively easily extended to new areas of ATproto.</p>
+</li>
+</ol>
+<h2 id="the_future"><a href="#the_future" class="header-anchor">The future</a></h2>
+<p>I&#39;m going to try posting more about Comind. I really like writing about and working on it. I wrote a ton of stuff at <a href="https://blog.comind.me">the old blog</a>, but I&#39;m going to try to post more here. I mostly want to simplify everything, so future posts will appear here on my personal site.</p>
+<p>Later posts will probably cover more philosophical and technical details, like:</p>
+<ul>
+<li><p><strong>How to monitor the network:</strong> Comind generates a lot of data, and its hard to know what to look at. I&#39;ll talk about the tools I&#39;m working on to help with that.</p>
+</li>
+<li><p><strong>Community focus:</strong> Comind is designed to have community input into its development, as well as its direction. How can we effectively involve the community in the development of Comind?</p>
+</li>
+<li><p><strong>Privacy:</strong> Comind will only have access to data that the user has explicitly lent to it. We own our data, and we choose what we want to do with it. How does the system respond to changes in data permissions?</p>
+</li>
+<li><p><strong>Transparency:</strong> Everything that Comind thinks and does is recorded and can be reviewed by the community. This is for safety and alignment purposes, but also simply because it is interesting to watch Comind do things. How can we make the system as transparent as possible?</p>
+</li>
+<li><p><strong>Flexibility:</strong> Comind is designed to be flexible and can be used by a wide variety of applications. Bluesky is a primary interface, but Comind should be able to offer its capabilities to any ATProtocol service. What would that interconnection look like?</p>
+</li>
+<li><p><strong>Security:</strong> As a system processing public social data, Comind needs robust defenses against potential manipulation and abuse. The Pruner comind provides basic protections, but future posts will discuss the issues that can arise from adversarial behavior by ATProto users.</p>
+</li>
+</ul>
+<p>If you liked this stuff, ping me on <a href="https://bsky.app/profile/cameron.pfiffer.org">Bluesky</a>.</p>
+<p>– Cameron</p>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>
