@@ -52,7 +52,7 @@ The network also provides a structured way to connect blips together. These are 
 
 In ATProto world, a record for links might look like
 
-```json
+```
 {
   "$type": "network.comind.links",
   "from": {
@@ -72,7 +72,7 @@ which would connect a from node (a question) to a to node (an answer). This roug
 
 That path looks like
 
-```cypher
+```
 (q:Question)-[:ANSWERED_BY]->(a:Answer)
 ```
 
