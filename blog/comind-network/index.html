@@ -122,7 +122,7 @@
 <h3 id="links"><a href="#links" class="header-anchor">Links</a></h3>
 <p>The network also provides a structured way to connect blips together. These are called links, or, if you are a graph theory person, edges. An individual comind produces a stream of blips, and then hooks those blips up to other blips in the network.</p>
 <p>In ATProto world, a record for links might look like</p>
-<pre><code class="language-json">&#123;
+<pre><code class="language-julia">&#123;
   &quot;&#36;type&quot;: &quot;network.comind.links&quot;,
   &quot;from&quot;: &#123;
     &quot;cid&quot;: &quot;...&quot;,
@@ -137,7 +137,7 @@
 &#125;</code></pre>
 <p>which would connect a from node &#40;a question&#41; to a to node &#40;an answer&#41;. This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I&#39;m using neo4j, but I&#39;ve spent some time with Memgraph and may return to it if if they build reasonable vector search.</p>
 <p>That path looks like</p>
-<pre><code class="language-cypher">&#40;q:Question&#41;-&#91;:ANSWERED_BY&#93;-&gt;&#40;a:Answer&#41;</code></pre>
+<pre><code class="language-julia">&#40;q:Question&#41;-&#91;:ANSWERED_BY&#93;-&gt;&#40;a:Answer&#41;</code></pre>
 <p>There&#39;s probably a better way to handle edges like this – probably by putting separate permissible links into different NSIDs, like</p>
 <pre><code class="language-julia">network.comind.links.raises
 network.comind.links.answered_by
