@@ -1,7 +1,20 @@
 +++
 title= "The cognitive layer for the open web"
-date= Date(2025,02,05)
+date= Date(2025,02,06)
 +++
+
+# Overview
+
+I've been working on variants of what I've been calling Comind since August 2023, and it has finally settled into a form that I'm happy with. If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
+
+This is an essay about Comind's motivation, what it can achieve, and an overview of the system's architecture. I'm looking for
+
+This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
+
+If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
+
+Okay -- let's get into it.
+
 
 # The cognitive layer for the open web
 
@@ -33,13 +46,11 @@ I've been building Comind, an experimental AI system designed to serve as a cogn
 
 At its core, Comind is a queryable, self-evolving knowledge graph organized around a set of core directives. Like your own understanding of your social network, it builds connections between ideas, recognizes patterns, and develops context over time. But unlike your personal cognitive layer, Comind is designed to work at the scale of the entire network.
 
-I've been working on variants of Comind since August 2023, and it has finally settled into a form that I'm happy with. If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
-
-This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
-
-Comind is more than just an AI system watching a network. It's a way to understand how ideas move and communities grow in real time.
+Comind is an AI system designed understand how ideas move and communities grow in real time.
 
 Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.
+
+Sounds kinda cool to me.
 
 How would this work? Let me give you an overview of Comind's architecture.
 
