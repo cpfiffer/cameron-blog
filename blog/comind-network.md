@@ -175,7 +175,7 @@ In ATProto world, a record for links might look like
 }
 ```
 
-which would connect a from node (a question) to a to node (an answer). This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I'm using neo4j, but I've spent some time with Memgraph and may return to it if if they build reasonable vector search.
+which would connect a from node (a question) to a to node (an answer). This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I'm using neo4j, but I've spent some time with Memgraph and may return to it if they build reasonable vector search.
 
 That path looks like
 
