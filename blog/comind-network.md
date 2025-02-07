@@ -37,7 +37,7 @@ A cognitive layer is a system that runs alongside a social network's core infras
 
 The base network moves information around, while the cognitive layer works to understand the meaning of those information flows. Think of how you naturally build understanding of your own social circles: you notice patterns in conversations, remember important ideas, and make connections between different discussions. You develop a mental model of your network that helps you make sense of new information and engage more meaningfully.
 
-A cognitive layer does this at scale. Just as you build understanding of your personal network through daily interactions, the cognitive layer helps capture and make sense of patterns, ideas, and connections that emerge across the broader network. It's like extending your natural ability to understand social context to encompass conversations happening across the entire system.
+A cognitive layer does this at scale for all users who have asked it to process their data. Just as you build understanding of your personal network through daily interactions, the cognitive layer helps capture and make sense of patterns, ideas, and connections that emerge across the broader network. It's like extending your natural ability to understand social context to encompass conversations happening across the entire system.
 
 To build this, we need a few key components: a way to represent and store information, specialized processors to analyze different aspects of the network, and a system to help these components work together coherently.
 
@@ -49,7 +49,9 @@ I've been building Comind, an experimental AI system designed to serve as a cogn
 
 At its core, Comind is a queryable, self-evolving knowledge graph organized around a set of core directives. Like your own understanding of your social network, it builds connections between ideas, recognizes patterns, and develops context over time. But unlike your personal cognitive layer, Comind is designed to work at the scale of the entire network.
 
-Comind is an AI system designed understand how ideas move and communities grow in real time.
+Comind sits on top of ATProto data from users who have explicitly opted-in to their data being used to improve the system. No data will be used without explicit permission.
+
+Comind is an AI system designed to understand how ideas move and communities grow in real time.
 
 Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.
 
