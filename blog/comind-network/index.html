@@ -223,7 +223,7 @@
   &quot;via&quot;:&quot;ANSWERED_BY&quot;,
   &quot;createdAt&quot;: &quot;2025-02-05T21:09:36.835Z&quot;
 &#125;</code></pre>
-<p>which would connect a from node &#40;a question&#41; to a to node &#40;an answer&#41;. This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I&#39;m using neo4j, but I&#39;ve spent some time with Memgraph and may return to it if if they build reasonable vector search.</p>
+<p>which would connect a from node &#40;a question&#41; to a to node &#40;an answer&#41;. This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I&#39;m using neo4j, but I&#39;ve spent some time with Memgraph and may return to it if they build reasonable vector search.</p>
 <p>That path looks like</p>
 <pre><code class="language-julia">&#40;q:Question&#41;-&#91;:ANSWERED_BY&#93;-&gt;&#40;a:Answer&#41;</code></pre>
 <p>There&#39;s probably a better way to handle edges like this – probably by putting separate permissible links into different NSIDs, like</p>
