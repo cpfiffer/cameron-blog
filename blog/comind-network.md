@@ -13,9 +13,7 @@ The system is built on four key components: blips (atomic units of information),
 
 I've been working on variants of this system since August 2023, but it's finally settled into a form that makes sense. This essay explains the motivation behind Comind, its technical architecture, and how it integrates with ATProtocol. I'll cover how it works, what it can achieve, and where I think it could go.
 
-If you find this interesting or want to contribute, you can reach me on Bluesky. I'm hoping to present this work at [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
-
-If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
+If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm hoping to present this work at [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
 
 Okay -- let's get into it.
 
