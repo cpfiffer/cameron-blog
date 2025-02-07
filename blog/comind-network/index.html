@@ -86,6 +86,12 @@
   </body>
 </html>
 <div class="franklin-content">
+<h1 id="overview"><a href="#overview" class="header-anchor">Overview</a></h1>
+<p>I&#39;ve been working on variants of what I&#39;ve been calling Comind since August 2023, and it has finally settled into a form that I&#39;m happy with. If you&#39;ve seen my previous posts on it, you&#39;ll notice that it&#39;s changed quite a bit – it&#39;s not a note-taking app anymore. I&#39;ll leave the previous posts up for posterity, but this is the current state of the system.</p>
+<p>This is an essay about Comind&#39;s motivation, what it can achieve, and an overview of the system&#39;s architecture. I&#39;m looking for</p>
+<p>This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the <a href="https://atprotocol.dev/atmosphereconf/">ATmosphereConf</a> in March.</p>
+<p>If you think this is interesting and would like to know more or provide feedback, please reach out on <a href="https://bsky.app/profile/cameron.pfiffer.org">Bluesky</a>. I&#39;m always happy to chat.</p>
+<p>Okay – let&#39;s get into it.</p>
 <h1 id="the_cognitive_layer_for_the_open_web"><a href="#the_cognitive_layer_for_the_open_web" class="header-anchor">The cognitive layer for the open web</a></h1>
 <p>I&#39;m an economist by training. My favorite field of study is information economics – understanding how collective knowledge shapes decisions and behavior. Social networks delight me because they&#39;re markets for ideas and information. I share little tidbits of information about my life, things I&#39;m excited about, pictures of something cool I saw on the street, or research I found interesting with a small piece of my perspective on it.</p>
 <p>But most of this information lives in closed systems. While social networks like X, Reddit, and Facebook are full of these daily interactions and exchanges of ideas, they&#39;re closed to builders who want to create open tools for understanding these patterns.</p>
@@ -101,10 +107,9 @@
 <h2 id="introducing_comind"><a href="#introducing_comind" class="header-anchor">Introducing Comind</a></h2>
 <p>I&#39;ve been building Comind, an experimental AI system designed to serve as a cognitive layer for the ATProtocol, particularly focused on Bluesky&#39;s social network. I&#39;ve been working on variants of it since August 2023, and it has finally settled into a form that I&#39;m happy with.</p>
 <p>At its core, Comind is a queryable, self-evolving knowledge graph organized around a set of core directives. Like your own understanding of your social network, it builds connections between ideas, recognizes patterns, and develops context over time. But unlike your personal cognitive layer, Comind is designed to work at the scale of the entire network.</p>
-<p>I&#39;ve been working on variants of Comind since August 2023, and it has finally settled into a form that I&#39;m happy with. If you&#39;ve seen my previous posts on it, you&#39;ll notice that it&#39;s changed quite a bit – it&#39;s not a note-taking app anymore. I&#39;ll leave the previous posts up for posterity, but this is the current state of the system.</p>
-<p>This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the <a href="https://atprotocol.dev/atmosphereconf/">ATmosphereConf</a> in March.</p>
-<p>Comind is more than just an AI system watching a network. It&#39;s a way to understand how ideas move and communities grow in real time.</p>
+<p>Comind is an AI system designed understand how ideas move and communities grow in real time.</p>
 <p>Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.</p>
+<p>Sounds kinda cool to me.</p>
 <p>How would this work? Let me give you an overview of Comind&#39;s architecture.</p>
 <h2 id="nuts_and_bolts"><a href="#nuts_and_bolts" class="header-anchor">Nuts and bolts</a></h2>
 <p>Comind processes information the same way we do - it breaks things down into small pieces, connects them, and builds understanding over time.</p>
