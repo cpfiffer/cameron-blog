@@ -7,9 +7,7 @@ date= Date(2025,02,06)
 
 I've been working on variants of what I've been calling Comind since August 2023, and it has finally settled into a form that I'm happy with. If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
 
-This is an essay about Comind's motivation, what it can achieve, and an overview of the system's architecture. I'm looking for
-
-This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
+This is an essay about Comind's motivation, what it can achieve, how it interacts with the ATProtocol, and an overview of the system's architecture. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
 
 If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
 
