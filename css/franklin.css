@@ -5,7 +5,7 @@
 @import "dark.css";
 
 html {
-  font-family: sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 17px;
   color: var(--text-color);
 }
