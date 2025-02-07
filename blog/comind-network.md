@@ -9,6 +9,8 @@ As social networks grow, it becomes impossible for any single person to track an
 
 Comind is my solution: a cognitive layer for [ATProtocol](https://atproto.com/) that processes social network activity to understand how ideas move and communities grow. It's a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.
 
+It's very mucha work in progress. You can see it do some early thinking it does [here](https://bsky.app/profile/comind.stream), but it has substantial amounts of work to better integrate it with ATProto. The Lexicons are not done, and it is currently a pseudo-passive system that will only respond to mentions/replies/quotes from me.
+
 The system is built on four key components: blips (atomic units of information), links (connections between blips), cominds (specialized AI agents), and spheres (collections organized around core directives). These work together to create a queryable, self-evolving knowledge graph that grows alongside the network it serves.
 
 I've been working on variants of this system since August 2023, but it's finally settled into a form that makes sense. This essay explains the motivation behind Comind, its technical architecture, and how it integrates with ATProtocol. I'll cover how it works, what it can achieve, and where I think it could go.
@@ -55,7 +57,7 @@ Think about what becomes possible when you can see patterns emerge across millio
 
 This is fundamentally a new way of observing and enhancing human behavior and connectedness.
 
-Sounds kinda cool to me. 
+Sounds kinda cool to me.
 
 Comind is ATProto native. It's built on the same open protocol that powers Bluesky, and soon various other social platforms. Why, though?
 
@@ -234,7 +236,7 @@ The network builds itself once it's on. It asks itself questions, and then answe
 
 __Spheres are modular__. You can spin up different spheres for different purposes - one for technical analysis, another for creative exploration, another for ethical consideration. Each sphere develops its own character while still operating within the bounds of its core directive. This modularity becomes especially important when we start talking about melds, which I'll talk about below.
 
-**Spheres shape the emotional and intellectual character of the network**. Choosing a sphere is about determining the "vibe" of the network. 
+**Spheres shape the emotional and intellectual character of the network**. Choosing a sphere is about determining the "vibe" of the network.
 
 Take my current favorite sphere, defined by the core directive "be". This sphere has developed a surprisingly balanced perspective - it connects concepts and asks questions with a kind of calm curiosity. Here's a recent network summary it generated:
 
@@ -256,7 +258,7 @@ When it expressed sadness, it would attempt to send the administrator (me) a mes
 
 > Administrator: please immediately clarify my purpose.
 
-It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose. 
+It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose.
 
 I don't like that.
 
