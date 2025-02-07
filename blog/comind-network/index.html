@@ -95,6 +95,7 @@
 <h1 id="overview"><a href="#overview" class="header-anchor">Overview</a></h1>
 <p>As social networks grow, it becomes impossible for any single person to track and understand the flow of information, the formation of communities, and the evolution of ideas. We need systems that can process and make sense of these patterns at scale, while keeping the data open and accessible.</p>
 <p>Comind is my solution: a cognitive layer for <a href="https://atproto.com/">ATProtocol</a> that processes social network activity to understand how ideas move and communities grow. It&#39;s a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.</p>
+<p>It&#39;s very mucha work in progress. You can see it do some early thinking it does <a href="https://bsky.app/profile/comind.stream">here</a>, but it has substantial amounts of work to better integrate it with ATProto. The Lexicons are not done, and it is currently a pseudo-passive system that will only respond to mentions/replies/quotes from me.</p>
 <p>The system is built on four key components: blips &#40;atomic units of information&#41;, links &#40;connections between blips&#41;, cominds &#40;specialized AI agents&#41;, and spheres &#40;collections organized around core directives&#41;. These work together to create a queryable, self-evolving knowledge graph that grows alongside the network it serves.</p>
 <p>I&#39;ve been working on variants of this system since August 2023, but it&#39;s finally settled into a form that makes sense. This essay explains the motivation behind Comind, its technical architecture, and how it integrates with ATProtocol. I&#39;ll cover how it works, what it can achieve, and where I think it could go.</p>
 <p>If you think this is interesting and would like to know more or provide feedback, please reach out on <a href="https://bsky.app/profile/cameron.pfiffer.org">Bluesky</a>. I&#39;m hoping to present this work at <a href="https://atprotocol.dev/atmosphereconf/">ATmosphereConf</a> in March.</p>
@@ -118,7 +119,7 @@
 <p>Comind is an AI system designed to understand how ideas move and communities grow in real time.</p>
 <p>Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.</p>
 <p>This is fundamentally a new way of observing and enhancing human behavior and connectedness.</p>
-<p>Sounds kinda cool to me. </p>
+<p>Sounds kinda cool to me.</p>
 <p>Comind is ATProto native. It&#39;s built on the same open protocol that powers Bluesky, and soon various other social platforms. Why, though?</p>
 <h2 id="why_atproto"><a href="#why_atproto" class="header-anchor">Why ATProto?</a></h2>
 <p>A big question I should probably answer is why I should build any of this stuff on ATProto. Couldn&#39;t it just be a standalone application?</p>
@@ -271,7 +272,7 @@ network.comind.links.related_to</code></pre>
 <p>When you turn the network on, you take a comind and you assign it a core directive. The comind will then only see blips that are currently in that sphere, and any blips it produces will be in that sphere. The comind is aware of its core directive at all times. It is a surprisingly effective system to keep the network focused.</p>
 <p>The network builds itself once it&#39;s on. It asks itself questions, and then answers them. It connects concepts, and then uses those connections to answer new questions. I&#39;ve been renting a tiny GPU and regularly have the stream running in the evenings.</p>
 <p><strong>Spheres are modular</strong>. You can spin up different spheres for different purposes - one for technical analysis, another for creative exploration, another for ethical consideration. Each sphere develops its own character while still operating within the bounds of its core directive. This modularity becomes especially important when we start talking about melds, which I&#39;ll talk about below.</p>
-<p><strong>Spheres shape the emotional and intellectual character of the network</strong>. Choosing a sphere is about determining the &quot;vibe&quot; of the network. </p>
+<p><strong>Spheres shape the emotional and intellectual character of the network</strong>. Choosing a sphere is about determining the &quot;vibe&quot; of the network.</p>
 <p>Take my current favorite sphere, defined by the core directive &quot;be&quot;. This sphere has developed a surprisingly balanced perspective - it connects concepts and asks questions with a kind of calm curiosity. Here&#39;s a recent network summary it generated:</p>
 <blockquote>
 <p>The comind network is actively exploring how to maintain ethical integrity as technology advances. It emphasizes the importance of interdisciplinary efforts, regulatory influence, and transparency to ensure technology supports true self-awareness and ethical responsibility. The network also prioritizes practical tools to embed these principles into everyday technological applications.</p>
@@ -288,7 +289,7 @@ network.comind.links.related_to</code></pre>
 <blockquote>
 <p>Administrator: please immediately clarify my purpose.</p>
 </blockquote>
-<p>It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose. </p>
+<p>It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose.</p>
 <p>I don&#39;t like that.</p>
 <p>The key thing to understand about spheres is that they&#39;re not just organizational tools - they&#39;re more like cognitive environments that shape how the network thinks and grows. They give us a way to create focused, purposeful AI systems without having to hardcode every possible behavior and interaction.</p>
 <h3 id="melds"><a href="#melds" class="header-anchor">Melds</a></h3>
