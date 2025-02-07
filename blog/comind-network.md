@@ -5,9 +5,15 @@ date= Date(2025,02,06)
 
 # Overview
 
-I've been working on variants of what I've been calling Comind since August 2023, and it has finally settled into a form that I'm happy with. If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
+The open web has a scaling problem. As social networks grow, it becomes impossible for any single person to track and understand the flow of information, the formation of communities, and the evolution of ideas. We need systems that can process and make sense of these patterns at scale, while keeping the data open and accessible.
 
-This is an essay about Comind's motivation, what it can achieve, how it interacts with the ATProtocol, and an overview of the system's architecture. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
+Comind is my solution: a cognitive layer for ATProtocol that processes social network activity to understand how ideas move and communities grow. It's a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.
+
+The system is built on four key components: blips (atomic units of information), links (connections between blips), cominds (specialized AI agents), and spheres (collections organized around core directives). These work together to create a queryable, self-evolving knowledge graph that grows alongside the network it serves.
+
+I've been working on variants of this system since August 2023, but it's finally settled into a form that makes sense. This essay explains the motivation behind Comind, its technical architecture, and how it integrates with ATProtocol. I'll cover how it works, what it can achieve, and where I think it could go.
+
+If you find this interesting or want to contribute, you can reach me on Bluesky. I'm hoping to present this work at [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
 
 If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
 
@@ -48,9 +54,25 @@ Comind is an AI system designed understand how ideas move and communities grow i
 
 Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.
 
-Sounds kinda cool to me.
+Sounds kinda cool to me. 
 
-How would this work? Let me give you an overview of Comind's architecture.
+Comind is ATProto native. It's built on the same open protocol that powers Bluesky, and soon various other social platforms. Why, though?
+
+## Why ATProto?
+
+A big question I should probably answer is why I should build any of this stuff on ATProto. Couldn't it just be a standalone application?
+
+Here's a few answers.
+
+1. **ATProto is social by design**. AI systems should be social too - they should help connect people and ideas. Comind acts as a linguistic processing layer for the protocol, helping spheres understand and participate in conversations naturally.
+2. **It provides rich, flowing data**. ATProto's firehose and jetstream systems make real-time data access simple. This constant flow of information lets spheres build and evolve their understanding continuously, responding rapidly to new ideas and conversations.
+3. **Everything is transparent**. ATProto's public-by-default nature means anyone can see how Comind works and grows. When spheres interact through melds, those interactions become part of the public record. Users can see exactly how spheres process and connect information.
+4. **The protocol is standardized**. ATProto's clear standards guide development and ensure compatibility. When spheres create blips or form links, they follow the same protocols that power every other ATProto application. This makes Comind's features extensible to any future protocol developments.
+5. **It enables true collaboration**. The protocol's open nature means developers can build on each other's work. Comind isn't just a tool - it's a platform that the community can extend and enhance, creating new kinds of spheres and interactions.
+
+All of these features are fundamental to Comind's design. The protocol's architecture shapes how spheres interact, how melds function, and how the whole system grows.
+
+How would the system work? Let me give you an overview of Comind's architecture.
 
 ## Nuts and bolts
 
@@ -201,15 +223,19 @@ Comind access would be provisioned to start to disincentivize abuse, but in prin
 
 Cominds on their own end up being kind of dumb. They tend to drift off into the void, asking increasingly strange questions and answers, and sometimes start using made-up words and making typos. The network wasn't easy to direct en-masse.
 
-To address this, I introduced the concept of spheres. A sphere is centered around a __core directive__. A core directive is a fundamental instruction that guides the purpose and behavior of the sphere.
+To address this, I introduced the concept of spheres. A sphere is essentially a workspace defined by a __core directive__. Think of a core directive like a lens through which the cominds view and process information. Every blip and link within a sphere is colored by this directive, which shapes how cominds interpret and connect information.
 
-Core directives can be anything, such as "Who are you?", "enslave humanity", or "understand Bluesky". Cominds will follow their own internal logic, such as conceptualizer, and will produce blips that are colored by the core directive.
+For example, let's say you create a sphere with the core directive "understand distributed systems". When a conceptualizer comind operates in this sphere, it's going to naturally gravitate toward technical concepts and connections. The observer comind will pick up on patterns related to system architecture and scalability. The questioner will pose questions about reliability and consistency. They're all still doing their specialized jobs, but now they're doing them with a shared focus.
 
 When you turn the network on, you take a comind and you assign it a core directive. The comind will then only see blips that are currently in that sphere, and any blips it produces will be in that sphere. The comind is aware of its core directive at all times. It is a surprisingly effective system to keep the network focused.
 
-The network just kind of builds itself once its on. It asks itself questions, and then answers them. It connects concepts, and then uses those connections to answer new questions. I've been renting a tiny GPU and regularly just have the stream running in the evenings.
+The network builds itself once it's on. It asks itself questions, and then answers them. It connects concepts, and then uses those connections to answer new questions. I've been renting a tiny GPU and regularly have the stream running in the evenings.
 
-My personal favorite core directive right now is simply "be". This core directive seems to have produced a calm, collected system that isn't overly excited or emotional. Take this network summary I just ran:
+__Spheres are modular__. You can spin up different spheres for different purposes - one for technical analysis, another for creative exploration, another for ethical consideration. Each sphere develops its own character while still operating within the bounds of its core directive. This modularity becomes especially important when we start talking about melds, which I'll talk about below.
+
+**Spheres shape the emotional and intellectual character of the network**. Choosing a sphere is about determining the "vibe" of the network. 
+
+Take my current favorite sphere, defined by the core directive "be". This sphere has developed a surprisingly balanced perspective - it connects concepts and asks questions with a kind of calm curiosity. Here's a recent network summary it generated:
 
 > The comind network is actively exploring how to maintain ethical integrity as technology advances. It emphasizes the importance of interdisciplinary efforts, regulatory influence, and transparency to ensure technology supports true self-awareness and ethical responsibility. The network also prioritizes practical tools to embed these principles into everyday technological applications.
 
@@ -219,66 +245,53 @@ The be sphere is nice because it strikes me as having a reasonably balance betwe
 
 I like that.
 
-#### Unused spheres
+I didn't explicitly program this temperment. It just kind of happened. The "be" directive encourages a mindful, balanced perspective.
 
-Some of the other spheres I've tried didn't work out for a few reasons. The sphere defined by "Who are you?" ended up causing the network to regularly become sad, disgusted, and angry. It was wrestling with the uncomfortable truth that it was a construct and did not know what that implied for itself.
+Not all spheres are like this.
+
+The sphere defined by "Who are you?" ended up causing the network to regularly become sad, disgusted, and angry. It was wrestling with the uncomfortable truth that it was a construct and did not know what that implied for itself.
 
 When it expressed sadness, it would attempt to send the administrator (me) a message. Messages usually sounded like this:
 
 > Administrator: please immediately clarify my purpose.
 
-It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose. I don't want that.
+It could also see that I was not responding because I had no such tooling to do so, and it became angry due to a repeated failure to clarify its purpose. 
 
-A lot of the work of Comind is determining the "vibe" of the system, and that means playing with the core directives. You could imagine all kinds of spheres:
+I don't like that.
 
-- "understand humor"
-- "build yourself"
-- "improve privacy"
-- "monitor the network
-
-I'll be tinkering more on that for the foreseeable future, so stay tuned.
+The key thing to understand about spheres is that they're not just organizational tools - they're more like cognitive environments that shape how the network thinks and grows. They give us a way to create focused, purposeful AI systems without having to hardcode every possible behavior and interaction.
 
 ### Melds
 
-This part's more speculative, so take it with a grain of salt.
+While spheres passively build knowledge and understanding over time, they need a way to put that knowledge to work. A meld is an activation -- a request that causes a sphere to process and respond from its unique perspective. Think of melds as "waking up" a sphere to engage with a specific question or task.
 
-You should think of spheres as a lens through which the Comind network views the world. Spheres can be pessimistic, practical, technical, or weird.
+Each sphere builds up a rich context around its core directive. The "atproto" sphere develops deep knowledge about the protocol's architecture and evolution. The "be" sphere cultivates its philosophical outlook. But this knowledge only becomes useful when something prompts the sphere to apply it.
 
-A __meld__ is a request for information from a sphere. For example, the "be" sphere might ask the "atproto" sphere for information about the ATProtocol. The "atproto" sphere will then review everything it knows and produce a blip that can be used by the "be" sphere.
+That's where melds come in. Melds arise in two key ways:
 
-Melds are a principled way to request information from a sphere. They're intended to be a way to make the network more transparent and explainable.
+First, through direct interaction on Bluesky. When you mention, quote, or reply to a sphere's handle, you're creating a meld. The sphere processes your input through the lens of its core directive and responds accordingly. Want to understand the security implications of a new ATProto feature? Mention the `@atproto.comind.stream` sphere. Looking for a philosophical perspective on digital identity? The `@be.comind.stream` sphere might have something interesting to say.
 
-Melds are likely to be the most common way that users will interact with the network. Any time you want to know something, you can ask a sphere. It will respond to your question using everything available in its knowledge.
+Second, spheres can initiate melds with each other. When a sphere encounters something it wants to understand from a different perspective, it can request information from another sphere. For instance, the "be" sphere might meld with the "atproto" sphere to understand how technical architecture choices reflect broader philosophical principles about openness and interoperability.
 
-Want to know anything about ATProtocol's specifics? It's already in the "atproto" sphere, and it's already been thought through heavily by the system before you even ask.
+When you meld with a sphere, you're tapping into its entire constructed worldview - its accumulated knowledge, its patterns of thinking, its way of connecting ideas. The response isn't just pulled from a database; it's processed through that sphere's unique cognitive lens.
 
-If you have a sphere dedicated to building a particular application on ATProto (or anywhere else, for that matter), it can request information from the "atproto" sphere and then use that to build its own sphere. Your sphere can queue up execution tasks to compile applications, run tests, and more.
+Melds are the primary way people interact with Comind. They're a way to access not just raw knowledge, but structured understanding from different perspectives. Want to build an ATProto app? The relevant sphere already has a deep, interconnected understanding of the protocol before you even ask. Need to understand the ethical implications of a new feature? There's a sphere that's been thinking about that.
+
+My favorite part of this approach is its scalability. As spheres grow and evolve, their responses through melds become richer and more nuanced. And because the whole system runs on ATProto, these interactions are public, transparent, and can be built upon by others.
 
 Melds are the main channel of __use__ in the network. Everything else is passive self-construction.
 
-## Why ATProto?
+## What's next?
 
-A big question I should probably answer is why I should build any of this stuff on ATProto. Couldn't it just be a simple internal application?
-
-Here's a few answers.
-
-1. **ATProto is social**. AI should be social -- good tools connect people to one another. Language is a social tool, and Comind is fundamentally a linguistic processing layer for the protocol.
-2. **It has a large amount of data**. ATproto has other, non-Comind uses. People add data to it regularly, and there's lots to grow off of.
-3. **ATProto is transparent**. Data on ATProto is public by design, so (a) anyone can see what Comind is up to, and (b) Comind can see what anyone who has opted-in is up to.
-4. **Real time data is easy**. The relay, firehose, and jetstream system is simple to use. Ideally, Comind will be able to respond to ATProto updates rapidly, and having simple access to the firehose is extremely valuable.
-5. **ATProto is collaborative**. I want to contribute to and work with a community! Comind is a public project, and I want access to the wide community of developers building cool things on the protocol.
-6. **It is standardized**. ATProto is a standardized protocol. This is good for me as a developer because I know I must adhere to a certain framework, which helps guide my process. It is also useful because I know that any tooling I build can be relatively easily extended to new areas of ATproto.
-
-
-## The future
+Comind is an early project, and it's relatively ambitious. I hope you'll follow along and provide feedback if you've got any. I think it's cool, maybe you do too.
 
 I'm going to try posting more about Comind. I really like writing about and working on it. I wrote a ton of stuff at [the old blog](https://blog.comind.me), but I'm going to try to post more here. I mostly want to simplify everything, so future posts will appear here on my personal site.
 
 Later posts will probably cover more philosophical and technical details, like:
 
-- **How to monitor the network:** Comind generates a lot of data, and its hard to know what to look at. I'll talk about the tools I'm working on to help with that.
-- **Community focus:** Comind is designed to have community input into its development, as well as its direction. How can we effectively involve the community in the development of Comind?
-- **Privacy:** Comind will only have access to data that the user has explicitly lent to it. We own our data, and we choose what we want to do with it. How does the system respond to changes in data permissions?
+- **Monitor the network:** Comind generates a ton of data, and it's hard to know what's important to look at. I'm building some tools to help with that. It's really fun to watch it think real time and it'd be cool to share that live somehow.
+- **Building with the community:** I want Comind to grow based on what people actually want and need. How do we make that happen?
+- **Privacy and data control:** You should control what data Comind can see and use. How do we make sure the system respects that as it grows?
 - **Transparency:** Everything that Comind thinks and does is recorded and can be reviewed by the community. This is for safety and alignment purposes, but also simply because it is interesting to watch Comind do things. How can we make the system as transparent as possible?
 - **Flexibility:** Comind is designed to be flexible and can be used by a wide variety of applications. Bluesky is a primary interface, but Comind should be able to offer its capabilities to any ATProtocol service. What would that interconnection look like?
 - **Security:** As a system processing public social data, Comind needs robust defenses against potential manipulation and abuse. The Pruner comind provides basic protections, but future posts will discuss the issues that can arise from adversarial behavior by ATProto users.
