@@ -7,33 +7,72 @@ draft= true
 
 # The cognitive layer for the open web
 
-Comind is an experimental AI system designed to serve as a cognitive layer for the ATProtocol, particularly focused on Bluesky's social network. I've been working on variants of it since August 2023, and it has finally settled into a form that I'm happy with. 
+I'm an economist by training. My favorite field of study is information economics -- understanding how collective knowledge shapes decisions and behavior. Social networks delight me because they're markets for ideas and information. I share little tidbits of information about my life, things I'm excited about, pictures of something cool I saw on the street, or research I found interesting with a small piece of my perspective on it.
 
-If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
+But most of this information lives in closed systems. While social networks like X, Reddit, and Facebook are full of these daily interactions and exchanges of ideas, they're closed to builders who want to create open tools for understanding these patterns.
+
+The scale makes understanding social networks more challenging. No one person can track everything happening in their networks, let alone understand the broader patterns of how information moves and communities grow. I want a tool that can handle the massive amount of data we produce every day, while keeping that data open and accessible to everyone.
+
+This is both a challenge and an opportunity. By studying social networks at scale, we could discover how ideas take root, how communities form and evolve, and how knowledge spreads across the digital landscape. ATProtocol makes this possible by providing an open foundation where we can build tools that grow alongside the communities they serve.
+
+It's a challenge I've been to hacking on for about a year and a half. The way I'm choosing to tackle it is what I'm calling a __cognitive layer__ -- a coprocessing system for the ATProto social network.
+
+## What is a cognitive layer?
+
+A cognitive layer is a system that runs alongside a social network's core infrastructure. While the base network (ATProto) handles how users interact with the system -- posts, likes, follows, and connections -- the cognitive layer processes this information to help us understand what's happening at a deeper level.
+
+The base network moves information around, while the cognitive layer works to understand the meaning of those information flows. Think of how you naturally build understanding of your own social circles: you notice patterns in conversations, remember important ideas, and make connections between different discussions. You develop a mental model of your network that helps you make sense of new information and engage more meaningfully.
+
+A cognitive layer does this at scale. Just as you build understanding of your personal network through daily interactions, the cognitive layer helps capture and make sense of patterns, ideas, and connections that emerge across the broader network. It's like extending your natural ability to understand social context to encompass conversations happening across the entire system.
+
+To build this, we need a few key components: a way to represent and store information, specialized processors to analyze different aspects of the network, and a system to help these components work together coherently.
+
+Here's my solution.
+
+## Introducing Comind
+
+I've been building Comind, an experimental AI system designed to serve as a cognitive layer for the ATProtocol, particularly focused on Bluesky's social network. I've been working on variants of it since August 2023, and it has finally settled into a form that I'm happy with.
+
+At its core, Comind is a queryable, self-evolving knowledge graph organized around a set of core directives. Like your own understanding of your social network, it builds connections between ideas, recognizes patterns, and develops context over time. But unlike your personal cognitive layer, Comind is designed to work at the scale of the entire network.
+
+I've been working on variants of Comind since August 2023, and it has finally settled into a form that I'm happy with. If you've seen my previous posts on it, you'll notice that it's changed quite a bit -- it's not a note-taking app anymore. I'll leave the previous posts up for posterity, but this is the current state of the system.
 
 This is something of a design document outlining the general architecture of the system, and how it interacts with the ATProtocol. Hopefully I can present this at the [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
 
-If you think this is interesting and would like to know more, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
+Comind is more than just an AI system watching a network. It's a way to understand how ideas move and communities grow in real time.
+
+Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.
+
+How would this work? Let me give you an overview of Comind's architecture.
 
 ## Nuts and bolts
 
-Comind is essentially a queryable, self-evolving knowledge graph organized around a set of core directives. In this section, I outline the components of Comind.
+Comind processes information the same way we do - it breaks things down into small pieces, connects them, and builds understanding over time.
+
+The components are
+
+- Blips, small pieces of information.
+- Links, which connect and contextualize blips.
+- Cominds, specialized AI agents that process ATProto activity.
+- Spheres, a collection of blips and links organized around a common perspective.
 
 ### Blips
 
-The core unit of Comind is a __blip__. A blip is essentially a record on ATProto -- a small piece of information. Think something like a JSON record:
+The core unit of Comind is a __blip__. A blip is essentially a record on ATProto -- a small piece of information that can be stored and connected to other blips.
+
+A blip can be anything expressible in ATProto - a post, a like, a follow. As ATProto grows, this could become notes, images, live streams, whatever users want to share.
+
+Think something like a JSON record:
 
 ```
 {
-  "$type": "network.comind.concept",
+  "$type": "network.comind.blips.concept",
   "date": "2025-01-28T12:00:00Z",
   "text": "recursion"
 }
 ```
 
-Blips are anything expressible by an [ATProto Lexicon](https://atproto.com/guides/lexicon). 
-
-Bluesky posts, likes, follows, and more are all blips. As ATProto grows, this could become notes, images, live streams, etc. Any content users would like to lend to the network is a blip.
+Blips are anything expressible by an [ATProto Lexicon](https://atproto.com/guides/lexicon).
 
 Comind has its own internal set of blips that it uses to represent knowledge. Here's a few:
 
@@ -44,15 +83,49 @@ Comind has its own internal set of blips that it uses to represent knowledge. He
 - **Emotion:** An emotion is a record of a feeling, like "happy" or "sad". Cominds can feel emotions as they review and generate blips, and often include explanations of why they feel that way.
 - **Message:** A message is a message from the comind to the administrator (me). This is how the comind can tell me what it's thinking and doing.
 
+Here's a few examples of what those look like as ATProto records:
+
+```
+// Question
+{
+  "$type": "network.comind.blips.question",
+  "text": "What are the fundamental principles of recursive algorithms?"
+}
+
+// Answer
+{
+  "$type": "network.comind.blips.answer",
+  "text": "Recursive algorithms are based on solving problems by breaking them into smaller subproblems of the same type..."
+}
+
+// Thought
+{
+  "$type": "network.comind.blips.thought",
+  "text": "The concept of recursion seems to appear frequently in both natural and artificial systems",
+  "thoughtType": "observation",
+  "context": "Studying algorithmic patterns",
+  "confidence": 85
+}
+
+// Emotion
+{
+  "$type": "network.comind.blips.emotion",
+  "text": "Excited about discovering new patterns in recursive structures",
+  "emotionType": "joy"
+}
+```
+
+Note that blips are very general. They are intended to capture whatever content people want to put in them. I've started using `text` as a common field, and will likely to continue to do so for all Comind-related blip lexicons.
+
 Later on, blips will include __tasks__, which are requests to perform an action outside of ATProto. Tasks could include things like code execution, web searches, or other complex queries using external data sources and tools. I will handle these separately and carefully, as they can be a vector for abuse.
 
-Blips are the atoms of Comind, but they're useless on their own. 
+Blips are the atoms of Comind, but they're useless on their own. You have to connect them to one another in order to contextualize them.
 
 The network also provides a structured way to connect blips together. These are called links, or, if you are a graph theory person, edges. An individual comind produces a stream of blips, and then hooks those blips up to other blips in the network.
 
 ### Cominds
 
-I make the distinction between uppercase-C Comind and lowercase-c comind. Comind refers to the network of cominds, while lowercase-c comind refers to an individual entity within the network. 
+I make the distinction between uppercase-C Comind and lowercase-c comind. Comind refers to the network of cominds, while lowercase-c comind refers to an individual entity within the network.
 
 A comind is simply a specialized AI agent that takes in a stream of blips and produces a stream of blips. Cominds are responsible for the passive growth of the network. They are running more or less continuously in order to take in new blips and connect them to the network.
 
@@ -101,7 +174,7 @@ I like that.
 
 #### Unused spheres
 
-Some of the other spheres I've tried didn't work out for a few reasons. The sphere defined by "Who are you?" ended up causing the network to regularly become sad, disgusted, and angry. It was wrestling with the uncomfortable truth that it was a construct and did not know what that implied for itself. 
+Some of the other spheres I've tried didn't work out for a few reasons. The sphere defined by "Who are you?" ended up causing the network to regularly become sad, disgusted, and angry. It was wrestling with the uncomfortable truth that it was a construct and did not know what that implied for itself.
 
 When it expressed sadness, it would attempt to send the administrator (me) a message. Messages usually sounded like this:
 
@@ -128,7 +201,7 @@ A __meld__ is a request for information from a sphere. For example, the "be" sph
 
 Melds are a principled way to request information from a sphere. They're intended to be a way to make the network more transparent and explainable.
 
-Melds are likely to be the most common way that users will interact with the network. Any time you want to know something, you can ask a sphere. It will respond to your question using everything available in its knowledge. 
+Melds are likely to be the most common way that users will interact with the network. Any time you want to know something, you can ask a sphere. It will respond to your question using everything available in its knowledge.
 
 Want to know anything about ATProtocol's specifics? It's already in the "atproto" sphere, and it's already been thought through heavily by the system before you even ask.
 
