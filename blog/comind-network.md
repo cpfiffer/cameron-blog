@@ -53,6 +53,8 @@ Comind is an AI system designed to understand how ideas move and communities gro
 
 Think about what becomes possible when you can see patterns emerge across millions of conversations. You could watch new programming paradigms take shape in tech communities before they hit mainstream. Track how scientific ideas spread from research discussions into practical applications. Understand how communities naturally split, merge, and evolve.
 
+This is fundamentally a new way of observing and enhancing human behavior and connectedness.
+
 Sounds kinda cool to me. 
 
 Comind is ATProto native. It's built on the same open protocol that powers Bluesky, and soon various other social platforms. Why, though?
