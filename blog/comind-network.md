@@ -5,9 +5,9 @@ date= Date(2025,02,06)
 
 # Overview
 
-The open web has a scaling problem. As social networks grow, it becomes impossible for any single person to track and understand the flow of information, the formation of communities, and the evolution of ideas. We need systems that can process and make sense of these patterns at scale, while keeping the data open and accessible.
+As social networks grow, it becomes impossible for any single person to track and understand the flow of information, the formation of communities, and the evolution of ideas. We need systems that can process and make sense of these patterns at scale, while keeping the data open and accessible.
 
-Comind is my solution: a cognitive layer for ATProtocol that processes social network activity to understand how ideas move and communities grow. It's a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.
+Comind is my solution: a cognitive layer for [ATProtocol](https://atproto.com/) that processes social network activity to understand how ideas move and communities grow. It's a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.
 
 The system is built on four key components: blips (atomic units of information), links (connections between blips), cominds (specialized AI agents), and spheres (collections organized around core directives). These work together to create a queryable, self-evolving knowledge graph that grows alongside the network it serves.
 
@@ -18,7 +18,6 @@ If you find this interesting or want to contribute, you can reach me on Bluesky.
 If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm always happy to chat.
 
 Okay -- let's get into it.
-
 
 # The cognitive layer for the open web
 
