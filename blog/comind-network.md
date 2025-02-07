@@ -1,8 +1,6 @@
 +++
 title= "The cognitive layer for the open web"
 date= Date(2025,02,05)
-draft= true
-
 +++
 
 # The cognitive layer for the open web
@@ -72,9 +70,11 @@ Think something like a JSON record:
 }
 ```
 
-Blips are anything expressible by an [ATProto Lexicon](https://atproto.com/guides/lexicon).
+Technically speaking, blips are anything expressible by an [ATProto Lexicon](https://atproto.com/guides/lexicon).
 
-Comind has its own internal set of blips that it uses to represent knowledge. Here's a few:
+Bluesky posts, likes, follows, and more are all blips. As ATProto grows, this could become notes, images, live streams, etc. Any content users would like to lend to the network is a blip.
+
+Comind has its own set of internal blips that it uses to store its core operations. Here's a few:
 
 - **Question:** A question is a question, like "What is the meaning of life?" or "What is the best way to learn about recursion?" Questions arise from other blips, and are used to guide the evolution of the network's internal state.
 - **Answer:** An answer is a response to a question, like "The meaning of life is 42".
@@ -121,7 +121,45 @@ Later on, blips will include __tasks__, which are requests to perform an action 
 
 Blips are the atoms of Comind, but they're useless on their own. You have to connect them to one another in order to contextualize them.
 
+### Links
+
 The network also provides a structured way to connect blips together. These are called links, or, if you are a graph theory person, edges. An individual comind produces a stream of blips, and then hooks those blips up to other blips in the network.
+
+In ATProto world, a record for links might look like
+
+```
+{
+  "$type": "network.comind.links",
+  "from": {
+    "cid": "...",
+    "uri": "..."
+  },
+  "to": {
+    "cid": "...",
+    "uri": "..."
+  },
+  "via":"ANSWERED_BY",
+  "createdAt": "2025-02-05T21:09:36.835Z"
+}
+```
+
+which would connect a from node (a question) to a to node (an answer). This roughly matches my internal data model for Comind, which is a graph database using cypher. Currently I'm using neo4j, but I've spent some time with Memgraph and may return to it if if they build reasonable vector search.
+
+That path looks like
+
+```
+(q:Question)-[:ANSWERED_BY]->(a:Answer)
+```
+
+There's probably a better way to handle edges like this -- probably by putting separate permissible links into different NSIDs, like
+
+```
+network.comind.links.raises
+network.comind.links.answered_by
+network.comind.links.related_to
+```
+
+I still need to sketch out the full structure, but it's something like this.
 
 ### Cominds
 
@@ -209,6 +247,20 @@ If you have a sphere dedicated to building a particular application on ATProto (
 
 Melds are the main channel of __use__ in the network. Everything else is passive self-construction.
 
+## Why ATProto?
+
+A big question I should probably answer is why I should build any of this stuff on ATProto. Couldn't it just be a simple internal application?
+
+Here's a few answers.
+
+1. **ATProto is social**. AI should be social -- good tools connect people to one another. Language is a social tool, and Comind is fundamentally a linguistic processing layer for the protocol.
+2. **It has a large amount of data**. ATproto has other, non-Comind uses. People add data to it regularly, and there's lots to grow off of.
+3. **ATProto is transparent**. Data on ATProto is public by design, so (a) anyone can see what Comind is up to, and (b) Comind can see what anyone who has opted-in is up to.
+4. **Real time data is easy**. The relay, firehose, and jetstream system is simple to use. Ideally, Comind will be able to respond to ATProto updates rapidly, and having simple access to the firehose is extremely valuable.
+5. **ATProto is collaborative**. I want to contribute to and work with a community! Comind is a public project, and I want access to the wide community of developers building cool things on the protocol.
+6. **It is standardized**. ATProto is a standardized protocol. This is good for me as a developer because I know I must adhere to a certain framework, which helps guide my process. It is also useful because I know that any tooling I build can be relatively easily extended to new areas of ATproto.
+
+
 ## The future
 
 I'm going to try posting more about Comind. I really like writing about and working on it. I wrote a ton of stuff at [the old blog](https://blog.comind.me), but I'm going to try to post more here. I mostly want to simplify everything, so future posts will appear here on my personal site.
@@ -220,7 +272,8 @@ Later posts will probably cover more philosophical and technical details, like:
 - **Privacy:** Comind will only have access to data that the user has explicitly lent to it. We own our data, and we choose what we want to do with it. How does the system respond to changes in data permissions?
 - **Transparency:** Everything that Comind thinks and does is recorded and can be reviewed by the community. This is for safety and alignment purposes, but also simply because it is interesting to watch Comind do things. How can we make the system as transparent as possible?
 - **Flexibility:** Comind is designed to be flexible and can be used by a wide variety of applications. Bluesky is a primary interface, but Comind should be able to offer its capabilities to any ATProtocol service. What would that interconnection look like?
+- **Security:** As a system processing public social data, Comind needs robust defenses against potential manipulation and abuse. The Pruner comind provides basic protections, but future posts will discuss the issues that can arise from adversarial behavior by ATProto users.
 
-Anyway, have a good evening.
+If you liked this stuff, ping me on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org).
 
 -- Cameron

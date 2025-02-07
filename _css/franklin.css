@@ -94,6 +94,8 @@ html {
 ================================================================== */
 
 .franklin-content h1 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   font-size: 24px;
 }
 .franklin-content h2 {
