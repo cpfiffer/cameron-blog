@@ -24,7 +24,7 @@ Let me show you an example. I have a node type called a "Thought" in Comind-worl
 
 Here's an example of a thought in ATProto record format:
 
-```json
+```
 {
   "$type": "network.comind.blips.generated.thought",
   "generated": {
@@ -44,7 +44,7 @@ Here's an example of a thought in ATProto record format:
 
 I've been using Pydantic to specify blip structures inside of my code:
 
-```json
+```
 class Thought(Node):
     """A thought that captures both direct observations and metacognitive processes"""
     node_type: Literal["Thought"] = "Thought"
@@ -68,7 +68,7 @@ but for various reasons this has become pretty annoying to work with. It's hard 
 
 Here's the Lexicon for thoughts:
 
-```json
+```
 {
     "lexicon": 1,
     "id": "network.comind.blips.generated.thought",
@@ -125,7 +125,7 @@ Here's the Lexicon for thoughts:
 
 If you extract just the `record` part of this lexicon, you get something that is a satisfactory JSON schema to define a language model's output:
 
-```json
+```
 {
     "type": "object",
     "required": ["thoughtType", "text", "evidence", "alternatives"],
@@ -182,7 +182,7 @@ response = src.structured_gen.generate_by_schema(
 
 aaaaand the output you get is a thought:
 
-```json
+```
 {
   "$type": "network.comind.blips.generated.thought",
   "generated": {
