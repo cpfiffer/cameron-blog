@@ -9,13 +9,15 @@ As social networks grow, it becomes impossible for any single person to track an
 
 Comind is my solution: a cognitive layer for [ATProtocol](https://atproto.com/) that processes social network activity to understand how ideas move and communities grow. It's a network of specialized AI agents that work together to observe, question, and connect information flowing through the protocol. Think of it as extending our natural ability to understand social context to encompass conversations happening across the entire network.
 
-It's very mucha work in progress. You can see it do some early thinking it does [here](https://bsky.app/profile/comind.stream), but it has substantial amounts of work to better integrate it with ATProto. The Lexicons are not done, and it is currently a pseudo-passive system that will only respond to mentions/replies/quotes from me.
+It's very much a work in progress. You can see it do some early thinking it does [here](https://bsky.app/profile/comind.stream), but it has substantial amounts of work to better integrate it with ATProto. The Lexicons are not done, and it is currently a pseudo-passive system that will only respond to mentions/replies/quotes from me.
 
 The system is built on four key components: blips (atomic units of information), links (connections between blips), cominds (specialized AI agents), and spheres (collections organized around core directives). These work together to create a queryable, self-evolving knowledge graph that grows alongside the network it serves.
 
 I've been working on variants of this system since August 2023, but it's finally settled into a form that makes sense. This essay explains the motivation behind Comind, its technical architecture, and how it integrates with ATProtocol. I'll cover how it works, what it can achieve, and where I think it could go.
 
 If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm hoping to present this work at [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
+
+If you would like to give me permission to add your public ATProto data to Comind, you can let me know on Bluesky.
 
 Okay -- let's get into it.
 
