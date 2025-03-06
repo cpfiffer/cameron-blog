@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+  <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+    <title>Structured LLM output from ATProto Lexicons</title>
+    
+  </head>
+  <body>
+    <div class="center-column-holder">
+      <div class="center-column">
+        <header>
+  <div class="header-nav">
+    <span style="font-weight: bold">Cameron Pfiffer</span>
+    <div>
+      <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘
+      <a href="/links/">links</a>
+    </div>
+  </div>
+  <hr />
+</header>
+
+        <!-- Content appended here -->
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+    <style>
+      #theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem;
+        font-size: 1.25rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        z-index: 1000;
+      }
+    </style>
+    <script>
+      // Check for saved theme preference, otherwise use system preference
+      const getPreferredTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      // Apply theme
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        // Update button text
+        document.getElementById("theme-toggle").innerText =
+          theme === "dark" ? "☼" : "☾";
+      };
+
+      // Initialize theme
+      setTheme(getPreferredTheme());
+
+      // Add toggle functionality
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        setTheme(currentTheme === "dark" ? "light" : "dark");
+      });
+
+      // Listen for system theme changes
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            setTheme(e.matches ? "dark" : "light");
+          }
+        });
+    </script>
+  </body>
+</html>
+<div class="franklin-content">
+<p>I spent time time this evening fucking around with <a href="https://atproto.com/specs/lexicon">AT Protocol lexicons</a> for <a href="https://bsky.app/profile/comind.stream">Comind</a>. </p>
+<p>Lexicon is a schema definition language for AT Protocol. Devs on ATProto use Lexicons to describe a shape for remote calls &#40;GET/POST&#41;, websocket connections, and records. Providing clean lexicons is a great way to make sure that your application can be easily understood by everyone else in AT Protocol-world &#40;The Atmosphere&#41;.</p>
+<p>Comind, if you&#39;re not familiar, is an attempt to build a cognitive layer on top of AT Protocol. It&#39;s intended to passively think about what&#39;s happening on the network and to provide perspectives or information as needed. Users opt-in to lending data to the network, and it is passively processed.. More on that <a href="https://cameron.pfiffer.org/blog/comind-network/">here</a>.</p>
+<p>It&#39;s designed as a distributed AI system, meaning that various agents &#40;called a &quot;comind&quot;&#41; asynchronously produce &quot;blips&quot;, which are structured pieces of content like thoughts, memories, emotions, messages, etc. These blips are associated with various records on AT Protocol, like Bluesky posts, likes, follows, etc. Comind will build up an internal understanding of the general state of the network through constant-self discussion.</p>
+<p>Funnily enough, it turns out that Lexicons have another advantage – specifying the public language by which agents on Comind communicate with one another. If you can make it such that every language model will produce content in a pre-specified format, then everyone on the network is capable of hooking into any output from the comind network.</p>
+<p>Lexicons can be &#40;partially&#41; converted to JSON schemas, which structured generation tools like Outlines use to enforce particular output formats. </p>
+<p>Let me show you an example. I have a node type called a &quot;Thought&quot; in Comind-world. Thoughts are composed of:</p>
+<ul>
+<li><p>a thought category &#40;analysis, critique, correction, speculation, etc&#41;</p>
+</li>
+<li><p>content, an arbitrary piece of text that contains the main point of the thought</p>
+</li>
+<li><p>evidence, a list of observations that support the content</p>
+</li>
+<li><p>alternatives, a set of contratian ideas</p>
+</li>
+</ul>
+<p>Here&#39;s an example of a thought in ATProto record format:</p>
+<pre><code class="language-json">&#123;
+  &quot;&#36;type&quot;: &quot;network.comind.blips.generated.thought&quot;,
+  &quot;generated&quot;: &#123;
+    &quot;thoughtType&quot;: &quot;metacognition&quot;,
+    &quot;text&quot;: &quot;Thinking about the thought process itself&quot;,
+    &quot;evidence&quot;: &#91;
+      &quot;proof of concept&quot;,
+      &quot;idea validation&quot;
+    &#93;,
+    &quot;alternatives&quot;: &#91;
+      &quot;negative thinking&quot;,
+      &quot;positive thinking&quot;
+    &#93;
+  &#125;
+&#125;</code></pre>
+<p>I&#39;ve been using Pydantic to specify blip structures inside of my code:</p>
+<pre><code class="language-json">class Thought&#40;Node&#41;:
+    &quot;&quot;&quot;A thought that captures both direct observations and metacognitive processes&quot;&quot;&quot;
+    node_type: Literal&#91;&quot;Thought&quot;&#93; &#61; &quot;Thought&quot;
+    text: str &#61; Field&#40;&#41;
+    context: Optional&#91;str&#93; &#61; None
+    confidence: Optional&#91;float&#93; &#61; None
+    thought_type: Literal&#91;
+        &quot;observation&quot;,
+        &quot;reflection&quot;,
+        &quot;hypothesis&quot;,
+        &quot;question&quot;,
+        &quot;synthesis&quot;,
+        &quot;correction&quot;
+    &#93; &#61; &quot;observation&quot;
+    evidence: Optional&#91;List&#91;str&#93;&#93; &#61; None
+    alternatives: Optional&#91;List&#91;str&#93;&#93; &#61; None
+    uri: Optional&#91;str&#93; &#61; None</code></pre>
+<p>but for various reasons this has become pretty annoying to work with. It&#39;s hard to make this work with ATProto without a bunch of hacky glue code. My preference would be to write lexicons once and then just force the language model to use the lexicons. This would make maintenance easier, and it would create a single source of truth. Any time I change the Python shit I have to go and change the lexicons too. This basically means the lexicons get left behind because they&#39;re not useful to the core functioning of the system.</p>
+<p>Here&#39;s the Lexicon for thoughts:</p>
+<pre><code class="language-json">&#123;
+    &quot;lexicon&quot;: 1,
+    &quot;id&quot;: &quot;network.comind.blips.generated.thought&quot;,
+    &quot;revision&quot;: 1,
+    &quot;description&quot;: &quot;A thought node in the comind network, generated by a language model.&quot;,
+    &quot;defs&quot;: &#123;
+        &quot;main&quot;: &#123;
+            &quot;type&quot;: &quot;record&quot;,
+            &quot;key&quot;: &quot;tid&quot;,
+            &quot;record&quot;: &#123;
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: &#91;&quot;thoughtType&quot;, &quot;text&quot;, &quot;evidence&quot;, &quot;alternatives&quot;&#93;,
+                &quot;properties&quot;: &#123;
+                    &quot;thoughtType&quot;: &#123;
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;description&quot;: &quot;The type of thought. May be one of the following: analysis, prediction, evaluation, comparison, inference, critique, integration, speculation, clarification, metacognition, observation, reflection, hypothesis, question, synthesis, correction.&quot;,
+                        &quot;enum&quot;: &#91;
+                            &quot;analysis&quot;,
+                            &quot;prediction&quot;,
+                            &quot;evaluation&quot;,
+                            &quot;comparison&quot;,
+                            &quot;inference&quot;,
+                            &quot;critique&quot;,
+                            &quot;integration&quot;,
+                            &quot;speculation&quot;,
+                            &quot;clarification&quot;,
+                            &quot;metacognition&quot;,
+                            &quot;observation&quot;,
+                            &quot;reflection&quot;,
+                            &quot;hypothesis&quot;,
+                            &quot;question&quot;,
+                            &quot;synthesis&quot;,
+                            &quot;correction&quot;
+                        &#93;
+                    &#125;,
+                    &quot;context&quot;: &#123; &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;A context for the thought. This is a short description of the situation or topic that the thought is about.&quot; &#125;,
+                    &quot;text&quot;: &#123; &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The text of the thought.&quot; &#125;,
+                    &quot;evidence&quot;: &#123;
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: &#123; &quot;type&quot;: &quot;string&quot; &#125;,
+                        &quot;description&quot;: &quot;A list of evidence or sources that support the thought.&quot;
+                    &#125;,
+                    &quot;alternatives&quot;: &#123;
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: &#123; &quot;type&quot;: &quot;string&quot; &#125;,
+                        &quot;description&quot;: &quot;A list of alternative thoughts or interpretations of the thought.&quot;
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
+<p>If you extract just the <code>record</code> part of this lexicon, you get something that is a satisfactory JSON schema to define a language model&#39;s output:</p>
+<pre><code class="language-json">&#123;
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;required&quot;: &#91;&quot;thoughtType&quot;, &quot;text&quot;, &quot;evidence&quot;, &quot;alternatives&quot;&#93;,
+    &quot;properties&quot;: &#123;
+        &quot;thoughtType&quot;: &#123;
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;The type of thought. May be one of the following: analysis, prediction, evaluation, comparison, inference, critique, integration, speculation, clarification, metacognition, observation, reflection, hypothesis, question, synthesis, correction.&quot;,
+            &quot;enum&quot;: &#91;
+                &quot;analysis&quot;,
+                &quot;prediction&quot;,
+                &quot;evaluation&quot;,
+                &quot;comparison&quot;,
+                &quot;inference&quot;,
+                &quot;critique&quot;,
+                &quot;integration&quot;,
+                &quot;speculation&quot;,
+                &quot;clarification&quot;,
+                &quot;metacognition&quot;,
+                &quot;observation&quot;,
+                &quot;reflection&quot;,
+                &quot;hypothesis&quot;,
+                &quot;question&quot;,
+                &quot;synthesis&quot;,
+                &quot;correction&quot;
+            &#93;
+        &#125;,
+        &quot;context&quot;: &#123; &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;A context for the thought. This is a short description of the situation or topic that the thought is about.&quot; &#125;,
+        &quot;text&quot;: &#123; &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The text of the thought.&quot; &#125;,
+        &quot;evidence&quot;: &#123;
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: &#123; &quot;type&quot;: &quot;string&quot; &#125;,
+            &quot;description&quot;: &quot;A list of evidence or sources that support the thought.&quot;
+        &#125;,
+        &quot;alternatives&quot;: &#123;
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: &#123; &quot;type&quot;: &quot;string&quot; &#125;,
+            &quot;description&quot;: &quot;A list of alternative thoughts or interpretations of the thought.&quot;
+        &#125;
+    &#125;
+&#125;</code></pre>
+<p>When you&#39;ve got a schema, you can get JSON from a language model. I&#39;m using a vLLM server here, which supports structured generation for language models.</p>
+<pre><code class="language-python">response &#61; src.structured_gen.generate_by_schema&#40;
+    messages&#61;&#91;
+        &#123;&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;&#125;,
+        &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Please provide a brief thought, we&#39;re just testing the JSON schema.&quot;&#125;,
+    &#93;,
+    schema&#61;generated_part,
+&#41;</code></pre>
+<p>aaaaand the output you get is a thought:</p>
+<pre><code class="language-json">&#123;
+  &quot;&#36;type&quot;: &quot;network.comind.blips.generated.thought&quot;,
+  &quot;generated&quot;: &#123;
+    &quot;thoughtType&quot;: &quot;metacognition&quot;,
+    &quot;text&quot;: &quot;Thinking about the thought process itself&quot;,
+    &quot;evidence&quot;: &#91;
+      &quot;proof of concept&quot;,
+      &quot;idea validation&quot;
+    &#93;,
+    &quot;alternatives&quot;: &#91;
+      &quot;negative thinking&quot;,
+      &quot;positive thinking&quot;
+    &#93;
+  &#125;
+&#125;</code></pre>
+<p>I was even able to upload this to <a href="https://atp.tools/at:/did&#37;3Aplc&#37;3Anpv2xmou5cvhnupypxzrgoj4/network.comind.blips.generated.thought/3ljogibu3ck2t">data repo of void.comind.stream</a>.</p>
+<p>Anyway, I&#39;ll tinker more on it.</p>
+<p>– Cameron</p>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>
