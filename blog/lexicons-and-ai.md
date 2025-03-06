@@ -1,5 +1,5 @@
 +++
-title= "ATProto: social media for machines"
+title= "Structured LLM output from ATProto Lexicons"
 date= Date(2025,03,05)
 +++
 
