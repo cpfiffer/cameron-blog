@@ -130,7 +130,7 @@
 </li>
 </ul>
 <p>Here&#39;s an example of a thought in ATProto record format:</p>
-<pre><code class="language-json">&#123;
+<pre><code class="language-julia">&#123;
   &quot;&#36;type&quot;: &quot;network.comind.blips.generated.thought&quot;,
   &quot;generated&quot;: &#123;
     &quot;thoughtType&quot;: &quot;metacognition&quot;,
@@ -146,7 +146,7 @@
   &#125;
 &#125;</code></pre>
 <p>I&#39;ve been using Pydantic to specify blip structures inside of my code:</p>
-<pre><code class="language-json">class Thought&#40;Node&#41;:
+<pre><code class="language-julia">class Thought&#40;Node&#41;:
     &quot;&quot;&quot;A thought that captures both direct observations and metacognitive processes&quot;&quot;&quot;
     node_type: Literal&#91;&quot;Thought&quot;&#93; &#61; &quot;Thought&quot;
     text: str &#61; Field&#40;&#41;
@@ -165,7 +165,7 @@
     uri: Optional&#91;str&#93; &#61; None</code></pre>
 <p>but for various reasons this has become pretty annoying to work with. It&#39;s hard to make this work with ATProto without a bunch of hacky glue code. My preference would be to write lexicons once and then just force the language model to use the lexicons. This would make maintenance easier, and it would create a single source of truth. Any time I change the Python shit I have to go and change the lexicons too. This basically means the lexicons get left behind because they&#39;re not useful to the core functioning of the system.</p>
 <p>Here&#39;s the Lexicon for thoughts:</p>
-<pre><code class="language-json">&#123;
+<pre><code class="language-julia">&#123;
     &quot;lexicon&quot;: 1,
     &quot;id&quot;: &quot;network.comind.blips.generated.thought&quot;,
     &quot;revision&quot;: 1,
@@ -218,7 +218,7 @@
     &#125;
 &#125;</code></pre>
 <p>If you extract just the <code>record</code> part of this lexicon, you get something that is a satisfactory JSON schema to define a language model&#39;s output:</p>
-<pre><code class="language-json">&#123;
+<pre><code class="language-julia">&#123;
     &quot;type&quot;: &quot;object&quot;,
     &quot;required&quot;: &#91;&quot;thoughtType&quot;, &quot;text&quot;, &quot;evidence&quot;, &quot;alternatives&quot;&#93;,
     &quot;properties&quot;: &#123;
@@ -267,7 +267,7 @@
     schema&#61;generated_part,
 &#41;</code></pre>
 <p>aaaaand the output you get is a thought:</p>
-<pre><code class="language-json">&#123;
+<pre><code class="language-julia">&#123;
   &quot;&#36;type&quot;: &quot;network.comind.blips.generated.thought&quot;,
   &quot;generated&quot;: &#123;
     &quot;thoughtType&quot;: &quot;metacognition&quot;,
