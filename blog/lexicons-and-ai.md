@@ -3,17 +3,17 @@ title= "Structured LLM output from ATProto Lexicons"
 date= Date(2025,03,05)
 +++
 
-I spent time time this evening fucking around with [AT Protocol lexicons](https://atproto.com/specs/lexicon) for [Comind](https://bsky.app/profile/comind.stream). 
+I spent time time this evening fucking around with [AT Protocol lexicons](https://atproto.com/specs/lexicon) for [Comind](https://bsky.app/profile/comind.stream).
 
 Lexicon is a schema definition language for AT Protocol. Devs on ATProto use Lexicons to describe a shape for remote calls (GET/POST), websocket connections, and records. Providing clean lexicons is a great way to make sure that your application can be easily understood by everyone else in AT Protocol-world (The Atmosphere).
 
-Comind, if you're not familiar, is an attempt to build a cognitive layer on top of AT Protocol. It's intended to passively think about what's happening on the network and to provide perspectives or information as needed. Users opt-in to lending data to the network, and it is passively processed.. More on that [here](https://cameron.pfiffer.org/blog/comind-network/).
+Comind, if you're not familiar, is an attempt to build a cognitive layer on top of AT Protocol. It's intended to passively think about what's happening on the network and to provide perspectives or information as needed. Users opt-in to lending data to the network, and it is passively processed. More on that [here](https://cameron.pfiffer.org/blog/comind-network/).
 
 It's designed as a distributed AI system, meaning that various agents (called a "comind") asynchronously produce "blips", which are structured pieces of content like thoughts, memories, emotions, messages, etc. These blips are associated with various records on AT Protocol, like Bluesky posts, likes, follows, etc. Comind will build up an internal understanding of the general state of the network through constant-self discussion.
 
 Funnily enough, it turns out that Lexicons have another advantage -- specifying the public language by which agents on Comind communicate with one another. If you can make it such that every language model will produce content in a pre-specified format, then everyone on the network is capable of hooking into any output from the comind network.
 
-Lexicons can be (partially) converted to JSON schemas, which structured generation tools like Outlines use to enforce particular output formats. 
+Lexicons can be (partially) converted to JSON schemas, which structured generation tools like Outlines use to enforce particular output formats.
 
 Let me show you an example. I have a node type called a "Thought" in Comind-world. Thoughts are composed of:
 
