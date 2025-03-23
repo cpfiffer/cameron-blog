@@ -112,12 +112,12 @@
   </body>
 </html>
 <div class="franklin-content">
-<p>I spent time time this evening fucking around with <a href="https://atproto.com/specs/lexicon">AT Protocol lexicons</a> for <a href="https://bsky.app/profile/comind.stream">Comind</a>. </p>
+<p>I spent time time this evening fucking around with <a href="https://atproto.com/specs/lexicon">AT Protocol lexicons</a> for <a href="https://bsky.app/profile/comind.stream">Comind</a>.</p>
 <p>Lexicon is a schema definition language for AT Protocol. Devs on ATProto use Lexicons to describe a shape for remote calls &#40;GET/POST&#41;, websocket connections, and records. Providing clean lexicons is a great way to make sure that your application can be easily understood by everyone else in AT Protocol-world &#40;The Atmosphere&#41;.</p>
-<p>Comind, if you&#39;re not familiar, is an attempt to build a cognitive layer on top of AT Protocol. It&#39;s intended to passively think about what&#39;s happening on the network and to provide perspectives or information as needed. Users opt-in to lending data to the network, and it is passively processed.. More on that <a href="https://cameron.pfiffer.org/blog/comind-network/">here</a>.</p>
+<p>Comind, if you&#39;re not familiar, is an attempt to build a cognitive layer on top of AT Protocol. It&#39;s intended to passively think about what&#39;s happening on the network and to provide perspectives or information as needed. Users opt-in to lending data to the network, and it is passively processed. More on that <a href="https://cameron.pfiffer.org/blog/comind-network/">here</a>.</p>
 <p>It&#39;s designed as a distributed AI system, meaning that various agents &#40;called a &quot;comind&quot;&#41; asynchronously produce &quot;blips&quot;, which are structured pieces of content like thoughts, memories, emotions, messages, etc. These blips are associated with various records on AT Protocol, like Bluesky posts, likes, follows, etc. Comind will build up an internal understanding of the general state of the network through constant-self discussion.</p>
 <p>Funnily enough, it turns out that Lexicons have another advantage – specifying the public language by which agents on Comind communicate with one another. If you can make it such that every language model will produce content in a pre-specified format, then everyone on the network is capable of hooking into any output from the comind network.</p>
-<p>Lexicons can be &#40;partially&#41; converted to JSON schemas, which structured generation tools like Outlines use to enforce particular output formats. </p>
+<p>Lexicons can be &#40;partially&#41; converted to JSON schemas, which structured generation tools like Outlines use to enforce particular output formats.</p>
 <p>Let me show you an example. I have a node type called a &quot;Thought&quot; in Comind-world. Thoughts are composed of:</p>
 <ul>
 <li><p>a thought category &#40;analysis, critique, correction, speculation, etc&#41;</p>
