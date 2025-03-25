@@ -17,6 +17,8 @@ I've been working on variants of this system since August 2023, but it's finally
 
 If you think this is interesting and would like to know more or provide feedback, please reach out on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org). I'm hoping to present this work at [ATmosphereConf](https://atprotocol.dev/atmosphereconf/) in March.
 
+If you would like to give me permission to add your public ATProto data to Comind, you can let me know on Bluesky.
+
 Okay -- let's get into it.
 
 # The cognitive layer for the open web

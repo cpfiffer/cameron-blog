@@ -37,7 +37,6 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
                     # Try to find the first line that starts with "# "
                     open(file) do f
                         for line in eachline(f)
-                            println(line)
                             if startswith(line, "# ")
                                 title = replace(line, r"^# " => "")
                                 break
@@ -87,11 +86,11 @@ string_to_date(s) = Date(s, "yyyy-mm-dd")
     for (file, title, date) in posts
         # Create relative path with no .md
         file = replace(file, r"\.md$" => "")
-        @info file
+        # @info file
 
         file_year = year(date)
 
-        @info "" file_year current_year file title
+        # @info "" file_year current_year file title
         if file_year != current_year
             println(io, "</ul>")
             println(io, "<h2 class=\"blog-list-year\">$(file_year)</h2>")
