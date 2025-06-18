@@ -1,45 +1,45 @@
 /* Simple css to follow the geometry of franklin-content (see franklin.css) */
 
 header {
-  margin-top: 14px;
-  position: relative;
-  padding-left: 12.5%;
-  padding-right: 12.5%;
+    margin-top: 14px;
+    position: relative;
+    padding-left: 12.5%;
+    padding-right: 12.5%;
 
-  /* font-family: monospace; */
-  /* margin-bottom: 50px; */
+    /* font-family: monospace; */
+    /* margin-bottom: 50px; */
 }
 
 .header-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* on wide screens, fix content width to a max value */
 @media (min-width: 940px) {
-  header {
-    width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    header {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 /* on narrow device, reduce margins */
 @media (max-width: 480px) {
-  header {
-    padding-left: 6%;
-    padding-right: 6%;
-  }
-  .header-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    header {
+        padding-left: 6%;
+        padding-right: 6%;
+    }
+    .header-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 header hr {
-  border: none;
-  border-top: 1px solid
-    color-mix(in srgb, var(--blockquote-color) 15%, transparent);
-  margin: 1em 0;
+    border: none;
+    border-top: 1px solid
+        color-mix(in srgb, var(--blockquote-color) 15%, transparent);
+    margin: 1em 0;
 }

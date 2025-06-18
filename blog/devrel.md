@@ -210,4 +210,4 @@ Developer relations is challenging but rewarding. You'll need to be comfortable 
 
 Above all, remember to play. The moment advocacy becomes just another marketing job is the moment you've lost the thread. Stay curious, stay engaged, and keep building cool shit.
 
-- Cameron
+-- Cameron
