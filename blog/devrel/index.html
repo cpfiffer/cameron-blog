@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+    <title>A Guide to Developer Advocacy</title>
+    
+  </head>
+  <body>
+    <div class="center-column-holder">
+      <div class="center-column">
+        <header>
+  <div class="header-nav">
+    <span style="font-weight: bold">Cameron Pfiffer</span>
+    <div>
+      <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘
+      <a href="/links/">links</a>
+    </div>
+  </div>
+  <hr />
+</header>
+
+        <!-- Content appended here -->
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+    <style>
+      #theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem;
+        font-size: 1.25rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        z-index: 1000;
+      }
+    </style>
+    <script>
+      // Check for saved theme preference, otherwise use system preference
+      const getPreferredTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      // Apply theme
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        // Update button text
+        document.getElementById("theme-toggle").innerText =
+          theme === "dark" ? "☼" : "☾";
+      };
+
+      // Initialize theme
+      setTheme(getPreferredTheme());
+
+      // Add toggle functionality
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        setTheme(currentTheme === "dark" ? "light" : "dark");
+      });
+
+      // Listen for system theme changes
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            setTheme(e.matches ? "dark" : "light");
+          }
+        });
+    </script>
+  </body>
+</html>
+<div class="franklin-content">
+<p>I&#39;ve been a developer advocate at .txt for 8-9 months. A short time, but enough to learn a lot. I&#39;ve given talks, I&#39;ve written demos, blog posts, been on podcasts, recorded YouTube videos, etc.</p>
+<p>I wrote this guide as an internal guide for my successor at .txt, but I figured it was worth cleaning it up a little bit for external use.</p>
+<p>Developer relations, or developer advocacy, is a weird industry. Your role as a &quot;devrel&quot; is to essentially get developers to use whatever technical product your company provides. Importantly, you want users to <em>succeed</em> with that product. It sits at the intersection of engineering, education, and evangelism.</p>
+<p>In a lot of ways, there&#39;s very few formal pathways to developer advocacy. I&#39;m an academic – I did my PhD in financial economics, postdoc in econ at Stanford, etc. None of that teaches you specific developer relations skills.</p>
+<p>This guide contains a few of my observations about what tends to work, though note that there are many, many styles of advocacy that will work better for you or your particular product. I&#39;ll try to update it as I go along, since I expect to remain in the industry.</p>
+<h2 id="what_is_advocacy_for"><a href="#what_is_advocacy_for" class="header-anchor">What is advocacy for?</a></h2>
+<p>Advocacy is about getting people to use your product, and getting them to use it well.</p>
+<p>Your role is also to get your company to adapt the product to meet user needs. Good developer advocates serve as tech support, “thought leaders” &#40;whatever the fuck that is&#41;, product managers, and educators.</p>
+<p>You’re also the public face for your company. You need to present a <em>personality</em> to your community, as well as make sure you help your company look good. You set the tone — do it carefully.</p>
+<p>A common misconception about developer relations is that it is a marketing or sales role. Certainly this is a part of it, but developer relations is targeted at asking for something more specific from developers than money: time.</p>
+<p>Time is valuable. Lots of companies have a ton of money but little time. Good developer relations engineers demonstrate that an investment of a developer&#39;s time is well worth the effort. They need to know that you respect their time, and that the thing they get from that investment is a significant step up from whatever they&#39;re doing right now.</p>
+<p>Marketing and sales are often more external roles – you&#39;re not necessarily a user. Developers are an often insular community. They respond to reputation, community engagement, and trust. You need to play that role – be a member of the developer community, not just someone who plays pretend.</p>
+<h3 id="why_do_businesses_have_developer_relations"><a href="#why_do_businesses_have_developer_relations" class="header-anchor">Why do businesses have developer relations?</a></h3>
+<p>Because it is a critical part of the business for a growing number of technical organizations.</p>
+<p>You are trying to sell another API, SDK, programming language, DSL, framework, or tool. <strong>The market is crowded.</strong> Your company has to fight for every inch of developer mindshare, and you aren&#39;t going to get that for free.</p>
+<p>Nobody is going to buy your thing if nobody even uses it, unless it is the greatest thing since sliced bread &#40;most things are not that great, you can&#39;t beat bread&#41;.</p>
+<p>For most companies that sell a technical solution, developer relations is more of a necessity than a luxury.</p>
+<h3 id="providing_inspiration"><a href="#providing_inspiration" class="header-anchor">Providing inspiration</a></h3>
+<p>My approach to advocacy ended up being one of inspiring the imagination of users.</p>
+<p>Most engineers are often focused on how to solve existing problems, and they are often not aware of/seeking alternative solutions to their problems.</p>
+<p>For these users, you need to either show them how to solve their exact problem your way, while convincing them that it is easier, more flexible, and more powerful.</p>
+<p>If you have some tact, you can solve a general problem that is “similar” to many user’s problems that is recognizably similar to an engineer’s problem such that they handle the cognitive work of adapting it to their use case.</p>
+<p>In addition, some users <strong>may not even know</strong> that they have a problem that can be solved. Here, you have to be imaginative. Find a problem that you think someone might be experiencing, and then solve that. You don’t have to solve it well, just enough to highlight that there is a solution to this issue that was not previously on anyone’s radar.</p>
+<h3 id="communicating"><a href="#communicating" class="header-anchor">Communicating</a></h3>
+<p>Of course, you cannot do any of this without <strong>communicating with the community</strong>. You do not know everything, and cannot simply assert user problems and solutions. Go talk to people. Read industry news. Stay a part of the wider conversation.</p>
+<p>A few ways to do this:</p>
+<ul>
+<li><p><strong>Use your own shit.</strong> This is rule #1 of advocacy. If you are not regularly building hobby stuff or demos on your own products, you will fail. You will be screaming into a void that you do not understand. This is non-negotiable. <strong>Advocates are the first users.</strong></p>
+</li>
+<li><p><strong>Help out on GitHub issues</strong>. It’s very easy as an advocate to just not observe people’s technical issues and to allow the engineers on your team to handle them. However, this doesn’t help you experience your user’s suffering. Engage in their suffering, and help them out in the process.</p>
+</li>
+<li><p><strong>Talk to people on the internet.</strong> X sadly remains the best place for most AI discussion, though Bluesky has seen quite an uptick lately. Respond to people regularly. Ask questions. Be a reply guy. Try to cultivate an expertise so that people know who you are. LinkedIn gives you a lot of engagement, but you don’t learn much.</p>
+</li>
+<li><p><strong>Use discord</strong>. I hate discord. Many of us do. However, it is the top place for technical support and user discussion, despite our best wishes. Try to post what you’ve done, support other people’s work. You should try to engage with almost every message or conversation in the discord. If you can find a way to get people off discord onto a sane communication platform &#40;forums, preferably Discourse&#41;, you will be happier.</p>
+</li>
+<li><p><strong>Be loud</strong>. There are many developer advocates who are quiet. This is not your job — your job is broadcasting as much as it is listening. Take what you learn from your communications channels and help people understand what you’ve learned. You need to be a voice. <a href="https://x.com/OfficialLoganK/">Logan Kilpatrick</a> is great at this. He’s an authoritative, loud voice in pretty much every space he’s involved in, which is why he’s popular.</p>
+</li>
+<li><p><strong>Figure out how you best communicate.</strong> Not everyone is a good YouTuber, speaker, blogger, poster, etc. Find what’s best for you. I found that my expertise was in presenting. I’m weakest at YouTube because I don’t actually watch YouTube, so I’m not involved in the community. I’m an alright blogger but I tend to have a scattered writing style. Focus on what works best for you and try to encourage others to fill the gaps — many users are more than happy to record their own videos, blog posts, etc. Boost these as best as you can. Obviously try to expand your other skills, but focus on core competencies. <a href="https://bsky.app/profile/deepfates.com.deepfates.com.deepfates.com.deepfates.com.deepfates.com">Deepfates</a> is a good example of someone who’s figured out his communication style — he’s always involved in some kind of conversation, and everyone knows what kind of stuff they’re going to hear from him &#40;spoiler: it’s all weird shit&#41;</p>
+</li>
+<li><p><strong>Be opinionated.</strong> Good advocates set the stage for conversations. Don’t let others set it for you. I think of <a href="https://x.com/charles_irl">Charles Frye</a> as being a very good advocate for this reason — Charles is first to a conversation, and you are along for the ride.</p>
+</li>
+</ul>
+<h3 id="events"><a href="#events" class="header-anchor">Events</a></h3>
+<p>If you are an advocate in San Francisco or another geographic location, go to meetups, hackathons, and other events. These force people to understand your personality. If you work in AI in San Francisco, this has huge leverage — most of the other voices in the industry are at those same events.</p>
+<p>Some event tips:</p>
+<ul>
+<li><p><strong>Meet everyone.</strong> Don’t try to spend a lot of time in deep conversation with everyone during the mingling phase until you’ve gauged the room and figured out roughly who’s there. Try to chat a little, introduce yourself, learn a bit about the people. Once you’ve figured it out, you’ll probably have a good sense of who you’ll want to talk to more.</p>
+</li>
+<li><p><strong>Learn to disengage</strong>. A huge skill of events is leaving a conversation in a way that isn’t rude. You’re there working. You need to go gladhand and say hi. I will typically interrupt at reasonably spots to go get a drink, the bathroom, throw something away, etc. Typically you’ll run into someone else and you can start another conversation. You can also politely say “Lovely meeting you, I want to go say hi to X, chat again later?”</p>
+</li>
+<li><p><strong>Listen.</strong> People mostly want to talk about themselves. You should fight that urge. You are there to understand how people are working in the industry, what’s happening, who’s doing what, etc. This helps you understand what your product should look like and why. If you have something to sell, try to determine what the person’s problem is and whether you can sell it to them <strong>without pitching them</strong>. You are there to gather information, not pitch. Read the <a href="https://www.momtestbook.com/">Mom Test</a>.</p>
+</li>
+<li><p><strong>Walk up to people</strong>. People are actually pretty reserved. When you are at an event, it is your job to initiate conversations. Walk up to people. Typically, groups of people will clump together in small circles to chat, and these are extraordinarily easy to join. Just walk up, stand in the circle until people acknowledge you, and then ask for a quick round of introductions. You’re now in the conversation and can either step back and listen by saying “I don’t mean to interrupt, what were you talking about?”. You can also focus on specific people by saying “Oh that’s cool, tell me more&#33;”. Try to engage with each person’s introduction briefly by connecting to something you learned about them, like their work or interests.</p>
+</li>
+<li><p><strong>Take notes immediately afterwards.</strong> My preferred approach was to record a voice memo. This helps you consolidate your understanding while it’s fresh, summarize general themes and conversations, and gets the information out of your head so you can send it to your team if need be.</p>
+</li>
+<li><p><strong>Time spent at events is time not spent developing.</strong> You can easily spend all your time at events in San Francisco. This will cause your skills to atrophy, and you&#39;ll stop producing meaningful content. Be cautious and keep a balance.</p>
+</li>
+</ul>
+<h3 id="burnout"><a href="#burnout" class="header-anchor">Burnout</a></h3>
+<p>Developer relations is a social job. I am an introvert. It is costly to go to events in terms of social energy, and this can bleed into the rest of your life.</p>
+<ul>
+<li><p><strong>Do not go to every event.</strong> You need to be judicious, or you will burn out, and you will not have time to do the rest of your job.</p>
+</li>
+<li><p><strong>Focus on important events.</strong> Find events that are popular or focused on your specific product.</p>
+</li>
+<li><p><strong>You don&#39;t have to stay all night.</strong> You can leave. You don&#39;t have to close out the event if you want to go home and relax a bit.</p>
+</li>
+<li><p><strong>Remember that events are work.</strong> Just because they happen at night does not mean that they aren&#39;t work. When I was active on the event scene, I would tend to start working later in the morning to keep myself from working too many hours.</p>
+</li>
+</ul>
+<p>Outside of the event landscape:</p>
+<ul>
+<li><p><strong>Maintain other hobbies.</strong> There&#39;s a good chance you&#39;re a hobbiest builder if you are a developer relations engineer. Be careful not to use your work product all the time, though you should do some hobby work. Play elsewhere too.</p>
+</li>
+<li><p><strong>Find friends that are not in the industry.</strong> This is a big one, especially in San Francisco. Find &quot;normal people&quot; who could not give less of a shit what you do. It will keep you sane.</p>
+</li>
+</ul>
+<h3 id="virtual_engagement"><a href="#virtual_engagement" class="header-anchor">Virtual Engagement</a></h3>
+<p>Not all advocacy happens in person. Virtual events, webinars, and online workshops have become increasingly important. The skills differ slightly - you need to be more energetic on camera, create more interactive moments, and fight harder for engagement when you can&#39;t read the room physically.</p>
+<p>My approach to virtual events was to try to be less &quot;canned&quot;. A lot of webinars are tightly scripted, but I tend to tune out for these.</p>
+<p>My years in academia helped me see virtual events as places where you can engage with people from a wide variety of backgrounds and perspectives. Try to make something engaging, organic, and flexible. Try to get audience interaction if you can.</p>
+<p>If you&#39;re using a demo, ask them for suggestions&#33; Show them how their ideas can be demonstrated in a virtual demo.</p>
+<p>Virtual events have the benefit of being screen-first in a way that live events are not. You can show a lot of code very easily, so try to take advantage of that.</p>
+<p>This is perhaps the most important thing about virtual events.</p>
+<p>ZOOM</p>
+<p>IN</p>
+<p>FARTHER</p>
+<p>THAN</p>
+<p>YOU</p>
+<p>THINK</p>
+<p>Seriously, nobody can read your screen. <strong>If you think the text is far too big, it is not big enough.</strong></p>
+<h3 id="bridging_users_and_product"><a href="#bridging_users_and_product" class="header-anchor">Bridging Users and Product</a></h3>
+<p>One of the most valuable aspects of developer advocacy is serving as the bridge between your users and your product team. You&#39;re uniquely positioned to understand both sides of this equation.</p>
+<p>Product management is the art of guiding your product to be the best one it can be. This requires listening, finding use cases for your product, and helping to focus the company towards specific goals for the product.</p>
+<p>Often, you are one of the very few people at your company who use the product the way that your users do — that makes you valuable. Share that information with your company.</p>
+<p>A good advocate has a sense of how the product “feels”. It’s their job to get the company to improve that “feel”. A good company builds channels to support product input from advocates.</p>
+<p>Try to collect pain points that you experience from using the product, and from users when they mention it.</p>
+<p>You can be opinionated as well. Try to communicate areas of focus that the company should take — once you say it, it is the company’s role to decide whether to engage with your feedback.</p>
+<h3 id="messaging"><a href="#messaging" class="header-anchor">Messaging</a></h3>
+<p>Try to tailor your message to your audience. All your talks, demos, examples, posts, etc. are a funnel towards a particular product or ideology. Choose a specific goal before you give any talk and make sure you structure your output around that goal.</p>
+<p>Regarding talks specifically: <strong>be interesting</strong>. Most talks are extraordinarily boring. Capture people’s interests. Do not fill your slides with bullet points, do not show them the same thing over and over. Present a single, novel idea well, and then demonstrate how it connects to your broader point.</p>
+<p>If you have a reputation for being a good speaker in the meetup or conference scene, you will get better speaking spots and more attendees.</p>
+<h3 id="documentation"><a href="#documentation" class="header-anchor">Documentation</a></h3>
+<p>For most things, documentation is the product.</p>
+<p>Don’t ignore it. Stay on top of the documentation. Ideally, this is a company-wide practice. It should not fall solely on your developer relations person. All pull requests should come with either a statement of why no documentation update is needed, or an update to the documentation.</p>
+<p>If you don’t do this, your product will rapidly become bad. People will not want to use it. The second your docs are perceived as bad is the second people start losing interest in your product.</p>
+<h3 id="metrics"><a href="#metrics" class="header-anchor">Metrics</a></h3>
+<p>I&#39;m not the biggest pro at metrics, despite being an econometrician. I&#39;ll defer to articles like <a href="https://www.devrel.agency/post/survey-insights-devrel-metrics-that-matter">this one</a>.</p>
+<p>Brief overview, though. Metrics differ by what your product is.</p>
+<ul>
+<li><p><strong>Cloud services</strong>. Active users is probably the best.</p>
+</li>
+<li><p><strong>Open-source</strong>. Downloads, contributors, stars, and issues opened &#40;hopefully you close these issues&#41;</p>
+</li>
+<li><p><strong>Community engagement, like Discord or Slack</strong>. Membership count, active users, and total messages.</p>
+</li>
+</ul>
+<p>Ultimately this is up to you and your team. Just figure out what you actually want people to do and choose a few metrics.</p>
+<h3 id="join_the_devrel_community"><a href="#join_the_devrel_community" class="header-anchor">Join the devrel community</a></h3>
+<p>There are many, many devrels. Go talk to them. Grab coffee. Chat over twitter. Whatever.</p>
+<p>The advantage of this is that many events, talks, and collaborations can be found through the developer relations community.</p>
+<p>A big benefit specifically is joint projects. For example, .txt works a lot with <a href="https://modal.com">Modal</a>, and it&#39;s been excellent to have demos and showcases that use both products.</p>
+<p>Joint partnerships on products allow you to share audiences, get buy in from the respective companies, and explore use cases for both products.</p>
+<h3 id="ai-specific_stuff"><a href="#ai-specific_stuff" class="header-anchor">AI-specific stuff</a></h3>
+<p>I work in AI, and there are some thing that are specific to AI that you should be aware of.</p>
+<ul>
+<li><p><strong>The industry moves fast.</strong> Pay attention. Try not to form too many preconceived notions about how things <em>should</em> work. Update your priors regularly. Things that seem to be fads might end up being a huge deal, like MCP. I didn’t expect that and it snuck up on me, because I did not take it seriously.</p>
+</li>
+<li><p><strong>There is lots of stupid stuff to ignore.</strong> The flip side of this is that there is a ton of chaff you have to be well-informed enough to ignore. I won’t dig into this too much, but rest assured that you must cultivate an eye for AI bullshit.</p>
+</li>
+<li><p><strong>Embrace agents</strong>. I did not particularly understand or believe in agentic systems until very recently. They are not a fad. They are extremely powerful tools that you need to understand. Experiment with LangChain, CrewAI, Letta, OpenAI swarm, etc. Agents are becoming increasingly common and will not stop doing so. Pay attention and understand theirHands-on demos are essential for building trust and understanding. Experiment with LangChain, CrewAI, Letta, OpenAI swarm, etc. Agents are becoming increasingly common and will not stop doing so. Pay attention and understand their strengths and limitations.</p>
+</li>
+</ul>
+<p>strengths and limitations.</p>
+<ul>
+<li><p><strong>Do hands-on demos</strong>. People need to see your tool used. AI stuff is &#40;a&#41; cool and &#40;b&#41; sometimes hard to visualize – make it obvious what&#39;s happening and walk them through what you&#39;re seeing step by step. Be clear.</p>
+</li>
+<li><p><strong>Avoid hype, but not too much.</strong> Hype is annoying, and there&#39;s a lot of it in AI. Being too hype-y about AI. Do not say AI is going to cure cancer and contracts in 6 months or whatever, because people do not believe you and will distrust you. However, hype is also good – it taps into a powerful social movement that can foster excitement in what you&#39;re showing people. Show something that is cool but don&#39;t overpromise.</p>
+</li>
+</ul>
+<h3 id="ai_subcultures"><a href="#ai_subcultures" class="header-anchor">AI Subcultures</a></h3>
+<p><strong>Be aware of the AI subcultures.</strong> AI has many different subcultures.</p>
+<p>There are:</p>
+<ul>
+<li><p><strong>Enterprise users</strong> who just need to solve problems, like content moderation, customer support, or internal support agents. These are LinkedIn folks who just need solutions. They have money and problems and want to talk to adults who can help. Be a grownup, understand their problem, propose at least one solution. Follow up on linkedin to see if they need help, or provide other suggestions if they come to you.</p>
+</li>
+<li><p><strong>Machine god people</strong> are often very concerned with artificial general intelligence/super intelligence, either with building it or with managing it &#40;the rationalists and others&#41;. The machine god people <strong>ship</strong>. They build gnarly stuff because they can and because they are motivated. They may not have a product or any meaningful path to revenue. They want bits and pieces of things they can use to build massive-scale AI systems purpose-built for plant scale intelligence. Show them how you can build these small subsystems and they will go to war for you. I tried to provide some inspiration with stuff like my <a href="https://www.youtube.com/watch?v&#61;xmDf1vZwe_o">self-expanding knowledge graph talk</a> &#40;<a href="https://github.com/cpfiffer/self-expansion">GitHub</a>&#41;. Is it obviously revenue building? No. Was it fascinating and highlight some feature of intelligence? Yes.</p>
+</li>
+<li><p><strong>The hobbyists</strong>. Hobbyists are a massive group. They are somewhere between enterprise users and machine god types. They simply love the act of building things. Adding UI frontends. Building experimental inference engines. Hobbyists “play”. Hobbyists are an extremely powerful group, because they often become professionals at companies. If you support them in their hobbies, they may support you in their professional work. This means focusing on your open source efforts, providing cookbooks, and contributing demo applications. Show them something they can expand.</p>
+</li>
+</ul>
+<p>It’s up to you how much you get involved in each of these. Know that going too far into any one group in particular can be costly in terms of your ability to build a reputation with other groups.</p>
+<h3 id="news_resources"><a href="#news_resources" class="header-anchor">News resources</a></h3>
+<ul>
+<li><p><a href="https://news.smol.ai/">AINews</a> is probably the best one.</p>
+</li>
+<li><p><a href="https://tldr.tech/ai">TLDR AI</a> gives you a few of the big stories.</p>
+</li>
+<li><p><a href="https://www.platformer.news/">Platformer</a> for a big picture overview of the industry. More general interest.</p>
+</li>
+</ul>
+<h2 id="conclusion"><a href="#conclusion" class="header-anchor">Conclusion</a></h2>
+<p>Developer advocacy is about connection, between people and products, problems and solutions, communities and companies. It&#39;s a role that demands curiosity, empathy, and genuine enthusiasm for the technology you represent.</p>
+<p>The best advocates I know share a few traits: they build interesting things, they listen more than they talk, and they remember that their audience is <em>people</em> trying to solve a problem.</p>
+<p>Developer relations is challenging but rewarding. You&#39;ll need to be comfortable with ambiguity, constant learning, and wearing many hats. But you&#39;ll also get to be at the forefront of technological progress, helping shape how developers interact with the tools that are building our future.</p>
+<p>Above all, remember to play. The moment advocacy becomes just another marketing job is the moment you&#39;ve lost the thread. Stay curious, stay engaged, and keep building cool shit.</p>
+<ul>
+<li><p>Cameron</p>
+</li>
+</ul>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+  </body>
+</html>
