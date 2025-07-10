@@ -15,6 +15,9 @@ mintoclevel = 2
 # Base files such as LICENSE.md and README.md are ignored by default.
 # ignore = ["node_modules/"]
 
+# Define global variables for conditional includes
+hasmermaid = false
+
 # RSS (the website_{title, descr, url} must be defined to get RSS)
 generate_rss = true
 website_title = "Cameron Pfiffer"

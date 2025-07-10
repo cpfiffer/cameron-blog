@@ -14,7 +14,7 @@
             rel="stylesheet"
         />
         {{if hasmath}} {{insert head_katex.html }} {{end}} {{if hascode}}
-        {{insert head_highlight.html }} {{end}} {{insert style.html}} {{isdef
+        {{insert head_highlight.html }} {{end}} {{if hasmermaid}} {{insert head_mermaid.html }} {{end}} {{insert style.html}} {{isdef
         title}}
         <title>{{fill title}}</title>
         {{end}}

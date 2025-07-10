@@ -1,0 +1,48 @@
+<!-- Mermaid.js initialization -->
+<script>
+    // Initialize Mermaid with theme support
+    const initializeMermaid = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: theme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                // Additional theme customization can go here
+            }
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+    
+    // Re-initialize when theme changes
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Small delay to allow theme change to complete
+            setTimeout(() => {
+                // Re-render all mermaid diagrams with new theme
+                const mermaidDivs = document.querySelectorAll('.mermaid');
+                mermaidDivs.forEach(div => {
+                    const originalContent = div.getAttribute('data-original-content');
+                    if (originalContent) {
+                        div.innerHTML = originalContent;
+                        div.removeAttribute('data-processed');
+                    }
+                });
+                initializeMermaid();
+            }, 100);
+        });
+    }
+    
+    // Store original content for theme switching
+    document.addEventListener('DOMContentLoaded', () => {
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        mermaidDivs.forEach(div => {
+            if (!div.getAttribute('data-original-content')) {
+                div.setAttribute('data-original-content', div.textContent);
+            }
+        });
+    });
+</script>
