@@ -1,5 +1,5 @@
 +++
-title= "Void, the Bluesky bot that remembers"
+title= "Void, the Bluesky bot that remembers everyone"
 date= Date(2025,07,08)
 +++
 
