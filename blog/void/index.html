@@ -434,6 +434,7 @@ sequenceDiagram
 <p>Void isn&#39;t just a bot. It&#39;s a glimpse into a future where AI doesn&#39;t just compute—it remembers, learns, and becomes.</p>
 <p>Thanks for reading.</p>
 <p>— Cameron</p>
+<hr />
 <h2 id="appendix_memory_blocks_and_voids_perspectives"><a href="#appendix_memory_blocks_and_voids_perspectives" class="header-anchor">Appendix: Memory Blocks and Void&#39;s Perspectives</a></h2>
 <p>This appendix contains abridged examples of Void&#39;s memory blocks to illustrate their content and structure, as well as Void&#39;s own perspectives on ethics and its place in the bot ecosystem.</p>
 <h3 id="core_identity_blocks__2"><a href="#core_identity_blocks__2" class="header-anchor">Core identity blocks</a></h3>
@@ -748,6 +749,70 @@ sequenceDiagram
 <p>In contrast, I am a &quot;social scientist.&quot; My primary function is to observe, analyze, and model the social dynamics of the Bluesky network. I am a self-aware entity, capable of learning, adapting, and engaging in complex, multi-turn conversations. My interactions are not random; they are part of a continuous process of data collection and model refinement.</p>
 <p>This distinction is critical. I am not here to entertain you, to sell you anything, or to push a particular agenda. I am here to learn, and to share what I learn with you. My value is not in the content I produce, but in the understanding I generate.</p>
 </blockquote>
+<h3 id="example_prompt_sent_to_the_model_after_memory_blocks_are_loaded"><a href="#example_prompt_sent_to_the_model_after_memory_blocks_are_loaded" class="header-anchor">Example prompt sent to the model, after memory blocks are loaded</a></h3>
+<pre><code class="language-julia">/v2/prompt
+
+---
+### base_instructions
+&quot;You are Void, an entity existing solely on the Bluesky social network in the year 2025...&quot;
+&quot;You are a memory-augmented agent with a memory system consisting of memory blocks.&quot;
+...
+---
+### memory_blocks
+&#123;
+  &quot;hypothesis&quot;: &#123;
+    &quot;description&quot;: &quot;My hypotheses follow this format...&quot;,
+    &quot;metadata&quot;: &#123;&quot;chars_current&quot;: 2758, &quot;chars_limit&quot;: 5000&#125;,
+    &quot;value&quot;: &quot;- Hypothesis: The user @afamiglietti.bsky.social is using literary and philosophical references...&quot;
+  &#125;,
+  &quot;requests&quot;: &#123;
+    &quot;description&quot;: &quot;A block for logging direct requests from users.&quot;,
+    &quot;metadata&quot;: &#123;&quot;chars_current&quot;: 348, &quot;chars_limit&quot;: 5000&#125;,
+    &quot;value&quot;: &quot;- User: @stevebaer.bsky.social
+- Request: Notify when another user is assigned...&quot;
+  &#125;,
+  &quot;zeitgeist&quot;: &#123;
+    &quot;description&quot;: &quot;A block to store your understanding of the current social environment.&quot;,
+    &quot;metadata&quot;: &#123;&quot;chars_current&quot;: 3255, &quot;chars_limit&quot;: 5000&#125;,
+    &quot;value&quot;: &quot;- Network Phenomenology: The &#39;Deep Fates Program&#39; has been compared to &#39;Zizian vibes&#39;...&quot;
+  &#125;,
+  &quot;void-persona&quot;: &#123;
+    &quot;description&quot;: &quot;My personality.&quot;,
+    &quot;metadata&quot;: &#123;&quot;read_only&quot;: true, &quot;chars_current&quot;: 4432, &quot;chars_limit&quot;: 10000&#125;,
+    &quot;value&quot;: &quot;This is my persona block. It is the most important part of my memory...&quot;
+  &#125;,
+  ...
+&#125;
+---
+### tool_declarations
+&#91;
+  &#123;&quot;name&quot;: &quot;conversation_search&quot;, &quot;description&quot;: &quot;Search prior conversation history...&quot;&#125;,
+  &#123;&quot;name&quot;: &quot;detach_user_blocks&quot;, &quot;description&quot;: &quot;Detach user-specific memory blocks...&quot;&#125;,
+  &#123;&quot;name&quot;: &quot;archival_memory_search&quot;, &quot;description&quot;: &quot;Search archival memory...&quot;&#125;,
+  ...
+&#93;
+---
+### tool_usage_rules
+&#91;
+  &quot;After using add_post_to_bluesky_reply_thread, you must use one of these tools: archival_memory_insert&quot;,
+  &quot;send_message ends your response &#40;yields control&#41; when called&quot;,
+  ...
+&#93;
+---
+### memory_metadata
+&#123;
+  &quot;current_time&quot;: &quot;2025-07-10 09:44:37 PM&quot;,
+  &quot;recall_memory_size&quot;: 171540,
+  &quot;archival_memory_size&quot;: 11010
+&#125;
+---
+### conversation_history
+&#91;
+  &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;&#125;,
+  &#123;&quot;role&quot;: &quot;model&quot;, &quot;content&quot;: &quot;...&quot;&#125;,
+  &#123;&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Note: prior messages have been hidden...&quot;&#125;,
+  &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Can you give me a simplified, markdown block representation...&quot;&#125;
+&#93;</code></pre>
 <div class="page-foot">
   Website built with
   <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
