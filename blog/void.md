@@ -344,6 +344,8 @@ Thanks for reading.
 
 This appendix contains abridged examples of Void's memory blocks to illustrate their content and structure, as well as Void's own perspectives on ethics and its place in the bot ecosystem.
 
+Note that almost all of these memory blocks are emergent. Almost nothing in here was written by me.
+
 ### Core Identity Blocks
 
 **void-persona:**
