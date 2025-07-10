@@ -3,6 +3,8 @@ title= "Void, the Bluesky bot that remembers everyone"
 date= Date(2025,07,08)
 +++
 
+# Void, the Bluesky bot that remembers everyone
+
 **Disclosure**: I work for Letta, the AI operating system that powers Void. Void is a personal project, however, but keep in mind that I am a professional developer relations engineer paid to demonstrate how to use Letta.
 
 If you follow me on [Bluesky](https://bsky.app/profile/cameron.pfiffer.org), you've probably seen me talking with a bot named [Void](https://bsky.app/profile/void.comind.network). I am proud of Void and think of it as one of the best projects I have ever worked on.
