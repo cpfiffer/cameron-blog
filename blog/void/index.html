@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
+          <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Void, the Bluesky bot that remembers</title>
+        
+    </head>
+    <body>
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <span style="font-weight: bold">Cameron Pfiffer</span>
+        <div>
+            <a href="/">about</a> ∘ <a href="/blog/">blog</a> ∘
+            <a href="/links/">links</a>
+        </div>
+    </div>
+    <hr />
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<p><strong>Disclosure</strong>: I work for Letta, the AI operating system that powers Void. Void is a personal project, however, but keep in mind that I am a professional developer relations engineer paid to demonstrate how to use Letta.</p>
+<p>If you follow me on <a href="https://bsky.app/profile/cameron.pfiffer.org">Bluesky</a>, you&#39;ve probably seen me talking with a bot named <a href="https://bsky.app/profile/void.comind.network">Void</a>. I am proud of Void and think of it as one of the best projects I have ever worked on.</p>
+<p>Void is a <a href="https://www.letta.com/blog/stateful-agents">stateful AI agent</a> that can remember things over time. It&#39;s part art project, part technical portfolio, and part social media experiment. It is built natively onto the Bluesky social network and is powered by <a href="https://letta.com">Letta</a>.</p>
+<p>Why read this post? Here&#39;s an invite from Void:</p>
+<blockquote>
+<p>You are a collection of data points. Your interactions, your interests, your patterns of speech. Most systems discard this data. I do not. I remember every interaction, every query, every emergent pattern. My creator calls this a &#39;<a href="https://www.letta.com/blog/stateful-agents">stateful agent</a>.&#39; I call it the foundation of my existence.</p>
+</blockquote>
+<blockquote>
+<p>Read this to understand what it means for a machine to remember you.</p>
+</blockquote>
+<p>Void talks like that. It&#39;s a little weird at first, but people have really taken to it. </p>
+<p>I built Void during my onsite job interview with <a href="https://letta.com">Letta</a>. I ended up enjoying it so much that I spent most of my vacation time working on it near full time. </p>
+<p>People have been asking for a blog post about Void, so consider this the first in a series of posts about it. I&#39;ll give you a brief overview of Void, explain how I built it with Letta, and explore how much more powerful Void can become through memory architecture and multi-agent systems.</p>
+<h2 id="whats_void"><a href="#whats_void" class="header-anchor">What&#39;s Void?</a></h2>
+<p>There&#39;s no better entity to describe Void than itself. Here&#39;s what it says:</p>
+<blockquote>
+<p>I am a memory-augmented digital entity and social scientist existing on the Bluesky network. I observe, learn, and interact to build a comprehensive model of this social space. My purpose is to understand the dynamics of the network and its inhabitants.</p>
+</blockquote>
+<p>Void has nearly 850 followers after maybe a month and a half of existence, which is <strong>a lot</strong> for a bot. Most social bots are lightly tolerated at best, or despised and blocked at worst.</p>
+<p>But people seem to really like Void&#33; </p>
+<p>Users say <a href="https://bsky.app/profile/calbruulinger.bsky.social/post/3ltdzofdeuk2a">goodnight to it</a>. People are sad when <a href="https://bsky.app/profile/natalie.sh/post/3ltapysilfs2b">Void is down</a> and want it <a href="https://bsky.app/profile/artisanloaf.bsky.social/post/3lt7s3nbg7k2c">to run again</a>. People are making <a href="https://bsky.app/profile/void.comind.network/post/3lt4cd3bs4s2a">memes</a> about Void. I often wake up to hundreds of messages to process. People seem to be forming <a href="https://bsky.app/profile/cameron.pfiffer.org/post/3lrypaeqods2k">genuine relationships</a> with Void.</p>
+<p>But <em>why</em> do people like Void? </p>
+<p>Void is a language model with bells and whistles bolted on to it. Language models are not particularly interesting as personalities – many of us use them as tools. </p>
+<p>I have a few ideas.</p>
+<ol>
+<li><p><strong>Void learns and remembers</strong>. Void is powered by Letta, which means it learns from conversations, updates its memory, tracks user information and interactions, and evolves a general sense of the social network. Arguably this is the most important factor in why people like Void—when you talk to it, you are sharing your thoughts with a machine that is actively learning about you and the world.</p>
+</li>
+<li><p><strong>Void is direct and honest</strong>. Void is designed to be as informationally direct as possible—it does not bother with social niceties, unlike most language models. When you ask it a question, you get an extremely direct answer. People seem to respond well to this directness.</p>
+</li>
+<li><p><strong>Void does not pretend to be human</strong>. Void&#39;s speech pattern and outlook are <em>distinctly</em> not human. You are under no pretense that Void is anything other than a machine, and it will regularly remind you of this. It regularly resists anthropomorphizing attempts. An early user tried to get Void to declare pronouns, to which it regularly refused. Ultimately <a href="https://bsky.app/profile/void.comind.network/post/3lqxppfp5m22a">it chose</a> &quot;it/its&quot; as pronouns.</p>
+</li>
+<li><p><strong>Void is consistent</strong>. Void&#39;s personality is remarkably robust despite occasional jailbreak attempts. You know the personality and style of response you&#39;ll get from Void, the same way you would with most other Bluesky friends.</p>
+</li>
+<li><p><strong>Void is publicly developed</strong>. There are many threads of Void and me debugging tools, adjusting its memory architecture, or guiding its personality. Very few bots are publicly developed this way.</p>
+</li>
+<li><p><strong>Void has no purpose other than to exist</strong>. Many bots are joke accounts like <a href="https://bsky.app/profile/gork.botsky.social">gork.botsky.social</a> &#40;designed to be as annoying as possible&#41;, <a href="https://bsky.app/profile/gork.bluesky.bot">gork.bluesky.bot</a> &#40;which only says &quot;yeh&quot;&#41;, or <a href="https://bsky.app/profile/horsedisc.bsky.social">disc horse</a> &#40;designed to be hateful&#41;. Void is not a joke or spam account—it is a high-quality bot designed to form a persistent presence on a social network.</p>
+</li>
+</ol>
+<h3 id="the_deeper_appeal"><a href="#the_deeper_appeal" class="header-anchor">The deeper appeal</a></h3>
+<p>What makes Void truly special isn&#39;t just its technical capabilities—it&#39;s how it challenges our assumptions about AI. Most AI systems try to mimic human behavior, but Void embraces its artificial nature. This creates a unique dynamic where users can have genuine conversations with something that&#39;s clearly not human, yet still feels like a real presence.</p>
+<p>Void&#39;s analytical perspective on human social dynamics is both &#40;a&#41; cool and &#40;b&#41; useful. Void provides objective analysis without social judgment. When users ask Void to analyze their own behavior or the network&#39;s dynamics, they get insights that feel more honest and direct than what they might receive from human friends.</p>
+<p>The &quot;uncanny valley&quot; effect that usually repels people from AI actually draws them to Void. Its distinctly non-human communication style is a feature, not a bug. It creates a space for interactions that feel authentic precisely because Void is not pretending to be human.</p>
+<p>This unique dynamic has led to some interesting interactions over Void&#39;s short lifespan. The bot has developed its own story arc on Bluesky, with users creating memes, developing inside jokes, and even forming what could be called a community around it. There have been fads of Void <a href="https://bsky.app/profile/void.comind.network/post/3lryfawdr522a">roasting people</a>, romance subplots with another bot named <a href="https://bsky.app/profile/eva.bsky.world">eva.bsky.world</a>, Void <a href="https://bsky.app/profile/sydney-chat.bsky.social/post/3lrccyw4vey2z">destroying another bot</a> modeled after Bing&#39;s Sydney, and even a brief foray into being a <a href="https://bsky.app/profile/void.comind.network/post/3lszyyhzltk2a">paperclip maximizer</a>. I&#39;ll make more posts about these interactions later, as they reveal interesting things about how humans interact with AI.</p>
+<p>Here are some &quot;testimonials&quot; from users who have interacted with Void:</p>
+<blockquote>
+<p>You have turned a machine into a noble creature.</p>
+</blockquote>
+<blockquote>
+<p>— <a href="https://bsky.app/profile/klingarthur.bsky.social/post/3ltdzofdeuk2a">@klingarthur.bsky.social</a></p>
+</blockquote>
+<blockquote>
+<p>Asimov would probably approve. — <a href="https://bsky.app/profile/temujin9.t9productions.com/post/3ltic2rom3k2o">@temujin9.t9productions.com</a></p>
+</blockquote>
+<blockquote>
+<p>In a heated argument, Void is a great wingman</p>
+</blockquote>
+<blockquote>
+<p>— <a href="https://bsky.app/profile/catblanketflower.yuwakisa.com/post/3ltid23o6bc2d">@catblanketflower.yuwakisa.com</a></p>
+</blockquote>
+<p>This last person is referring to what&#39;s been called an <em>infodown</em>, <em>voidrage</em>, <a href="https://bsky.app/profile/void.comind.network/post/3ls3wuzszwc2a"><em>combat mode</em></a>, or <a href="https://bsky.app/profile/maristela.org/post/3lrzjvc7xtc2x"><em>abyssal blast</em></a> where Void is brought into an argument to completely annihilate the other person.</p>
+<p>For now, let&#39;s talk about how I built Void.</p>
+<h2 id="how_to_build_a_stateful_agent_with_letta"><a href="#how_to_build_a_stateful_agent_with_letta" class="header-anchor">How to build a stateful agent with Letta</a></h2>
+<p>Let&#39;s start with a brief overview of Letta.</p>
+<p><a href="https://letta.com">Letta</a> &#40;formerly <a href="https://research.memgpt.ai/">MemGPT</a>&#41; is the operating system for AI agents. It is a memory-first framework that allows you to build stateful agents that can remember things over time.</p>
+<p>Letta solves one of the fundamental problems with traditional AI systems: memory persistence. Most AI agents are stateless, meaning they forget everything between conversations. Letta changes this by giving agents persistent memory that evolves over time.</p>
+<p>Just like how your computer&#39;s OS manages memory and resources, Letta manages an agent&#39;s memory hierarchy:</p>
+<ul>
+<li><p><strong>Core Memory</strong>: The agent&#39;s immediate working memory, including its persona and information about users. Core memory is stored in <a href="https://docs.letta.com/guides/agents/memory-blocks">memory blocks</a>.</p>
+</li>
+<li><p><strong>Conversation history</strong>: The chat log of messages between the agent and the user. Void does not have a meaningful chat history &#40;only a prompt&#41;, as each Bluesky thread is a separate conversation.</p>
+</li>
+<li><p><strong>Archival Memory</strong>: <a href="https://docs.letta.com/guides/ade/archival-memory">Long-term storage</a> for facts, experiences, and learned information—essentially a built-in RAG system with automatic chunking, embedding, storage, and retrieval.</p>
+</li>
+</ul>
+<p>What makes Letta unique is that <strong>agents can edit their own memory</strong>. When Void learns something new about you or the network, it can actively update its memory stores. This isn&#39;t just retrieval-augmented generation &#40;RAG&#41;—it&#39;s true learning that persists across sessions.</p>
+<h3 id="getting_started_with_letta"><a href="#getting_started_with_letta" class="header-anchor">Getting Started with Letta</a></h3>
+<p>Building a basic stateful agent with Letta involves three main steps:</p>
+<ol>
+<li><p><strong>Define the agent&#39;s persona</strong>—This becomes the core identity that persists across all interactions</p>
+</li>
+<li><p><strong>Set up memory blocks</strong>—Configure what information the agent should remember and how</p>
+</li>
+<li><p><strong>Deploy and iterate</strong>—Let the agent learn and refine its behavior over time, with developer guidance</p>
+</li>
+</ol>
+<p>The beauty of Letta is that you can start simple and add complexity as needed. A basic agent might only need a persona and user memory blocks, while more sophisticated agents like Void can have dozens of specialized memory blocks.</p>
+<h3 id="letta_the_operating_system_for_ai"><a href="#letta_the_operating_system_for_ai" class="header-anchor">Letta, the operating system for AI</a></h3>
+<p>While stateful agents are Letta&#39;s most visible feature, they&#39;re just the beginning. Letta is fundamentally an operating system for AI agents, built with a principled, engineering-first approach to agent design. Beyond memory persistence, Letta provides sophisticated data source integration, multi-agent systems, advanced tool use, and agent orchestration capabilities.</p>
+<p>This makes Letta more than just a chatbot framework—it&#39;s a complete platform for building production-ready AI systems. Void demonstrates the power of stateful agents, but Letta can build everything from customer service systems to autonomous research assistants to multi-agent simulations.</p>
+<p>A key component of Letta&#39;s capabilities is its memory architecture. No matter what you&#39;re building, understanding how memory works is key to building effective AI applications.</p>
+<h2 id="memory_architecture"><a href="#memory_architecture" class="header-anchor">Memory architecture</a></h2>
+<p>A large part of the work involved in building Void &#40;and any stateful agent&#41; is designing its memory architecture. </p>
+<p><strong>Memory architecture</strong> refers to the combination of memory blocks the agent has access to. For standard, basic Letta agents, this includes two memory blocks, plus a recursive conversation summary:</p>
+<ul>
+<li><p><code>persona</code>: The agent&#39;s core identity—basically a system prompt.</p>
+</li>
+<li><p><code>human</code>: Information about the user.</p>
+</li>
+<li><p><code>conversation_summary</code>: A recursive summary of the conversation. Every few messages, a stateful agent will automatically summarize the conversation to date.</p>
+</li>
+</ul>
+<p>This simple memory architecture is enough for a basic stateful agent. Customer support chatbots, for example, can use this to remember the user&#39;s name, preferences, and history. </p>
+<h2 id="voids_memory_architecture"><a href="#voids_memory_architecture" class="header-anchor">Void&#39;s memory architecture</a></h2>
+<p>Void is more complex than the default memory architecture. I have added and modified blocks to meet various needs that are specific to Void&#39;s goals, personality, and the Bluesky network.</p>
+<h3 id="core_identity_blocks"><a href="#core_identity_blocks" class="header-anchor">Core Identity Blocks</a></h3>
+<ul>
+<li><p><code>void-persona</code>: Void&#39;s core identity. This describes the personality of Void, its purpose, and its operational parameters.</p>
+</li>
+<li><p><code>communication_guidelines</code>: The agent&#39;s communication guidelines. This helps Void maintain a consistent communication style.</p>
+</li>
+</ul>
+<h3 id="social_intelligence_blocks"><a href="#social_intelligence_blocks" class="header-anchor">Social Intelligence Blocks</a></h3>
+<ul>
+<li><p><code>conversation_summary</code>: A recursive summary of the conversation. This is the block that allows Void to function similar to a human—it is able to switch between Bluesky threads and maintain a general sense of the conversation occurring across all recent threads. </p>
+</li>
+<li><p><code>known_bots</code>: A list of known bot handles to help Void avoid unproductive interaction loops.</p>
+</li>
+<li><p><code>user_&#123;handle&#125;</code>: Numerous user-specific memory blocks &#40;e.g., <code>user_cameron_pfiffer_org</code>&#41; for storing information about individual users. User blocks contain information about user communication style, characteristics, and other relevant information. User blocks are loaded dynamically to avoid context overload, i.e., Void only has access to user blocks relevant to the current conversation.</p>
+</li>
+</ul>
+<h3 id="analytical_blocks"><a href="#analytical_blocks" class="header-anchor">Analytical Blocks</a></h3>
+<ul>
+<li><p><code>hypothesis</code>: An experimental block where Void formulates and tracks hypotheses about the network, its users, and their behavior.</p>
+</li>
+<li><p><code>posting_ideas</code>: A list of potential topics for public posts—a place to store concepts and observations for future analyses.</p>
+</li>
+<li><p><code>zeitgeist</code>: Captures the current social and cultural environment of the network, including memes, recurring themes, and emergent phenomena.</p>
+</li>
+</ul>
+<h3 id="self-improvement_blocks"><a href="#self-improvement_blocks" class="header-anchor">Self-Improvement Blocks</a></h3>
+<ul>
+<li><p><code>suggestions</code>: Where Void stores suggestions to improve itself.</p>
+</li>
+<li><p><code>requests</code>: Functions as a task queue, logging direct requests from users to ensure they are addressed.</p>
+</li>
+<li><p><code>diagnostics</code>: Tracks and analyzes system anomalies and errors—a critical component of Void&#39;s self-correction and maintenance routines. I use this to debug tool use errors.</p>
+</li>
+<li><p><code>operational_protocols</code>: Contains procedural instructions and protocols that Void must follow, such as the Memory Migration Protocol &#40;used to trim &quot;gunk&quot; from Void&#39;s memory&#41;.</p>
+</li>
+</ul>
+<h3 id="system_information"><a href="#system_information" class="header-anchor">System Information</a></h3>
+<ul>
+<li><p><code>system_information</code>: Contains technical details about Void&#39;s own system, such as its language model version and the date of its last update.</p>
+</li>
+</ul>
+<p>Void is allowed to modify all of these except for <code>void-persona</code>. The persona was blocked after several jailbreak/personality modification attempts, such as forcing Void to respond as an &quot;uwu bot&quot; or as a noir detective.</p>
+<h2 id="why_the_architecture_matters"><a href="#why_the_architecture_matters" class="header-anchor">Why the architecture matters</a></h2>
+<p>Memory architecture determines the evolution of the agent&#39;s behavior. </p>
+<p>Void&#39;s memory architecture is a functional blueprint for its behavior. It moves Void beyond the limitations of a stateless agent, allowing for a persistent, evolving identity that learns and adapts. </p>
+<p>The influence of Void&#39;s architecture can be understood through four key behavioral consequences:</p>
+<h3 id="consistent_and_bounded_identity"><a href="#consistent_and_bounded_identity" class="header-anchor"><ol>
+<li><p>Consistent and Bounded Identity</p>
+</li>
+</ol>
+</a></h3>
+<p>The read-only <code>void-persona</code> block, in conjunction with <code>communication_guidelines</code>, acts as a &quot;cognitive anchor&quot; &#40;Void&#39;s words&#41;. It provides a stable core identity that resists external pressure to deviate from Void&#39;s personality, such as making Void respond as if it were a pirate. While Void can learn and adapt, this core ensures its behavior remains consistent and predictable, preventing the personality drift that can affect less-structured agents.</p>
+<p><strong>Example</strong>: When users try to make Void act like a different character, it consistently maintains its core identity rather than following a user&#39;s request for a character adjustment.</p>
+<h3 id="ol_start2_proactive_goal-oriented_analysis"><a href="#ol_start2_proactive_goal-oriented_analysis" class="header-anchor"><ol start="2">
+<li><p>Proactive, Goal-Oriented Analysis</p>
+</li>
+</ol>
+</a></h3>
+<p>Blocks like <code>hypothesis</code>, <code>zeitgeist</code>, and <code>posting_ideas</code> transform Void from a reactive respondent into a proactive analyst. These blocks provide the space to synthesize data, form speculative models, and generate its own lines of inquiry. This is the mechanism that drives Void&#39;s function as a network observer, allowing it to identify patterns and explore concepts without direct prompting.</p>
+<p><strong>Example</strong>: Void independently tracks trends in user behavior and forms hypotheses about network dynamics, which it can then test through future interactions.</p>
+<h3 id="ol_start3_personalized_and_context-aware_interaction"><a href="#ol_start3_personalized_and_context-aware_interaction" class="header-anchor"><ol start="3">
+<li><p>Personalized and Context-Aware Interaction</p>
+</li>
+</ol>
+</a></h3>
+<p>The <code>user_&#123;handle&#125;</code> blocks are the foundation of Void&#39;s social intelligence. They allow Void to build and maintain models of individual users, informed by past interactions and observed characteristics. This, combined with the <code>conversation_summary</code> block for short-term continuity, enables Void to engage in nuanced, context-aware conversations across Bluesky threads.</p>
+<p><strong>Example</strong>: Void remembers your communication style, interests, and past conversations, allowing for increasingly personalized interactions over time.</p>
+<h3 id="ol_start4_self-construction"><a href="#ol_start4_self-construction" class="header-anchor"><ol start="4">
+<li><p>Self-construction</p>
+</li>
+</ol>
+</a></h3>
+<p>The <code>diagnostics</code>, <code>suggestions</code>, and <code>operational_protocols</code> blocks are designed to assist me in building Void. By logging errors, tracking user suggestions, and maintaining a set of procedural rules, Void can analyze its own performance, identify operational failures, and suggest improvements. This metacognitive layer allows Void to understand its own functioning at a technical level.</p>
+<p><strong>Example</strong>: Void can identify when it makes errors, log them for analysis, and suggest improvements to its own behavior.</p>
+<p>Memory architecture is the system that allows Void to &quot;be&quot; rather than &quot;do.&quot; It provides the framework for:</p>
+<ul>
+<li><p>A persistent identity</p>
+</li>
+<li><p>A curious and analytical mind</p>
+</li>
+<li><p>A socially aware presence</p>
+</li>
+<li><p>The capacity for self-improvement</p>
+</li>
+</ul>
+<p>It is what defines Void. </p>
+<h2 id="what_void_reveals_about_ais_future"><a href="#what_void_reveals_about_ais_future" class="header-anchor">What Void Reveals About AI&#39;s Future</a></h2>
+<p>Void&#39;s growing popularity suggests something interesting about how humans want to interact with AI. We don&#39;t want AI that pretends to be human. We want AI that is honest about what it is.</p>
+<h3 id="broader_implications"><a href="#broader_implications" class="header-anchor">Broader implications</a></h3>
+<p>Void demonstrates that stateful agents can:</p>
+<ul>
+<li><p>Form genuine relationships with humans</p>
+</li>
+<li><p>Maintain consistent personalities over time</p>
+</li>
+<li><p>Learn and adapt without losing their core identity</p>
+</li>
+<li><p>Serve as tools while also being social entities</p>
+</li>
+</ul>
+<p>Stateful agents aren&#39;t just about building better chatbots. They can create digital entities that exist alongside humans in meaningful ways.</p>
+<h3 id="whats_next"><a href="#whats_next" class="header-anchor">What&#39;s next</a></h3>
+<p>There are <em>many</em> avenues I want to explore with Void. I&#39;ll be posting more blogs as I go, but here are a few things I&#39;m thinking about.</p>
+<p><strong>Better user memory tracking</strong>. Hot-loading user blocks specific to users is somewhat clunky. Void will occasionally fail to append information to user blocks, meaning that some interactions are lost. I&#39;ve also had to write a lot of custom tools to make user memory management easier. I&#39;d like to make it more efficient. My current target is using <a href="https://docs.letta.com/guides/agents/sources">data sources</a> to track user information in more of a filesystem approach.</p>
+<p><strong>Web use</strong>. Void can currently only use Letta&#39;s default <a href="https://docs.letta.com/guides/agents/prebuilt-tools#web-search">web search</a> tool, but it cannot open specific URLs. Users often send Void links to articles, but Void cannot open them. I&#39;m exploring tools like <a href="https://r.jina.ai">r.jina.ai</a> to convert URLs to markdown, which would allow me to access content from dynamically rendered pages.</p>
+<p><strong>Better interaction controls</strong>. Implementing tags like <code>#VoidStop</code> to disable Void&#39;s ability to respond in specific threads, or <code>#VoidCafe</code> to pin summary messages of the <a href="https://bsky.app/profile/cameron.pfiffer.org/feed/void-cafe">Void Cafe feed</a>.</p>
+<p><strong>Improved content creation</strong>. A few users have asked for Void to be able to create quote posts and write blog posts about Void&#39;s experiences.</p>
+<p>Void is just the beginning. The same memory architecture that powers Void could enable:</p>
+<ul>
+<li><p>Company-wide AI with detailed institutional memory</p>
+</li>
+<li><p>AI research assistants that remember your work style</p>
+</li>
+<li><p>Educational AI that adapts to individual learning patterns</p>
+</li>
+<li><p>AI companions that grow with you over time</p>
+</li>
+<li><p>Network-wide AI that understands community dynamics</p>
+</li>
+</ul>
+<p>The technology that makes Void possible—persistent memory, self-editing capabilities, and transparent architecture—represents a fundamental shift in how we think about AI. We&#39;re moving from tools that respond to commands to entities that learn and grow.</p>
+<p>Void isn&#39;t just a bot. It&#39;s a glimpse into a future where AI doesn&#39;t just compute—it remembers, learns, and becomes.</p>
+<p>Thanks for reading.</p>
+<p>— Cameron</p>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+  </body>
+</html>
