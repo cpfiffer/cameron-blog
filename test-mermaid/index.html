@@ -13,7 +13,24 @@
             href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
             rel="stylesheet"
         />
-           <link rel="stylesheet" href="/css/normalize.css" />
+           <!-- Mermaid.js for diagram rendering -->
+<script src="/libs/mermaid/mermaid.min.js"></script>
+<style>
+    .mermaid {
+        text-align: center;
+        margin: 1em 0;
+    }
+    
+    /* Dark theme support for Mermaid */
+    [data-theme="dark"] .mermaid {
+        background: transparent;
+    }
+    
+    /* Light theme support for Mermaid */
+    [data-theme="light"] .mermaid {
+        background: transparent;
+    }
+</style>  <link rel="stylesheet" href="/css/normalize.css" />
 <link rel="stylesheet" href="/css/franklin.css" />
 <link rel="stylesheet" href="/css/hypertext.css" />
 <link rel="icon" href="/assets/favicon.png" />
@@ -38,7 +55,7 @@
 />
 <link rel="manifest" href="/assets/site.webmanifest" />
  
-        <title>New site using Franklin.jl</title>
+        <title>Test Mermaid Diagrams</title>
         
     </head>
     <body>
@@ -119,9 +136,40 @@
     </body>
 </html>
 <div class="franklin-content">
-<p>I moved to <a href="https://franklinjl.org">Franklin.jl</a> for my website. It&#39;s a static site generator written in Julia. I&#39;ve been using it for a few months now and I&#39;m really enjoying it. It&#39;s a bit more flexible than Hugo, which I was using before.</p>
-<p>The old website was really butched together. I had a lot of custom CSS written at a time when I knew nothing about CSS, and there was simply too much bloat. I&#39;d also had this weird-ass tufte-style thing that was just hilariously unwieldy.</p>
-<p>Anyway enjoy. I purged some old blog posts that were stupid but kept the good ones.</p>
+<h1 id="testing_mermaid_diagrams"><a href="#testing_mermaid_diagrams" class="header-anchor">Testing Mermaid Diagrams</a></h1>
+<p>This page tests Mermaid diagram rendering.</p>
+<h2 id="simple_flowchart"><a href="#simple_flowchart" class="header-anchor">Simple Flowchart</a></h2>
+
+<div class="mermaid">
+graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> A
+</div>
+
+<h2 id="sequence_diagram"><a href="#sequence_diagram" class="header-anchor">Sequence Diagram</a></h2>
+
+<div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Blog
+    participant Mermaid
+    User->>Blog: View page
+    Blog->>Mermaid: Render diagram
+    Mermaid->>Blog: Return SVG
+    Blog->>User: Display diagram
+</div>
+
+<h2 id="pie_chart"><a href="#pie_chart" class="header-anchor">Pie Chart</a></h2>
+
+<div class="mermaid">
+pie title Languages Used
+    "Julia" : 45
+    "JavaScript" : 30
+    "CSS" : 25
+</div>
+
 <div class="page-foot">
   Website built with
   <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
@@ -133,6 +181,55 @@
 </div> <!-- end of center-column-holder -->
     
     
+    
+        <!-- Mermaid.js initialization -->
+<script>
+    // Initialize Mermaid with theme support
+    const initializeMermaid = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: theme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                // Additional theme customization can go here
+            }
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+    
+    // Re-initialize when theme changes
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Small delay to allow theme change to complete
+            setTimeout(() => {
+                // Re-render all mermaid diagrams with new theme
+                const mermaidDivs = document.querySelectorAll('.mermaid');
+                mermaidDivs.forEach(div => {
+                    const originalContent = div.getAttribute('data-original-content');
+                    if (originalContent) {
+                        div.innerHTML = originalContent;
+                        div.removeAttribute('data-processed');
+                    }
+                });
+                initializeMermaid();
+            }, 100);
+        });
+    }
+    
+    // Store original content for theme switching
+    document.addEventListener('DOMContentLoaded', () => {
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        mermaidDivs.forEach(div => {
+            if (!div.getAttribute('data-original-content')) {
+                div.setAttribute('data-original-content', div.textContent);
+            }
+        });
+    });
+</script>
     
   </body>
 </html>

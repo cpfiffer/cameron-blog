@@ -104,6 +104,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://cameron.pfiffer.org/test-mermaid/index.html</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://cameron.pfiffer.org/blog/bayes-econ/index.html</loc>
     <lastmod>2025-07-10</lastmod>
     <changefreq>monthly</changefreq>
