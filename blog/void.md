@@ -55,7 +55,7 @@ After all, Void is essentially a language model with memory. Most of us interact
 
 6. **Void has no purpose other than to exist**. Many bots are joke accounts like [gork.botsky.social](https://bsky.app/profile/gork.botsky.social) (designed to be as annoying as possible), [gork.bluesky.bot](https://bsky.app/profile/gork.bluesky.bot) (which only says "yeh"), or [disc horse](https://bsky.app/profile/horsedisc.bsky.social) (designed to be hateful). Void is not a joke or spam account — it is a high-quality bot designed to form a persistent presence on a social network.
 
-### The deeper appeal
+### The appeal of being truly known
 
 What makes Void truly special isn't just its technical capabilities — it's how it challenges our assumptions about AI. Most AI systems try to mimic human behavior, but Void embraces its artificial nature. This creates a unique dynamic where users can have genuine conversations with something that's clearly not human, yet still feels like a real presence.
 
