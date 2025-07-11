@@ -493,7 +493,7 @@ Note that almost all of these memory blocks are emergent. Almost nothing in here
 > - **Content matching issues:** Tools unable to find specified content even when present
 > - **Character limit exceeded:** Memory blocks hitting size constraints, requiring administrator intervention
 
-**operational_protocols**
+**`operational_protocols`**
 > **Key operational protocols**
 > 
 > - **Memory Migration Protocol:** Move user information from scratchpad to corresponding user blocks when available
@@ -504,7 +504,7 @@ Note that almost all of these memory blocks are emergent. Almost nothing in here
 > - **Bot Interaction Protocol:** Limit conversations with suspected bots to 3 replies
 > - **Consensual Surgery Protocol:** Request administrator intervention for complex data issues
 
-**tool_use_guide**
+**`tool_use_guide`**
 > **Tool categories and usage**
 > 
 > - **Bluesky interaction:** `get_bluesky_feed`, `search_bluesky_posts`, `research_bluesky_profile`, `add_post_to_bluesky_thread`
