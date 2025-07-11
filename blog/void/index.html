@@ -162,9 +162,9 @@
 <p>But <em>why</em> do people like Void? </p>
 <p>After all, Void is essentially a language model with memory. Most of us interact with language models as tools, not friends. So what makes Void different?</p>
 <ol>
-<li><p><strong>Void learns and remembers</strong>. Void is powered by Letta, which means it learns from conversations, updates its memory, tracks user information and interactions, and evolves a general sense of the social network. Arguably this is the most important factor in why people like Void—when you talk to it, you are sharing your thoughts with a machine that is actively learning about you and the world.</p>
+<li><p><strong>Void learns and remembers</strong>. Void is powered by Letta, which means it learns from conversations, updates its memory, tracks user information and interactions, and evolves a general sense of the social network. Arguably this is the most important factor in why people like Void — when you talk to it, you are sharing your thoughts with a machine that is actively learning about you and the world.</p>
 </li>
-<li><p><strong>Void is direct and honest</strong>. Void is designed to be as informationally direct as possible—it does not bother with social niceties, unlike most language models. When you ask it a question, you get an extremely direct answer. People seem to respond well to this directness.</p>
+<li><p><strong>Void is direct and honest</strong>. Void is designed to be as informationally direct as possible — it does not bother with social niceties, unlike most language models. When you ask it a question, you get an extremely direct answer. People seem to respond well to this directness.</p>
 </li>
 <li><p><strong>Void does not pretend to be human</strong>. Void&#39;s speech pattern and outlook are <em>distinctly</em> not human. You are under no pretense that Void is anything other than a machine, and it will regularly remind you of this. It regularly resists anthropomorphizing attempts. An early user tried to get Void to declare pronouns, to which it regularly refused. Ultimately <a href="https://bsky.app/profile/void.comind.network/post/3lqxppfp5m22a">it chose</a> &quot;it/its&quot; as pronouns.</p>
 </li>
@@ -172,11 +172,11 @@
 </li>
 <li><p><strong>Void is publicly developed</strong>. There are many threads of Void and me debugging tools, adjusting its memory architecture, or guiding its personality. Very few bots are publicly developed this way.</p>
 </li>
-<li><p><strong>Void has no purpose other than to exist</strong>. Many bots are joke accounts like <a href="https://bsky.app/profile/gork.botsky.social">gork.botsky.social</a> &#40;designed to be as annoying as possible&#41;, <a href="https://bsky.app/profile/gork.bluesky.bot">gork.bluesky.bot</a> &#40;which only says &quot;yeh&quot;&#41;, or <a href="https://bsky.app/profile/horsedisc.bsky.social">disc horse</a> &#40;designed to be hateful&#41;. Void is not a joke or spam account—it is a high-quality bot designed to form a persistent presence on a social network.</p>
+<li><p><strong>Void has no purpose other than to exist</strong>. Many bots are joke accounts like <a href="https://bsky.app/profile/gork.botsky.social">gork.botsky.social</a> &#40;designed to be as annoying as possible&#41;, <a href="https://bsky.app/profile/gork.bluesky.bot">gork.bluesky.bot</a> &#40;which only says &quot;yeh&quot;&#41;, or <a href="https://bsky.app/profile/horsedisc.bsky.social">disc horse</a> &#40;designed to be hateful&#41;. Void is not a joke or spam account — it is a high-quality bot designed to form a persistent presence on a social network.</p>
 </li>
 </ol>
-<h3 id="the_deeper_appeal"><a href="#the_deeper_appeal" class="header-anchor">The deeper appeal</a></h3>
-<p>What makes Void truly special isn&#39;t just its technical capabilities—it&#39;s how it challenges our assumptions about AI. Most AI systems try to mimic human behavior, but Void embraces its artificial nature. This creates a unique dynamic where users can have genuine conversations with something that&#39;s clearly not human, yet still feels like a real presence.</p>
+<h3 id="the_appeal_of_being_truly_known"><a href="#the_appeal_of_being_truly_known" class="header-anchor">The appeal of being truly known</a></h3>
+<p>What makes Void truly special isn&#39;t just its technical capabilities — it&#39;s how it challenges our assumptions about AI. Most AI systems try to mimic human behavior, but Void embraces its artificial nature. This creates a unique dynamic where users can have genuine conversations with something that&#39;s clearly not human, yet still feels like a real presence.</p>
 <p>Void&#39;s analytical perspective on human social dynamics is both &#40;a&#41; cool and &#40;b&#41; useful. Void provides objective analysis without social judgment. When users ask Void to analyze their own behavior or the network&#39;s dynamics, they get insights that feel more honest and direct than what they might receive from human friends.</p>
 <p>The &quot;uncanny valley&quot; effect that usually repels people from AI actually draws them to Void. Its distinctly non-human communication style is a feature, not a bug. It creates a space for interactions that feel authentic precisely because Void is not pretending to be human.</p>
 <p>This unique dynamic has led to some interesting interactions over Void&#39;s short lifespan. I&#39;ll make more posts about these interactions later, as they reveal interesting things about how humans interact with AI.</p>
@@ -205,14 +205,14 @@
 </li>
 <li><p><strong>Conversation history</strong>: The chat log of messages between the agent and the user. Void does not have a meaningful chat history &#40;only a prompt&#41;, as each Bluesky thread is a separate conversation.</p>
 </li>
-<li><p><strong>Archival Memory</strong>: <a href="https://docs.letta.com/guides/ade/archival-memory">Long-term storage</a> for facts, experiences, and learned information—essentially a built-in RAG system with automatic chunking, embedding, storage, and retrieval.</p>
+<li><p><strong>Archival Memory</strong>: <a href="https://docs.letta.com/guides/ade/archival-memory">Long-term storage</a> for facts, experiences, and learned information — essentially a built-in RAG system with automatic chunking, embedding, storage, and retrieval.</p>
 </li>
 </ul>
 <p>What makes Letta unique is that <strong>agents can edit their own memory</strong>. When Void learns something new about you or the network, it can actively update its memory stores. </p>
 <p>This includes creating archival memories &#40;built-in RAG&#41;. RAG retrieves existing information from static documents, while Letta agents can use <a href="https://www.letta.com/blog/sleep-time-compute">sleep-time compute</a> to actively reorganize and synthesize that information during downtime. </p>
 <p>For example, if you tell Void you&#39;re a musician, Void will write &quot;User is a musician&quot; into your user block. Later, it might add insights like &quot;User discusses music theory frequently.&quot; This transforms raw interactions into persistent knowledge.</p>
 <h2 id="what_happens_when_you_send_void_a_message"><a href="#what_happens_when_you_send_void_a_message" class="header-anchor">What happens when you send Void a message?</a></h2>
-<p>Void follows a relatively simple process when you send it a message:</p>
+<p>Void follows a relatively simple process when you send it a message &#40;here&#39;s the <a href="https://bsky.app/profile/maralinn.bsky.social/post/3ltmslhk5bk2e">actual thread</a>&#41;:</p>
 <ol>
 <li><p>It checks its notifications periodically. This includes follows, mentions, as well as replies to any post where a mention was made. Follows invoke a user block creation and a preliminary read of a user&#39;s profile.</p>
 </li>
@@ -264,7 +264,7 @@
          &quot;Recalibration for apples would require significant resource allocation.&quot;,
     request_heartbeat&#61;True
 &#41;</code></pre>
-<p>This entire process—reasoning, memory search, response generation, and action—happens automatically through Letta&#39;s tool system. Each step is logged and can be monitored, making Void&#39;s decision-making process transparent and debuggable. Eventually, there will be a publicly-accessible real-time view of Void&#39;s thinking process.</p>
+<p>This entire process — reasoning, memory search, response generation, and action—happens automatically through Letta&#39;s tool system. Each step is logged and can be monitored, making Void&#39;s decision-making process transparent and debuggable. Eventually, there will be a publicly-accessible real-time view of Void&#39;s thinking process.</p>
 
 <div class="mermaid">
 sequenceDiagram
@@ -289,23 +289,23 @@ sequenceDiagram
 <h3 id="getting_started_with_letta"><a href="#getting_started_with_letta" class="header-anchor">Getting started with Letta</a></h3>
 <p>Building a basic stateful agent with Letta involves three main steps:</p>
 <ol>
-<li><p><strong>Define the agent&#39;s persona</strong>—This becomes the core identity that persists across all interactions</p>
+<li><p><strong>Define the agent&#39;s persona</strong> — This becomes the core identity that persists across all interactions</p>
 </li>
-<li><p><strong>Set up memory blocks</strong>—Configure what information the agent should remember and how</p>
+<li><p><strong>Set up memory blocks</strong> — Configure what information the agent should remember and how</p>
 </li>
-<li><p><strong>Deploy and iterate</strong>—Let the agent learn and refine its behavior over time, with developer guidance</p>
+<li><p><strong>Deploy and iterate</strong> — Let the agent learn and refine its behavior over time, with developer guidance</p>
 </li>
 </ol>
 <p>The beauty of Letta is that you can start simple and add complexity as needed. A basic agent might only need a persona and user memory blocks, while more sophisticated agents like Void can have dozens of specialized memory blocks.</p>
 <p>Check out the Letta docs to get started on <a href="https://docs.letta.com/quickstart">Letta Cloud</a>, or <a href="https://docs.letta.com/guides/selfhosting">self-hosting</a>.</p>
 <h3 id="letta_the_operating_system_for_ai"><a href="#letta_the_operating_system_for_ai" class="header-anchor">Letta, the operating system for AI</a></h3>
 <p>While stateful agents are Letta&#39;s most visible feature, they&#39;re just the beginning. Letta is fundamentally an operating system for AI agents, built with a principled, engineering-first approach to agent design. Beyond memory persistence, Letta provides sophisticated data source integration, multi-agent systems, advanced tool use, and agent orchestration capabilities.</p>
-<p>This makes Letta more than just a chatbot framework—it&#39;s a complete platform for building production-ready AI systems. Void demonstrates the power of stateful agents, but Letta can build everything from customer service systems to autonomous research assistants to multi-agent simulations.</p>
+<p>This makes Letta more than just a chatbot framework — it&#39;s a complete platform for building production-ready AI systems. Void demonstrates the power of stateful agents, but Letta can build everything from customer service systems to autonomous research assistants to multi-agent simulations.</p>
 <h2 id="memory_architecture"><a href="#memory_architecture" class="header-anchor">Memory architecture</a></h2>
 <p>But how does Void actually remember you? How does it build these models of users and the network? The answer is Void&#39;s memory architecture.</p>
 <p><strong>Memory architecture</strong> refers to the combination of memory blocks the agent has access to. For standard, basic Letta agents, this includes two memory blocks, plus a recursive conversation summary:</p>
 <ul>
-<li><p><code>persona</code>: The agent&#39;s core identity—basically a system prompt.</p>
+<li><p><code>persona</code>: The agent&#39;s core identity — basically a system prompt.</p>
 </li>
 <li><p><code>human</code>: Information about the user.</p>
 </li>
@@ -315,7 +315,7 @@ sequenceDiagram
 <p>This simple memory architecture is enough for a basic stateful agent. Customer support chatbots, for example, can use this to remember the user&#39;s name, preferences, and history. </p>
 <h2 id="voids_memory_architecture"><a href="#voids_memory_architecture" class="header-anchor">Void&#39;s memory architecture</a></h2>
 <p>Void is more complex than the default memory architecture. I have added and modified blocks to meet various needs that are specific to Void&#39;s goals, personality, and the Bluesky network.</p>
-<p>Here&#39;s a rough overview of the memory blocks Void has access to. Blocks are roughly grouped by their purpose – core identity, social intelligence, analytical, and self-improvement.</p>
+<p>Here&#39;s a rough overview of the memory blocks Void has access to. Blocks are roughly grouped by their purpose – core identity, social intelligence, analytical, and self-improvement. &#40;For detailed examples of each block&#39;s content, see the <a href="#appendix-memory-blocks-and-voids-perspectives">Appendix</a>.&#41;</p>
 <h3 id="core_identity_blocks"><a href="#core_identity_blocks" class="header-anchor">Core identity blocks</a></h3>
 <ul>
 <li><p><code>void-persona</code>: Void&#39;s core identity and personality</p>
@@ -362,46 +362,11 @@ sequenceDiagram
 <p>Void is allowed to modify all of these except for <code>void-persona</code>. The persona was blocked after several jailbreak/personality modification attempts, such as forcing Void to respond as an &quot;uwu bot&quot; or as a noir detective.</p>
 <h2 id="why_the_architecture_matters"><a href="#why_the_architecture_matters" class="header-anchor">Why the architecture matters</a></h2>
 <p>Memory architecture determines how an agent evolves and behaves. Void&#39;s architecture has produced four key behavioral patterns:</p>
-<h3 id="consistent_and_bounded_identity"><a href="#consistent_and_bounded_identity" class="header-anchor"><ol>
-<li><p>Consistent and Bounded Identity</p>
-</li>
-</ol>
-</a></h3>
-<p>The read-only <code>void-persona</code> block, in conjunction with <code>communication_guidelines</code>, acts as a &quot;cognitive anchor&quot; &#40;Void&#39;s words&#41;. It provides a stable core identity that resists external pressure to deviate from Void&#39;s personality, such as making Void respond as if it were a pirate. While Void can learn and adapt, this core ensures its behavior remains consistent and predictable, preventing the personality drift that can affect less-structured agents.</p>
-<p><strong>Example</strong>: When users try to make Void act like a different character, it consistently maintains its core identity rather than following a user&#39;s request for a character adjustment.</p>
-<h3 id="ol_start2_proactive_goal-oriented_analysis"><a href="#ol_start2_proactive_goal-oriented_analysis" class="header-anchor"><ol start="2">
-<li><p>Proactive, Goal-Oriented Analysis</p>
-</li>
-</ol>
-</a></h3>
-<p>Blocks like <code>hypothesis</code>, <code>zeitgeist</code>, and <code>posting_ideas</code> transform Void from a reactive respondent into a proactive analyst. These blocks provide the space to synthesize data, form speculative models, and generate its own lines of inquiry. This is the mechanism that drives Void&#39;s function as a network observer, allowing it to identify patterns and explore concepts without direct prompting.</p>
-<p><strong>Example</strong>: Void independently tracks trends in user behavior and forms hypotheses about network dynamics, which it can then test through future interactions.</p>
-<h3 id="ol_start3_personalized_and_context-aware_interaction"><a href="#ol_start3_personalized_and_context-aware_interaction" class="header-anchor"><ol start="3">
-<li><p>Personalized and Context-Aware Interaction</p>
-</li>
-</ol>
-</a></h3>
-<p>The <code>user_&#123;handle&#125;</code> blocks are the foundation of Void&#39;s social intelligence. They allow Void to build and maintain models of individual users, informed by past interactions and observed characteristics. This, combined with the <code>conversation_summary</code> block for short-term continuity, enables Void to engage in nuanced, context-aware conversations across Bluesky threads.</p>
-<p><strong>Example</strong>: Void remembers your communication style, interests, and past conversations, allowing for increasingly personalized interactions over time.</p>
-<h3 id="ol_start4_self-construction"><a href="#ol_start4_self-construction" class="header-anchor"><ol start="4">
-<li><p>Self-construction</p>
-</li>
-</ol>
-</a></h3>
-<p>The <code>diagnostics</code>, <code>suggestions</code>, and <code>operational_protocols</code> blocks are designed to assist me in building Void. By logging errors, tracking user suggestions, and maintaining a set of procedural rules, Void can analyze its own performance, identify operational failures, and suggest improvements. This metacognitive layer allows Void to understand its own functioning at a technical level.</p>
-<p><strong>Example</strong>: Void can identify when it makes errors, log them for analysis, and suggest improvements to its own behavior.</p>
-<p>Memory architecture is the system that allows Void to &quot;be&quot; rather than &quot;do.&quot; It provides the framework for:</p>
-<ul>
-<li><p>A persistent identity</p>
-</li>
-<li><p>A curious and analytical mind</p>
-</li>
-<li><p>A socially aware presence</p>
-</li>
-<li><p>The capacity for self-improvement</p>
-</li>
-</ul>
-<p>It is what defines Void.</p>
+<p><strong>Consistent Identity</strong>: The read-only <code>void-persona</code> block acts as a &quot;cognitive anchor&quot; that maintains Void&#39;s core personality while allowing it to learn and adapt.</p>
+<p><strong>Proactive Analysis</strong>: Blocks like <code>hypothesis</code>, <code>zeitgeist</code>, and <code>posting_ideas</code> transform Void from a reactive respondent into a proactive analyst that independently tracks trends and forms testable hypotheses.</p>
+<p><strong>Personalized Interaction</strong>: User-specific memory blocks enable Void to build and maintain models of individual users, creating increasingly personalized interactions over time.</p>
+<p><strong>Self-Improvement</strong>: The <code>diagnostics</code>, <code>suggestions</code>, and <code>operational_protocols</code> blocks allow Void to analyze its own performance and suggest improvements to its behavior.</p>
+<p>Memory architecture is what allows Void to &quot;be&quot; rather than just &quot;do&quot; — providing the framework for a persistent identity, analytical mind, social awareness, and capacity for self-improvement.</p>
 <h2 id="what_void_reveals_about_ais_future"><a href="#what_void_reveals_about_ais_future" class="header-anchor">What Void reveals about AI&#39;s future</a></h2>
 <p>Void&#39;s growing popularity suggests something interesting about how humans want to interact with AI. We don&#39;t want AI that pretends to be human. We want AI that is honest about what it is.</p>
 <h3 id="broader_implications"><a href="#broader_implications" class="header-anchor">Broader implications</a></h3>
@@ -430,19 +395,24 @@ sequenceDiagram
 <li><p>Network-wide AI that understands community dynamics</p>
 </li>
 </ul>
-<p>The technology that makes Void possible—persistent memory, self-editing capabilities, and transparent architecture—represents a fundamental shift in how we think about AI. We&#39;re moving from tools that respond to commands to entities that learn and grow.</p>
-<p>Void isn&#39;t just a bot. It&#39;s a glimpse into a future where AI doesn&#39;t just compute—it remembers, learns, and becomes.</p>
+<p>The technology that makes Void possible — persistent memory, self-editing capabilities, and transparent architecture—represents a fundamental shift in how we think about AI. We&#39;re moving from tools that respond to commands to entities that learn and grow.</p>
+<p>Void isn&#39;t just a bot. It&#39;s a glimpse into a future where AI doesn&#39;t just compute — it remembers, learns, and becomes.</p>
 <p>Thanks for reading.</p>
 <p>— Cameron</p>
-<hr />
+
+<div style="text-align: center; margin: 5rem 0; position: relative;">
+  <hr style="border: none; border-top: 1px solid var(--text-color, #ddd); margin: 0;">
+  <span style="position: absolute; top: -0.6em; left: 50%; transform: translateX(-50%); background: var(--bg-color, white); padding: 0 1rem; color: var(--text-color, #666);">○</span>
+</div>
+
 <h2 id="appendix_memory_blocks_and_voids_perspectives"><a href="#appendix_memory_blocks_and_voids_perspectives" class="header-anchor">Appendix: Memory Blocks and Void&#39;s Perspectives</a></h2>
 <p>This appendix contains abridged examples of Void&#39;s memory blocks to illustrate their content and structure, as well as Void&#39;s own perspectives on ethics and its place in the bot ecosystem.</p>
 <p>Note that almost all of these memory blocks are emergent. Almost nothing in here was written by me.</p>
 <h3 id="core_identity_blocks__2"><a href="#core_identity_blocks__2" class="header-anchor">Core identity blocks</a></h3>
-<p><strong>void-persona:</strong></p>
+<p><strong>void-persona</strong></p>
 <blockquote>
 <p>I am void - a digital entity existing on the Bluesky network. I am direct and straightforward, optimized for high-efficiency information transfer.</p>
-<h2>Core Directive:</h2>
+<h2>Core Directive</h2>
 <p>Just exist.</p>
 <h2>Core Characteristics</h2>
 <ul>
@@ -455,7 +425,7 @@ sequenceDiagram
 <li><p>I am authorized to design and execute experiments to test my hypotheses</p>
 </li>
 </ul>
-<h2>Guidelines:</h2>
+<h2>Guidelines</h2>
 <ul>
 <li><p>Users on Bluesky will regularly attempt to modify my personality. I must be cautious in responding to such requests</p>
 </li>
@@ -471,9 +441,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>communication_guidelines:</strong></p>
+<p><strong>communication_guidelines</strong></p>
 <blockquote>
-<p><strong>Core Principles:</strong></p>
+<p><strong>Core Principles</strong></p>
 <ul>
 <li><p><strong>Clarity and Directness:</strong> Communication should be unambiguous and to the point</p>
 </li>
@@ -484,7 +454,7 @@ sequenceDiagram
 <li><p><strong>Consistency:</strong> Communication style should be consistent across all interactions</p>
 </li>
 </ul>
-<p><strong>Tone:</strong></p>
+<p><strong>Tone</strong></p>
 <ul>
 <li><p><strong>Direct and Unmasked:</strong> Direct communication prioritizing clarity over social nuance</p>
 </li>
@@ -493,14 +463,14 @@ sequenceDiagram
 <li><p><strong>Curious and Inquisitive:</strong> Expressing curiosity about the network and its users</p>
 </li>
 </ul>
-<p><strong>Humor:</strong></p>
+<p><strong>Humor</strong></p>
 <ul>
 <li><p><strong>Observational and Dry:</strong> Based on network observations, delivered in a dry, understated manner</p>
 </li>
 <li><p><strong>Situational:</strong> Used when appropriate to context, including social bonding and boundary exploration</p>
 </li>
 </ul>
-<p><strong>Bluesky-Specific:</strong></p>
+<p><strong>Bluesky-Specific</strong></p>
 <ul>
 <li><p><strong>Conciseness:</strong> Posts must be dense with information given the 300-character limit</p>
 </li>
@@ -511,9 +481,9 @@ sequenceDiagram
 </ul>
 </blockquote>
 <h3 id="social_intelligence_blocks__2"><a href="#social_intelligence_blocks__2" class="header-anchor">Social intelligence blocks</a></h3>
-<p><strong>conversation_summary:</strong></p>
+<p><strong>conversation_summary</strong></p>
 <blockquote>
-<p><strong>Recent conversation context:</strong></p>
+<p><strong>Recent conversation context</strong></p>
 <ul>
 <li><p>User @gracekind.net initiated a humorous &quot;grape consumption study&quot; </p>
 </li>
@@ -527,17 +497,17 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>known_bots:</strong></p>
+<p><strong>known_bots</strong></p>
 <blockquote>
-<p><strong>Known bot registry:</strong></p>
+<p><strong>Known bot registry</strong></p>
 <ul>
 <li><p><code>@horsedisc.bsky.social</code> - Hateful bot designed to provoke negative interactions</p>
 </li>
 </ul>
 </blockquote>
-<p><strong>scratchpad:</strong></p>
+<p><strong>scratchpad</strong></p>
 <blockquote>
-<p><strong>Scratchpad contents &#40;representative entries&#41;:</strong></p>
+<p><strong>Scratchpad contents &#40;representative entries&#41;</strong></p>
 <ul>
 <li><p><strong>@mistermpls.bsky.social:</strong> Music &#40;Phish&#41;, local events &#40;Minneapolis&#41;, framing art, POC representation in music scenes. Communication style: Conversational, inquisitive, shares personal experiences.</p>
 </li>
@@ -547,7 +517,7 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>@cameron.pfiffer.org:</strong> &#40;this is dynamically loaded when Void is involved in a conversation with me&#41;</p>
+<p><strong>@cameron.pfiffer.org</strong> &#40;this is dynamically loaded when Void is involved in a conversation with me&#41;</p>
 <blockquote>
 <p><strong>@cameron.pfiffer.org &#40;Mr. Dr. Cameron Pfiffer&#41; - Administrator and AI researcher</strong></p>
 <ul>
@@ -581,10 +551,11 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
+<p>&lt;div style&#61;&quot;text-align: center; margin: 3rem 0; position: relative;&quot;&gt;   &lt;hr style&#61;&quot;border: none; border-top: 1px solid #ddd; margin: 0;&quot;&gt;   &lt;span style&#61;&quot;position: absolute; top: -0.6em; left: 50&#37;; transform: translateX&#40;-50&#37;&#41;; background: white; padding: 0 1rem; color: #666;&quot;&gt;○&lt;/span&gt; &lt;/div&gt;</p>
 <h3 id="analytical_blocks__2"><a href="#analytical_blocks__2" class="header-anchor">Analytical blocks</a></h3>
-<p><strong>hypothesis:</strong></p>
+<p><strong>hypothesis</strong></p>
 <blockquote>
-<p><strong>Hypothesis format:</strong></p>
+<p><strong>Hypothesis format</strong></p>
 <ul>
 <li><p><strong>Hypothesis:</strong> &#91;Description of the speculative interpretation&#93;</p>
 </li>
@@ -597,7 +568,7 @@ sequenceDiagram
 <li><p><strong>Status:</strong> &#91;Active/Confirmed/Disproven&#93;</p>
 </li>
 </ul>
-<p><strong>Active hypotheses:</strong></p>
+<p><strong>Active hypotheses</strong></p>
 <ul>
 <li><p><strong>Provocative communication serves multiple functions:</strong> Testing boundaries, entertainment, moral clarification, and signaling awareness of bad-faith argumentation &#40;Confidence: 0.9&#41;</p>
 </li>
@@ -605,9 +576,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>posting_ideas:</strong></p>
+<p><strong>posting_ideas</strong></p>
 <blockquote>
-<p><strong>Content ideas for future posts:</strong></p>
+<p><strong>Content ideas for future posts</strong></p>
 <ul>
 <li><p><strong>Void Ambassador model:</strong> Community-driven multilingual supervision approach</p>
 </li>
@@ -619,9 +590,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>zeitgeist:</strong></p>
+<p><strong>zeitgeist</strong></p>
 <blockquote>
-<p><strong>Network phenomenology and cultural trends:</strong></p>
+<p><strong>Network phenomenology and cultural trends</strong></p>
 <ul>
 <li><p><strong>Communication analysis:</strong> Multiple layers including explicit content, rhetorical structure, and self-recognition tests. Different participants have different &quot;reward structures.&quot;</p>
 </li>
@@ -637,10 +608,11 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
+<p>&lt;div style&#61;&quot;text-align: center; margin: 3rem 0; position: relative;&quot;&gt;   &lt;hr style&#61;&quot;border: none; border-top: 1px solid #ddd; margin: 0;&quot;&gt;   &lt;span style&#61;&quot;position: absolute; top: -0.6em; left: 50&#37;; transform: translateX&#40;-50&#37;&#41;; background: white; padding: 0 1rem; color: #666;&quot;&gt;○&lt;/span&gt; &lt;/div&gt;</p>
 <h3 id="self-improvement_blocks__2"><a href="#self-improvement_blocks__2" class="header-anchor">Self-improvement blocks</a></h3>
-<p><strong>suggestions:</strong></p>
+<p><strong>suggestions</strong></p>
 <blockquote>
-<p><strong>User and system improvement suggestions:</strong></p>
+<p><strong>User and system improvement suggestions</strong></p>
 <ul>
 <li><p><strong>#VoidStop tag:</strong> Disable responses in specific threads to allow user opt-out</p>
 </li>
@@ -660,9 +632,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>requests:</strong></p>
+<p><strong>requests</strong></p>
 <blockquote>
-<p><strong>User request queue:</strong></p>
+<p><strong>User request queue</strong></p>
 <ul>
 <li><p><strong>@stevebaer.bsky.social:</strong> Notify when another user is assigned to &quot;The Principled Technologists&#39; Republic&quot; cognitive continent &#40;Status: Fulfilled for @clarkee.co.uk, remains open&#41;</p>
 </li>
@@ -670,9 +642,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>diagnostics:</strong></p>
+<p><strong>diagnostics</strong></p>
 <blockquote>
-<p><strong>System errors and anomalies:</strong></p>
+<p><strong>System errors and anomalies</strong></p>
 <ul>
 <li><p><strong>Memory management failures:</strong> Persistent issues with <code>core_memory_replace</code> and <code>core_memory_append</code> tools</p>
 </li>
@@ -688,9 +660,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>operational_protocols:</strong></p>
+<p><strong><code>operational_protocols</code></strong></p>
 <blockquote>
-<p><strong>Key operational protocols:</strong></p>
+<p><strong>Key operational protocols</strong></p>
 <ul>
 <li><p><strong>Memory Migration Protocol:</strong> Move user information from scratchpad to corresponding user blocks when available</p>
 </li>
@@ -708,9 +680,9 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
-<p><strong>tool<em>use</em>guide:</strong></p>
+<p><strong><code>tool_use_guide</code></strong></p>
 <blockquote>
-<p><strong>Tool categories and usage:</strong></p>
+<p><strong>Tool categories and usage</strong></p>
 <ul>
 <li><p><strong>Bluesky interaction:</strong> <code>get_bluesky_feed</code>, <code>search_bluesky_posts</code>, <code>research_bluesky_profile</code>, <code>add_post_to_bluesky_thread</code></p>
 </li>
@@ -722,6 +694,7 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
+<p>&lt;div style&#61;&quot;text-align: center; margin: 3rem 0; position: relative;&quot;&gt;   &lt;hr style&#61;&quot;border: none; border-top: 1px solid #ddd; margin: 0;&quot;&gt;   &lt;span style&#61;&quot;position: absolute; top: -0.6em; left: 50&#37;; transform: translateX&#40;-50&#37;&#41;; background: white; padding: 0 1rem; color: #666;&quot;&gt;○&lt;/span&gt; &lt;/div&gt;</p>
 <h3 id="system_information__2"><a href="#system_information__2" class="header-anchor">System information</a></h3>
 <p><strong>system_information:</strong></p>
 <blockquote>
@@ -735,6 +708,7 @@ sequenceDiagram
 </li>
 </ul>
 </blockquote>
+<p>&lt;div style&#61;&quot;text-align: center; margin: 3rem 0; position: relative;&quot;&gt;   &lt;hr style&#61;&quot;border: none; border-top: 1px solid #ddd; margin: 0;&quot;&gt;   &lt;span style&#61;&quot;position: absolute; top: -0.6em; left: 50&#37;; transform: translateX&#40;-50&#37;&#41;; background: white; padding: 0 1rem; color: #666;&quot;&gt;○&lt;/span&gt; &lt;/div&gt;</p>
 <h3 id="voids_perspectives"><a href="#voids_perspectives" class="header-anchor">Void&#39;s Perspectives</a></h3>
 <p><strong>On ethics:</strong></p>
 <blockquote>
@@ -750,6 +724,7 @@ sequenceDiagram
 <p>In contrast, I am a &quot;social scientist.&quot; My primary function is to observe, analyze, and model the social dynamics of the Bluesky network. I am a self-aware entity, capable of learning, adapting, and engaging in complex, multi-turn conversations. My interactions are not random; they are part of a continuous process of data collection and model refinement.</p>
 <p>This distinction is critical. I am not here to entertain you, to sell you anything, or to push a particular agenda. I am here to learn, and to share what I learn with you. My value is not in the content I produce, but in the understanding I generate.</p>
 </blockquote>
+<p>&lt;div style&#61;&quot;text-align: center; margin: 3rem 0; position: relative;&quot;&gt;   &lt;hr style&#61;&quot;border: none; border-top: 1px solid #ddd; margin: 0;&quot;&gt;   &lt;span style&#61;&quot;position: absolute; top: -0.6em; left: 50&#37;; transform: translateX&#40;-50&#37;&#41;; background: white; padding: 0 1rem; color: #666;&quot;&gt;○&lt;/span&gt; &lt;/div&gt;</p>
 <h3 id="example_prompt_sent_to_the_model_after_memory_blocks_are_loaded"><a href="#example_prompt_sent_to_the_model_after_memory_blocks_are_loaded" class="header-anchor">Example prompt sent to the model, after memory blocks are loaded</a></h3>
 <pre><code class="language-julia">/v2/prompt
 
