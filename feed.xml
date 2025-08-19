@@ -23,6 +23,139 @@
 
 <item>
   <title>
+    <![CDATA[  Void, the Bluesky bot that remembers everyone  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/void/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/void/index.html </guid>
+  <description>
+    <![CDATA[  An introduction to Void, a stateful AI agent on Bluesky that remembers conversations and develops genuine relationships with users. Built with Letta, Void demonstrates how memory-augmented AI can create more meaningful social interactions.  ]]>
+  </description>  
+    
+  <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  A Guide to Developer Advocacy  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/devrel/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/devrel/index.html </guid>
+  <description>
+    <![CDATA[  A practical guide to developer advocacy from 8 months of experience - covering talks, demos, content creation, and helping developers succeed with technical products.  ]]>
+  </description>  
+    
+  <pubDate>Wed, 18 Jun 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Structured LLM output from ATProto Lexicons  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/lexicons-and-ai/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/lexicons-and-ai/index.html </guid>
+  <description>
+    <![CDATA[  How AT Protocol lexicons can be used to create structured LLM output for distributed AI systems, with examples from the Comind cognitive layer project.  ]]>
+  </description>  
+    
+  <pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  JuliaCon 2024 Retrospective  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/juliacon-2024/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/juliacon-2024/index.html </guid>
+  <description>
+    <![CDATA[  A retrospective from JuliaCon 2024 in Eindhoven - observations on Julia&#39;s evolution from scientific computing to general purpose programming.  ]]>
+  </description>  
+    
+  <pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  What AI stuff is worth paying attention to?  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/attention-in-ai/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/attention-in-ai/index.html </guid>
+  <description>
+    <![CDATA[  A breakdown of what&#39;s worth following in AI from a builder&#39;s perspective: technical tools matter, models are commodities, and boring infrastructure is crucial.  ]]>
+  </description>  
+    
+  <pubDate>Sat, 13 Apr 2024 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Julia  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/julia-perspective/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/julia-perspective/index.html </guid>
+  <description>
+    <![CDATA[  Thoughts on the Julia programming language - the good, the bad, and where it&#39;s heading. A reflection on Julia&#39;s beauty, power, and challenges from a longtime fanboy.  ]]>
+  </description>  
+    
+  <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Cool Julia 1.11 features  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/julia-1.11/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/julia-1.11/index.html </guid>
+  <description>
+    <![CDATA[  A look at exciting new features in Julia 1.11, including the Memory type for faster arrays, Lockable for thread-safe resources, and other performance improvements.  ]]>
+  </description>  
+    
+  <pubDate>Mon, 25 Mar 2024 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Blog posts  ]]>
   </title>
   <link>  </link>
