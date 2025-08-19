@@ -1,6 +1,8 @@
 +++
 title= "Structured LLM output from ATProto Lexicons"
 date= Date(2025,03,05)
+rss = "How AT Protocol lexicons can be used to create structured LLM output for distributed AI systems, with examples from the Comind cognitive layer project."
+rss_pubdate = Date(2025,03,05)
 +++
 
 I spent time time this evening fucking around with [AT Protocol lexicons](https://atproto.com/specs/lexicon) for [Comind](https://bsky.app/profile/comind.stream).

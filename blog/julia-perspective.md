@@ -1,6 +1,8 @@
 +++
 title= "Julia"
 date= Date(2024,03,27)
+rss = "Thoughts on the Julia programming language - the good, the bad, and where it's heading. A reflection on Julia's beauty, power, and challenges from a longtime fanboy."
+rss_pubdate = Date(2024,03,27)
 +++
 
 I have some thoughts on the future of the [Julia language](https://julialang.org), as prompted by [Mason Yahr](https://twitter.com/yahrMason/status/1772445238730084642) on X. As many of you all know I'm kind of a fanboy, but I too have noticed kind of a slowdown.

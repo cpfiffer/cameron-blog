@@ -1,6 +1,8 @@
 +++
 title= "Cool Julia 1.11 features"
 date= "2024-03-25"
+rss = "A look at exciting new features in Julia 1.11, including the Memory type for faster arrays, Lockable for thread-safe resources, and other performance improvements."
+rss_pubdate = Date(2024,03,25)
 toc= true
 +++
 

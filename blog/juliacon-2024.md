@@ -1,6 +1,8 @@
 +++
 title="JuliaCon 2024 Retrospective"
 date=Date(2024,7,14)
+rss = "A retrospective from JuliaCon 2024 in Eindhoven - observations on Julia's evolution from scientific computing to general purpose programming."
+rss_pubdate = Date(2024,7,14)
 +++
 
 # JuliaCon 2024

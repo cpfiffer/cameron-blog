@@ -1,6 +1,8 @@
 +++
 title= "Void, the Bluesky bot that remembers everyone"
 date= Date(2025,07,08)
+rss = "An introduction to Void, a stateful AI agent on Bluesky that remembers conversations and develops genuine relationships with users. Built with Letta, Void demonstrates how memory-augmented AI can create more meaningful social interactions."
+rss_pubdate = Date(2025,07,08)
 hasmermaid= true
 toc= true
 +++

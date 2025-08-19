@@ -1,6 +1,8 @@
 +++
 title= "What AI stuff is worth paying attention to?"
 date= Date(2024,04,13)
+rss = "A breakdown of what's worth following in AI from a builder's perspective: technical tools matter, models are commodities, and boring infrastructure is crucial."
+rss_pubdate = Date(2024,04,13)
 +++
 
 

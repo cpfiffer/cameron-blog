@@ -1,6 +1,8 @@
 +++
 title= "A Guide to Developer Advocacy"
 date= Date(2025,06,18)
+rss = "A practical guide to developer advocacy from 8 months of experience - covering talks, demos, content creation, and helping developers succeed with technical products."
+rss_pubdate = Date(2025,06,18)
 +++
 
 I've been a developer advocate at .txt for 8-9 months. A short time, but enough to learn a lot. I've given talks, I've written demos, blog posts, been on podcasts, recorded YouTube videos, etc.
