@@ -42,25 +42,6 @@
 
 <item>
   <title>
-    <![CDATA[  Memory blocks: the primitive that makes agent coordination possible  ]]>
-  </title>
-  <link> https://cameron.pfiffer.org/blog/memory-is-superhuman/index.html </link>
-  <guid> https://cameron.pfiffer.org/blog/memory-is-superhuman/index.html </guid>
-  <description>
-    <![CDATA[  Memory blocks are simple—text that agents can read and write. But they have one powerful property: they can be shared. This unlocks coordination capabilities that weren&#39;t possible before.  ]]>
-  </description>  
-    
-  <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>  
-  
-  
-  <atom:author>
-    <atom:name>Cameron Pfiffer</atom:name>
-  </atom:author>
-        
-</item>
-
-<item>
-  <title>
     <![CDATA[  Void, the Bluesky bot that remembers everyone  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/void/index.html </link>
