@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
+         
+        <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <!-- Mermaid.js for diagram rendering -->
+<script src="/libs/mermaid/mermaid.min.js"></script>
+<style>
+    .mermaid {
+        text-align: center;
+        margin: 1em 0;
+    }
+    
+    /* Dark theme support for Mermaid */
+    [data-theme="dark"] .mermaid {
+        background: transparent;
+    }
+    
+    /* Light theme support for Mermaid */
+    [data-theme="light"] .mermaid {
+        background: transparent;
+    }
+</style>  <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>A quick comparison between Letta and the Claude Agent SDK</title>
+        
+    </head>
+    <body>
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <span style="font-weight: bold">Cameron</span>
+        <div>
+            <a href="/">home</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘
+            <a href="/links/">links</a>
+        </div>
+    </div>
+    <hr />
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="a_quick_comparison_between_letta_and_the_claude_agent_sdk"><a href="#a_quick_comparison_between_letta_and_the_claude_agent_sdk" class="header-anchor">A quick comparison between Letta and the Claude Agent SDK</a></h1>
+<p>I spent a couple hours with Anthropic&#39;s new <a href="https://docs.claude.com/en/api/agent-sdk/overview">Claude Agent SDK</a> to see how it compares to Letta. It&#39;s the closest thing to what we&#39;re building.</p>
+<p>TL;DR: It&#39;s basically Claude Code&#39;s internals exposed as an SDK. But it&#39;s a subset of what Letta offers, and the two systems have fundamentally different design philosophies.</p>
+<h2 id="memory"><a href="#memory" class="header-anchor">Memory</a></h2>
+<p>The big differentiator in my view is how memory works. In Letta, memory is a first-class citizen. Letta agents are stateful by default through the use of specialized sections of the context window called <a href="https://docs.letta.com/guides/agents/memory-blocks">memory blocks</a>. Memory blocks are editable by the agent, which gives it the ability to self-improve and adapt to its environment. Memory blocks are also maintained server-side in a database, rather than in files.</p>
+<p>Claude uses Anthropic&#39;s standard brute-force approach to memory. There&#39;s a <code>CLAUDE.md</code> file that loads into the agent&#39;s window, and compaction happens when the context window is exceeded.</p>
+<p>Letta agents use smaller but regular compactions. Agents carry forward meaningful information by inserting it into memory blocks. This allows agents to grab information as it arises and becomes meaningful, rather than attempting to extract it at the end of the context window.</p>
+<p>In the Agent SDK, you load memory files through <code>setting_sources</code>:</p>
+<pre><code class="language-python"># Load project settings to include CLAUDE.md files
+async for message in query&#40;
+    prompt&#61;&quot;Add a new feature following project conventions&quot;,
+    options&#61;ClaudeAgentOptions&#40;
+        system_prompt&#61;&#123;
+            &quot;type&quot;: &quot;preset&quot;,
+            &quot;preset&quot;: &quot;claude_code&quot;
+        &#125;,
+        setting_sources&#61;&#91;&quot;project&quot;&#93;,  # Required to load CLAUDE.md from project
+        allowed_tools&#61;&#91;&quot;Read&quot;, &quot;Write&quot;, &quot;Edit&quot;&#93;
+    &#41;
+&#41;:
+    print&#40;message&#41;</code></pre>
+<p>Claude waits until the notebook is full, then summarizes everything at once. Letta takes notes continuously as important things happen. This enables a fundamentally different kind of agent—one that evolves its own knowledge base rather than just maintaining conversation history.</p>
+<h2 id="client-side_vs_server-side_architecture"><a href="#client-side_vs_server-side_architecture" class="header-anchor">Client-Side vs. Server-Side Architecture</a></h2>
+<p>The biggest architectural difference: <strong>Claude Agent SDK is client-side first, Letta is server-side first.</strong></p>
+<p>Client-side means your agent runs in your application&#39;s process. When your script ends, the agent disappears. State lives in memory or local files.</p>
+<p>Server-side means your agent lives on a server. It&#39;s always there, always maintaining state. Multiple applications can talk to the same agent. When your script ends, the agent keeps running.</p>
+<h3 id="why_this_matters"><a href="#why_this_matters" class="header-anchor">Why This Matters</a></h3>
+<p>The persistence model is completely different. With Claude Agent SDK, you instantiate an agent for each interaction. The agent exists for the duration of your script, then it&#39;s gone. If you want to remember something from a previous session, you need to manage that state yourself.</p>
+<pre><code class="language-python"># Session 1
+async for message in query&#40;prompt&#61;&quot;My name is Cameron&quot;&#41;:
+    print&#40;message&#41;
+# Agent forgets everything when this script ends
+
+# Session 2 &#40;later&#41;
+async for message in query&#40;prompt&#61;&quot;What&#39;s my name?&quot;&#41;:
+    print&#40;message&#41;  # Agent has no idea</code></pre>
+<p>With Letta, agents are persistent by default. You create an agent once, and it lives on the server. Every interaction adds to its history and memory. You can message it from your laptop today, your phone tomorrow, and a cron job next week—it&#39;s always the same agent with the same memory.</p>
+<pre><code class="language-python"># Session 1
+client.agents.messages.create&#40;
+    agent_id&#61;&quot;agent-123&quot;,
+    messages&#61;&#91;&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;My name is Cameron&quot;&#125;&#93;
+&#41;
+
+# Session 2 &#40;days later, different machine&#41;
+response &#61; client.agents.messages.create&#40;
+    agent_id&#61;&quot;agent-123&quot;,
+    messages&#61;&#91;&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What&#39;s my name?&quot;&#125;&#93;
+&#41;
+# Agent remembers: &quot;Cameron&quot;</code></pre>
+<p>The agent&#39;s ID is the key to its entire history. This architectural choice enables use cases that are difficult with ephemeral agents: monitoring systems that run on schedules, agents that respond to webhooks from external services, bots that maintain consistent personality across multiple platforms like Slack and Discord, and agents that coordinate with other agents in a shared environment.</p>
+<p>Claude Agent SDK is optimized for personal productivity tools, prototyping, and scenarios where you need direct filesystem access on your machine and your agent&#39;s lifecycle matches your script&#39;s lifecycle. Letta is optimized for production applications where you need persistent stateful agents, multiple clients talking to the same agent, agents that self-evolve over time, and agents accessible via API from anywhere.</p>
+<h2 id="first_impressions"><a href="#first_impressions" class="header-anchor">First Impressions</a></h2>
+<p>Claude Agent SDK ships with TypeScript and Python support, same as Letta. It includes auto-compaction when the context window fills up. Letta does this too, though Claude&#39;s approach is simpler since they don&#39;t track persistent state the way we do. Both systems have first-class MCP integration and agent permissions for controlling tool access.</p>
+<p>The SDK uses a <code>.claude</code> directory structure similar to Claude Code. There are subagents for specialized prompts, hooks for custom commands that run at specific events, slash commands for common operations, and memory stored in <code>CLAUDE.md</code> files. Tool permissions are controlled with <code>allowedTools</code>, <code>disallowedTools</code>, and <code>permissionMode</code> parameters.</p>
+<h2 id="quick_start_examples"><a href="#quick_start_examples" class="header-anchor">Quick Start Examples</a></h2>
+<p>Here&#39;s the same task in both systems: asking an agent to create a Python web server. These aren&#39;t exactly equivalent due to the server/client difference and which tools are available, but this should give you a rough sketch of what they look like.</p>
+<p><strong>Claude Agent SDK:</strong></p>
+<pre><code class="language-python">from dotenv import load_dotenv
+import os
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+load_dotenv&#40;&#41;
+
+async def main&#40;&#41;:
+    options &#61; ClaudeAgentOptions&#40;
+        system_prompt&#61;&quot;You are an expert Python developer&quot;,
+        permission_mode&#61;&#39;acceptEdits&#39;,
+        cwd&#61;&quot;/users/Cameron/letta/agent-sdk/sandbox&quot;
+    &#41;
+
+    async for message in query&#40;
+        prompt&#61;&quot;Create a Python web server&quot;,
+        options&#61;options
+    &#41;:
+        print&#40;message&#41;
+
+asyncio.run&#40;main&#40;&#41;&#41;</code></pre>
+<p><strong>Letta &#40;first time&#41;:</strong></p>
+<pre><code class="language-python">from letta_client import Letta
+import os
+
+client &#61; Letta&#40;token&#61;os.getenv&#40;&quot;LETTA_API_KEY&quot;&#41;&#41;
+
+# Create the agent once
+agent &#61; client.agents.create&#40;
+    model&#61;&quot;openai/gpt-4o-mini&quot;,
+    embedding&#61;&quot;openai/text-embedding-3-small&quot;,
+    memory_blocks&#61;&#91;
+        &#123;&quot;label&quot;: &quot;persona&quot;, &quot;value&quot;: &quot;You are an expert Python developer.&quot;&#125;
+    &#93;
+&#41;
+
+# Send a message
+response &#61; client.agents.messages.create&#40;
+    agent_id&#61;agent.id,
+    messages&#61;&#91;&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Create a Python web server&quot;&#125;&#93;
+&#41;</code></pre>
+<p><strong>Letta &#40;every subsequent time&#41;:</strong></p>
+<pre><code class="language-python">from letta_client import Letta
+import os
+
+client &#61; Letta&#40;token&#61;os.getenv&#40;&quot;LETTA_API_KEY&quot;&#41;&#41;
+
+# Just send a message to your existing agent
+response &#61; client.agents.messages.create&#40;
+    agent_id&#61;&quot;agent-123&quot;,
+    messages&#61;&#91;&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Create a Python web server&quot;&#125;&#93;
+&#41;</code></pre>
+<p>The Claude example is simpler for one-off queries. The Letta example requires agent creation the first time, but after that it&#39;s just one API call. The agent persists on the server, maintains its memory and context, and is accessible from anywhere.</p>
+<p>Running local tools client-side in Letta is something we&#39;re actively working on.</p>
+<h2 id="tools_two_philosophies"><a href="#tools_two_philosophies" class="header-anchor">Tools: Two Philosophies</a></h2>
+<h3 id="claudes_approach"><a href="#claudes_approach" class="header-anchor">Claude&#39;s Approach</a></h3>
+<p>Claude&#39;s tool definition syntax is clean:</p>
+<pre><code class="language-python">from claude_agent_sdk import tool
+from typing import Any
+
+@tool&#40;&quot;greet&quot;, &quot;Greet a user&quot;, &#123;&quot;name&quot;: str&#125;&#41;
+async def greet&#40;args: dict&#91;str, Any&#93;&#41; -&gt; dict&#91;str, Any&#93;:
+    return &#123;
+        &quot;content&quot;: &#91;&#123;
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;text&quot;: f&quot;Hello, &#123;args&#91;&#39;name&#39;&#93;&#125;&#33;&quot;
+        &#125;&#93;
+    &#125;</code></pre>
+<p>The <code>@tool</code> decorator wraps your function into a standard MCP tool. You can spin up an MCP server quickly:</p>
+<pre><code class="language-python">calculator &#61; create_sdk_mcp_server&#40;
+    name&#61;&quot;howdy_server&quot;,
+    version&#61;&quot;2.0.0&quot;,
+    tools&#61;&#91;greet&#93;  # Pass decorated functions
+&#41;</code></pre>
+<p>Then expose it to your agent:</p>
+<pre><code class="language-python">options &#61; ClaudeAgentOptions&#40;
+    mcp_servers&#61;&#123;&quot;howdy&quot;: calculator&#125;,
+    allowed_tools&#61;&#91;&quot;mcp__howdy__greet&quot;&#93;
+&#41;</code></pre>
+<h3 id="lettas_approach"><a href="#lettas_approach" class="header-anchor">Letta&#39;s Approach</a></h3>
+<p>Letta supports two methods for tools: persistent custom tools executed in a sandbox, and MCP servers &#40;same as Anthropic&#41;.</p>
+<p>Letta&#39;s built-in approach is designed for persistent, server-registered tools shared across all agents:</p>
+<pre><code class="language-python">from letta_client import Letta
+
+client &#61; Letta&#40;token&#61;os.getenv&#40;&quot;LETTA_API_KEY&quot;&#41;&#41;
+
+# Define your function with Google Style docstring
+def greet&#40;name: str&#41; -&gt; str:
+    &quot;&quot;&quot;
+    Greet a user by name.
+
+    Args:
+        name &#40;str&#41;: The name of the user to greet
+
+    Returns:
+        str: A greeting message
+    &quot;&quot;&quot;
+    return f&quot;Hello, &#123;name&#125;&#33;&quot;
+
+# Create the tool from the function
+tool &#61; client.tools.create_from_function&#40;func&#61;greet&#41;
+
+# Create an agent with the tool attached
+agent &#61; client.agents.create&#40;
+    model&#61;&quot;openai/gpt-4o-mini&quot;,
+    embedding&#61;&quot;openai/text-embedding-3-small&quot;,
+    memory_blocks&#61;&#91;
+        &#123;&quot;label&quot;: &quot;persona&quot;, &quot;value&quot;: &quot;I am a helpful assistant.&quot;&#125;
+    &#93;,
+    tools&#61;&#91;&quot;greet&quot;&#93;  # Attach tool by name
+&#41;
+
+# The tool can also be attached directly using the ID
+client.agents.tools.attach&#40;
+    agent_id&#61;agent.id,
+    tool_id&#61;tool.id
+&#41;
+
+# Use the agent &#40;it will call the greet tool&#41;
+response &#61; client.agents.messages.create&#40;
+    agent_id&#61;agent.id,
+    messages&#61;&#91;&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Please greet Cameron&quot;&#125;&#93;
+&#41;</code></pre>
+<p><a href="https://docs.letta.com/guides/mcp/overview">Letta also supports</a> Anthropic&#39;s MCP approach directly. For local servers, here&#39;s a stdio example:</p>
+<pre><code class="language-python">from letta_client import Letta
+from letta_client.types import StdioServerConfig
+
+# Self-hosted only
+client &#61; Letta&#40;base_url&#61;&quot;http://localhost:8283&quot;&#41;
+
+# Connect a stdio server &#40;npx example - works in Docker&#33;&#41;
+stdio_config &#61; StdioServerConfig&#40;
+    server_name&#61;&quot;github-server&quot;,
+    command&#61;&quot;npx&quot;,
+    args&#61;&#91;&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;&#93;,
+    env&#61;&#123;&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;your-token&quot;&#125;
+&#41;
+client.tools.add_mcp_server&#40;request&#61;stdio_config&#41;
+
+# List available tools
+tools &#61; client.tools.list_mcp_tools_by_server&#40;
+    mcp_server_name&#61;&quot;github-server&quot;
+&#41;
+
+# Add a tool to use with agents
+tool &#61; client.tools.add_mcp_tool&#40;
+    mcp_server_name&#61;&quot;github-server&quot;,
+    mcp_tool_name&#61;&quot;create_repository&quot;
+&#41;</code></pre>
+<p>Both approaches work well. They&#39;re roughly equivalent, though Letta supports server-side code execution and will soon support client-side execution as well.</p>
+<h2 id="hooks_vs_tool_rules"><a href="#hooks_vs_tool_rules" class="header-anchor">Hooks vs. Tool Rules</a></h2>
+<p>Claude Agent SDK has <a href="https://docs.claude.com/en/docs/claude-code/hooks-guide#quickstart">hooks</a> for executing code around specific events:</p>
+<pre><code class="language-python">HookEvent &#61; Literal&#91;
+    &quot;PreToolUse&quot;,       # Called before tool execution
+    &quot;PostToolUse&quot;,      # Called after tool execution
+    &quot;UserPromptSubmit&quot;, # Called when user submits a prompt
+    &quot;Stop&quot;,             # Called when stopping execution
+    &quot;SubagentStop&quot;,     # Called when a subagent stops
+    &quot;PreCompact&quot;        # Called before message compaction
+&#93;</code></pre>
+<p>Letta&#39;s closest equivalent is <a href="https://docs.letta.com/guides/agents/tool-rules">tool rules</a>, which force agents to call tools in specific orders. Claude&#39;s hook approach allows for arbitrary code execution outside the model. Letta&#39;s tools can approximate hook behavior, and tool rules give you fine-grained control over agent workflows.</p>
+<p>That said, the Agent SDK approach to hooks is quite powerful and well-suited to the kind of tight filesystem integration that Claude Code benefits from.</p>
+<h2 id="conclusion"><a href="#conclusion" class="header-anchor">Conclusion</a></h2>
+<p>Claude Agent SDK is well-executed, as you might imagine from Anthropic. It&#39;s a subset of what Letta offers, optimized for different use cases.</p>
+<p>Claude Agent SDK is designed for low-friction client-side interaction, ephemeral agents that spin up and down quickly, direct code execution in your local environment, and quick prototypes and one-off tasks.</p>
+<p>Letta is designed for persistent server-side agents, globally accessible agents that maintain state, self-evolving agents that manage their own memory, and production deployments with multiple agents coordinating.</p>
+<p>If you need an agent to help you write code on your laptop for an hour, Claude Agent SDK works. If you need an agent that remembers your last 50 conversations, coordinates with other agents, and improves itself over time—that&#39;s what Letta is built for.</p>
+<p>Try Letta at <a href="https://app.letta.com">app.letta.com</a> or check out the <a href="https://docs.letta.com">documentation</a>.</p>
+<p>– Cameron</p>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+    
+        <!-- Mermaid.js initialization -->
+<script>
+    // Initialize Mermaid with theme support
+    const initializeMermaid = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: theme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                // Additional theme customization can go here
+            }
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+    
+    // Re-initialize when theme changes
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Small delay to allow theme change to complete
+            setTimeout(() => {
+                // Re-render all mermaid diagrams with new theme
+                const mermaidDivs = document.querySelectorAll('.mermaid');
+                mermaidDivs.forEach(div => {
+                    const originalContent = div.getAttribute('data-original-content');
+                    if (originalContent) {
+                        div.innerHTML = originalContent;
+                        div.removeAttribute('data-processed');
+                    }
+                });
+                initializeMermaid();
+            }, 100);
+        });
+    }
+    
+    // Store original content for theme switching
+    document.addEventListener('DOMContentLoaded', () => {
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        mermaidDivs.forEach(div => {
+            if (!div.getAttribute('data-original-content')) {
+                div.setAttribute('data-original-content', div.textContent);
+            }
+        });
+    });
+</script>
+    
+  </body>
+</html>

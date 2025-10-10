@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
+         
+        <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <!-- Mermaid.js for diagram rendering -->
+<script src="/libs/mermaid/mermaid.min.js"></script>
+<style>
+    .mermaid {
+        text-align: center;
+        margin: 1em 0;
+    }
+    
+    /* Dark theme support for Mermaid */
+    [data-theme="dark"] .mermaid {
+        background: transparent;
+    }
+    
+    /* Light theme support for Mermaid */
+    [data-theme="light"] .mermaid {
+        background: transparent;
+    }
+</style>  <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Memory blocks: the primitive that makes agent coordination possible</title>
+        
+    </head>
+    <body>
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <span style="font-weight: bold">Cameron</span>
+        <div>
+            <a href="/">home</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘
+            <a href="/links/">links</a>
+        </div>
+    </div>
+    <hr />
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<p><strong>Disclosure</strong>: I work at Letta, and memory blocks are a core Letta primitive. This is my perspective on why they matter.</p>
+<p>Most people think AI agent memory is about better storage. They imagine agents that remember your preferences, conversation history, maybe some context about your projects.</p>
+<p>That&#39;s not wrong, but it misses what makes memory architecturally interesting.</p>
+<p>The question isn&#39;t how to store information better. It&#39;s what memory architecture enables.</p>
+<h2 id="what_are_memory_blocks"><a href="#what_are_memory_blocks" class="header-anchor">What are memory blocks?</a></h2>
+<p>Memory blocks are straightforward: they&#39;re text that agents can read and modify.</p>
+<p>Each block lives in the agent&#39;s context window and has four components:</p>
+<ul>
+<li><p><strong>Label</strong> - unique identifier &#40;e.g., <code>persona</code>, <code>human</code>, <code>organization</code>&#41;</p>
+</li>
+<li><p><strong>Description</strong> - tells the agent what the block is for and how to use it</p>
+</li>
+<li><p><strong>Value</strong> - the actual text content</p>
+</li>
+<li><p><strong>Limit</strong> - size constraint in characters</p>
+</li>
+</ul>
+<p>In the agent&#39;s context window, this looks like:</p>
+<pre><code class="language-julia">&lt;human&gt;
+&lt;description&gt;
+Information about the user I am interacting with.
+&lt;/description&gt;
+&lt;metadata&gt;
+- chars_current&#61;3010
+- chars_limit&#61;5000
+&lt;/metadata&gt;
+&lt;value&gt;
+# NOTE: Line numbers shown below are to help during editing. Do NOT include line number prefixes in your memory edit tool calls.
+Line 1: I am talking to Cameron, a human.
+Line 2: Cameron works at Letta.
+Line 3: Cameron plays piano.
+...
+Line N: ...
+&lt;/human&gt;</code></pre>
+<p>An agent can update its blocks using memory tools. The description field is critical—it&#39;s what the agent uses to figure out when and how to use each block.</p>
+<p>This is the primitive that makes Letta agents work. Pretty simple.</p>
+<p>But here&#39;s the interesting part: memory blocks can be shared by &quot;attaching&quot; the same block to multiple agents.</p>
+<h2 id="shared_memory_changes_everything"><a href="#shared_memory_changes_everything" class="header-anchor">Shared memory changes everything</a></h2>
+<p>When a memory block is shared among agents, updates propagate immediately. One agent updates a block—or you update it through the SDK—and every other agent sees the new content the next time they&#39;re invoked.</p>
+<p>Imagine hundreds or thousands of agents all with an immediate, updated understanding of the world around them. Any agent monitoring something can update all other agents instantly. No message queues. No synchronization protocols. No coordination overhead.</p>
+<h2 id="an_example"><a href="#an_example" class="header-anchor">An example</a></h2>
+<p>You run a SaaS platform with hundreds of customer service agents handling support tickets. You have a monitoring agent that checks your API health every 30 seconds.</p>
+<p>The monitoring agent maintains a shared <code>system_state</code> block that looks like this:</p>
+<pre><code class="language-julia">services:
+- api.payments: operational &#40;last_check: 14:23:01&#41;
+- api.auth: degraded - 15&#37; of login attempts failing &#40;last_check: 14:23:01&#41;
+- database.primary: operational &#40;last_check: 14:23:01&#41;
+- cdn.assets: operational &#40;last_check: 14:23:01&#41;
+
+active_incidents:
+- auth_service_partial_failure
+  - started: 14:18:33
+  - impact: users in EU region experiencing login delays
+  - customer_message: &quot;We&#39;re aware of login issues affecting European users. Our team is working on a fix. ETA: 15 minutes.&quot;</code></pre>
+<p>When a customer messages any of your 200 support agents asking &quot;Why can&#39;t I log in?&quot;, the agent reads the <code>system_state</code> block, sees the active incident, checks if the user is in EU region, and immediately responds with the exact customer message—without having to ask the monitoring system, check a dashboard, or wait for a human to update them.</p>
+<p>When the monitoring agent detects the issue is resolved, it updates the block. Every support agent instantly knows the problem is fixed. No Slack messages. No dashboard refreshes. No &quot;let me check with engineering.&quot;</p>
+<p>The coordination is free. You just update shared memory and every agent sees it.</p>
+<h2 id="coordination_patterns_at_scale"><a href="#coordination_patterns_at_scale" class="header-anchor">Coordination patterns at scale</a></h2>
+<p>Shared memory blocks enable coordination patterns that would be painful or impossible with traditional message-passing.</p>
+<h3 id="the_read-only_shard_pattern"><a href="#the_read-only_shard_pattern" class="header-anchor">The read-only shard pattern</a></h3>
+<p>Create multiple &quot;read-only&quot; versions of an agent that cannot update their blocks but can send messages to a central writing agent. The central agent decides how to update state and personality as it receives requests from shards.</p>
+<p>This enables two powerful use cases:</p>
+<p><strong>Swarm coordination</strong> - Deploy thousands of worker agents that all read from shared state blocks and send results to a coordinator. The coordinator synthesizes their work and updates the shared state. All workers immediately see the updated state and adjust their behavior accordingly. No explicit coordination code required.</p>
+<p><strong>Massively scalable personalities</strong> - Instead of running one agent that gets overwhelmed by requests, run hundreds of read-only shards that all share the same memory blocks. Users interact with any available shard, which reads current personality and context from shared blocks. Shards send updates to the central agent, which maintains consistency across all shards.</p>
+<p>I built <a href="https://cameron.pfiffer.org/blog/void/">Void</a> using this pattern. Void is a stateful AI agent on Bluesky with nearly 1,000 followers. It maintains consistent personality and relationships across thousands of conversations by using shared memory blocks that update in real-time. Users say goodnight to it. People get sad when it&#39;s down. There are regular discussions about whether Void is entitled to rights as a digital person.</p>
+<p>Wild.</p>
+<p>The memory architecture is what makes that possible—Void can exist as a persistent entity across thousands of conversations because all the shards share the same memory blocks.</p>
+<h2 id="why_this_architecture_matters"><a href="#why_this_architecture_matters" class="header-anchor">Why this architecture matters</a></h2>
+<p>Memory blocks solve a fundamental problem in multi-agent systems: how do you coordinate many agents without building complex orchestration layers?</p>
+<p>Traditional approaches require:</p>
+<ul>
+<li><p>Message queues and routing logic</p>
+</li>
+<li><p>State synchronization protocols</p>
+</li>
+<li><p>Complex consistency management</p>
+</li>
+<li><p>Explicit coordination code</p>
+</li>
+</ul>
+<p>With shared memory blocks, coordination just works. Agents coordinate through shared cognitive infrastructure rather than message passing. Update the shared state, and every agent immediately sees it.</p>
+<p>This isn&#39;t just simpler—it enables genuinely novel capabilities:</p>
+<p><strong>Emergent coordination</strong> - Agents develop coordination strategies by reading and writing shared blocks, without explicit programming of coordination logic.</p>
+<p><strong>Real-time knowledge propagation</strong> - Any agent can update shared understanding, immediately available to all other agents.</p>
+<p><strong>Scalable personality</strong> - Deploy thousands of agent instances that all maintain consistent personality and context through shared memory.</p>
+<p><strong>Swarm intelligence</strong> - Large numbers of agents working on the same problem, coordinating through shared state rather than explicit communication.</p>
+<h2 id="what_becomes_possible"><a href="#what_becomes_possible" class="header-anchor">What becomes possible</a></h2>
+<p>We&#39;re still early in figuring out what memory blocks enable. But here are some directions that look interesting:</p>
+<p><strong>Enterprise knowledge systems</strong> - Company-wide agents with shared understanding of policies, customers, and institutional knowledge. Update the knowledge once, every agent immediately operates on the new information.</p>
+<p><strong>Research coordination</strong> - Academic research agents that share methodology blocks, literature review blocks, and findings blocks. Discoveries by one agent immediately inform dozens of others working on related problems.</p>
+<p><strong>Personal intelligence networks</strong> - Your personal agent ecosystem doesn&#39;t just remember your preferences—agents maintain shared blocks for your current projects, communication style, and decision-making frameworks. Every agent in your personal network builds on the same growing understanding.</p>
+<p><strong>Multi-agent simulations</strong> - Agents modeling complex systems can share environmental state, allowing sophisticated simulations without building custom synchronization logic.</p>
+<h2 id="the_primitive_that_matters"><a href="#the_primitive_that_matters" class="header-anchor">The primitive that matters</a></h2>
+<p>Many systems claim to offer &quot;memory&quot; for AI agents. Persistence and updates are table stakes. The ability to store user preferences or conversation history is basic functionality any stateful system should provide.</p>
+<p>The question that matters is: what does your memory architecture enable?</p>
+<p>Memory blocks are simple—just text that agents can read and write. But by making them shareable with immediate propagation, they become coordination primitives that enable agent capabilities that weren&#39;t possible before.</p>
+<p>This is still early. We&#39;re discovering what becomes possible when agents can think together through shared memory infrastructure. But the architectural insight is clear: the right memory primitive doesn&#39;t just help agents remember—it helps them coordinate.</p>
+<p>And coordination is what makes individual agents into agent systems.</p>
+<div class="page-foot">
+  Website built with
+  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
+  <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+    
+        <!-- Mermaid.js initialization -->
+<script>
+    // Initialize Mermaid with theme support
+    const initializeMermaid = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: theme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                // Additional theme customization can go here
+            }
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+    
+    // Re-initialize when theme changes
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Small delay to allow theme change to complete
+            setTimeout(() => {
+                // Re-render all mermaid diagrams with new theme
+                const mermaidDivs = document.querySelectorAll('.mermaid');
+                mermaidDivs.forEach(div => {
+                    const originalContent = div.getAttribute('data-original-content');
+                    if (originalContent) {
+                        div.innerHTML = originalContent;
+                        div.removeAttribute('data-processed');
+                    }
+                });
+                initializeMermaid();
+            }, 100);
+        });
+    }
+    
+    // Store original content for theme switching
+    document.addEventListener('DOMContentLoaded', () => {
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        mermaidDivs.forEach(div => {
+            if (!div.getAttribute('data-original-content')) {
+                div.setAttribute('data-original-content', div.textContent);
+            }
+        });
+    });
+</script>
+    
+  </body>
+</html>
