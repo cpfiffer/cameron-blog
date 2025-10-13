@@ -7,6 +7,8 @@ hasmermaid= true
 toc= true
 +++
 
+# Good developer relations is about being a celebrity for dorks
+
 _Inspired by [a tweet](https://x.com/swyx/status/1977617630136828288) from swyx_
 
 Selling tech solutions is an attention problem rather than a technical problem.
