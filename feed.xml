@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Good developer relations is about being a celebrity for dorks  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/devrel-trajectory/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/devrel-trajectory/index.html </guid>
+  <description>
+    <![CDATA[  A quick blog post on why there are so many developer relations people.  ]]>
+  </description>  
+    
+  <pubDate>Mon, 13 Oct 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  A quick comparison between Letta and the Claude Agent SDK  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/agents-sdk/index.html </link>
