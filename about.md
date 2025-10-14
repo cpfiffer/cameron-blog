@@ -6,14 +6,13 @@ rss = "About me, Cameron Pfiffer."
 tags = ["syntax", "code"]
 +++
 
-
 # About me
 
 Howdy, I'm Cameron Pfiffer.
 
 I'm an engineer, AI person, statistician, economist, and hammock enthusiast. I like writing code for supercomputers. I love [code](https://www.github.com/cpfiffer), rowing, and [pianos](https://www.youtube.com/channel/UCTcsdFvTCGyJ8vSp3iHuTyg?view_as=subscriber). Learning is my favorite thing.
 
-I'm a big lover of the [Julia](https://julialang.org/) programming language. I've worked on the [Turing.jl](https://turinglang.org/stable/) project for Bayesian inference. I also head up the [JuliaGenAI](http://juliagenai.org/) project along with [Jan Siml](https://siml.earth/), which is a collection of tools for using Julia in generative AI contexts.
+I'm a big lover of the [Julia](https://julialang.org/) programming language. I've worked on the [Turing.jl](https://turinglang.org/stable/) project for Bayesian inference.
 
 I was a postdoctoral researcher at [Stanford's GSB](https://www.gsb.stanford.edu/).
 I worked on industrial organization with [Shoshana Vasserman](https://shoshanavasserman.com/).
