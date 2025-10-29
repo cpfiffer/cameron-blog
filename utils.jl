@@ -121,3 +121,77 @@ function hfun_pretty_date(vname)
     date = Dates.Date(date_string)
     return Dates.format(date, "d u yyyy")
 end
+
+"""
+    hfun_list_notes(folders)
+
+Lists notes from specified folders, similar to blog posts but with a simpler format.
+"""
+@delay function hfun_list_notes(folders)
+    notes = []
+    for folder in folders
+        for file in readdir(folder, join=true)
+            if endswith(file, ".md")
+                # Get title, date and draft status
+                title = pagevar(file, :title)
+                date = string_to_date(pagevar(file, :date))
+                is_draft = pagevar(file, :draft)
+
+                # Try to extract title from first # line if not found
+                if isnothing(title)
+                    @warn "No title found in $file, trying to use # line"
+                    open(file) do f
+                        for line in eachline(f)
+                            if startswith(line, "# ")
+                                title = replace(line, r"^# " => "")
+                                break
+                            end
+                        end
+                    end
+
+                    if isnothing(title)
+                        @warn "No title found in $file"
+                        continue
+                    end
+                end
+                if isnothing(date)
+                    @warn "No date found in $file"
+                    continue
+                end
+
+                # Only add non-draft notes to the listing
+                if is_draft !== true
+                    push!(notes, (file, title, date))
+                end
+            end
+        end
+    end
+
+    # Sort by date (most recent first)
+    sort!(notes, by=x -> x[3], rev=true)
+
+    # Generate HTML
+    io = IOBuffer()
+
+    println(
+        io,
+        """
+        <p>
+        Quick notes and thoughts on various topics.
+        </p>
+        """
+    )
+
+    println(io, "<ul>")
+    for (file, title, date) in notes
+        # Create relative path with no .md
+        file = replace(file, r"\.md$" => "")
+        
+        println(io, "<li>")
+        println(io, "<a class=\"blog-list-title\" href=\"/$(file)\">$(title)</a>")
+        println(io, "</li>")
+    end
+    println(io, "</ul>")
+
+    return String(take!(io))
+end

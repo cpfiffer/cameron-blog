@@ -16,6 +16,21 @@ header {
     align-items: center;
 }
 
+.site-name {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.site-name-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.site-name-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* on wide screens, fix content width to a max value */
 @media (min-width: 940px) {
     header {
