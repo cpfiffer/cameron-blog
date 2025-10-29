@@ -48,7 +48,7 @@
             <div class="center-column">
                 <header>
     <div class="header-nav">
-        <span style="font-weight: bold">Cameron</span>
+        <span class="site-name">◯ <a href="/" class="site-name-link">Cameron</a></span>
         <div>
             <a href="/">home</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘
             <a href="/links/">links</a>
@@ -218,11 +218,6 @@ baz</code></pre>
 end</code></pre>
 <p>Julia has the other scheduling options <code>:dynamic</code> and <code>:static</code>, which are more sophisticated and can be more efficient in some cases. <code>:static</code> will partition the iterator into chunks and assign each chunk to a thread, while <code>:dynamic</code> will dynamically allocate small chunks to threads. <code>:dynamic</code> is the default scheduler, but I suspect <code>:greedy</code> will be useful in some repeated, small multithreading tasks.</p>
 <p>The <a href="https://github.com/JuliaLang/julia/pull/52096">PR</a> is here. Thanks to <a href="https://seelengrab.github.io/about/">Valentin Bogad/Sukera</a>.</p>
-<div class="page-foot">
-  Website built with
-  <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the
-  <a href="https://julialang.org">Julia programming language</a>.
-</div>
 </div><!-- CONTENT ENDS HERE -->
 
 </div> <!-- end of center-column -->
