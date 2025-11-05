@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
+         <link rel="stylesheet" href="/libs/katex/katex.min.css">
+    <!-- Mermaid.js for diagram rendering -->
+<script src="/libs/mermaid/mermaid.min.js"></script>
+<style>
+    .mermaid {
+        text-align: center;
+        margin: 1em 0;
+    }
+    
+    /* Dark theme support for Mermaid */
+    [data-theme="dark"] .mermaid {
+        background: transparent;
+    }
+    
+    /* Light theme support for Mermaid */
+    [data-theme="light"] .mermaid {
+        background: transparent;
+    }
+</style>  <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Models for production AI</title>
+        
+    </head>
+    <body>
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <span class="site-name">◯ <a href="/" class="site-name-link">Cameron</a></span>
+        <div>
+            <a href="/">home</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘
+            <a href="/links/">links</a>
+        </div>
+    </div>
+    <hr />
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="models_for_production_ai"><a href="#models_for_production_ai" class="header-anchor">Models for Production AI</a></h1>
+<p>A friend recently asked me a few questions about model selection, pricing, and the competitive landscape. I work at Letta, so my perspective is shaped by building stateful AI agents, but I figured these answers might be useful more broadly. Here&#39;s my unfiltered take on what actually matters when you&#39;re building production AI systems.</p>
+<h2 id="model_performance_what_actually_matters"><a href="#model_performance_what_actually_matters" class="header-anchor">Model Performance: What Actually Matters</a></h2>
+<h3 id="which_models_perform_best"><a href="#which_models_perform_best" class="header-anchor">Which models perform best?</a></h3>
+<p>The answer depends on what you&#39;re optimizing for. There&#39;s no single &quot;best&quot; model. The paid models from Anthropic, OpenAI, and Google each have different strengths. Open-source and Chinese models exist, but for production work, they&#39;re not worth the effort yet.</p>
+<h3 id="anthropic_best_for_stateful_agents"><a href="#anthropic_best_for_stateful_agents" class="header-anchor">Anthropic: Best for Stateful Agents</a></h3>
+<p>Anthropic&#39;s models are the strongest choice if you&#39;re building stateful agents. They focus on agentic memory and post-train their models to use the <code>memory</code> tool for dynamically managing state. This isn&#39;t marketing. It&#39;s a real architectural advantage.</p>
+<p>Their models understand that memory isn&#39;t just retrieval. It&#39;s about maintaining and updating persistent state across interactions. When your agent needs to remember user preferences, track ongoing conversations, or maintain context across sessions, Anthropic&#39;s models handle this more naturally than alternatives.</p>
+<p>The practical difference shows up in how agents behave over time. An agent built on Anthropic&#39;s models will more reliably update its own memory blocks, recognize when information conflicts with what it already knows, and maintain coherent long-term context. In Letta Code &#40;<a href="https://github.com/letta-ai/letta-code">github.com/letta-ai/letta-code</a>&#41;, Sonnet 4.5 performs excellently for code generation with persistent memory.</p>
+<h3 id="openai_best_for_tool_calling"><a href="#openai_best_for_tool_calling" class="header-anchor">OpenAI: Best for Tool Calling</a></h3>
+<p>OpenAI models have the most reliable tool calling support. Better than Anthropic&#39;s in many cases. If you&#39;re building agents that need to execute actions consistently, this matters. The models are solid across the board. I&#39;m less thrilled about the personality, but they do fine. If you already use OpenAI extensively, they&#39;re probably fine for your purposes.</p>
+<p>Letta maintains benchmarks for different models on agentic context management at <a href="https://leaderboard.letta.com/">leaderboard.letta.com</a>.</p>
+<h2 id="lock-in_design_it_away"><a href="#lock-in_design_it_away" class="header-anchor">Lock-In? Design It Away</a></h2>
+<h3 id="how_easy_is_it_to_switch_models_and_will_that_get_easier_or_harder"><a href="#how_easy_is_it_to_switch_models_and_will_that_get_easier_or_harder" class="header-anchor">How easy is it to switch models, and will that get easier or harder?</a></h3>
+<p>Lock-in shouldn&#39;t be a big risk if you design for it. The key is separating your agent&#39;s intelligence from model-specific behaviors. Letta was built to abstract the model away entirely. You can swap to any other model in five seconds, and much of your agent will perform similarly if it has a decently built state and memory architecture.</p>
+<h3 id="what_makes_switching_easy"><a href="#what_makes_switching_easy" class="header-anchor">What Makes Switching Easy</a></h3>
+<p>Your agent&#39;s intelligence should come from its memory architecture, not from being tightly coupled to a specific model&#39;s quirks. When you build on top of persistent memory blocks, switching providers becomes trivial. You&#39;re not rewriting prompt engineering hacks or restructuring your entire application. You&#39;re just pointing to a different API endpoint.</p>
+<p>Concretely, this means:</p>
+<ul>
+<li><p>Store conversation history and context in structured memory, not in prompt templates</p>
+</li>
+<li><p>Use tool schemas that work across providers rather than provider-specific formats</p>
+</li>
+<li><p>Test your agent with multiple models during development to ensure portability</p>
+</li>
+<li><p>Avoid relying on model-specific behaviors &#40;like specific output formatting quirks&#41;</p>
+</li>
+</ul>
+<h3 id="getting_easier_over_time"><a href="#getting_easier_over_time" class="header-anchor">Getting Easier Over Time</a></h3>
+<p>This will only get easier as models improve and respond better to context. As model capabilities converge toward similar performance levels, the differentiation shifts from &quot;which model is smartest&quot; to &quot;which model fits my cost/speed/reliability requirements for this specific task.&quot; Good architecture lets you make those trade-offs dynamically rather than being locked into decisions you made months ago.</p>
+<p>The models themselves are becoming more similar in how they handle common patterns &#40;tool calling, structured output, context management&#41;. This convergence makes switching less risky. The bigger risk is building your entire system around a specific model&#39;s quirks and then discovering you can&#39;t leave.</p>
+<h2 id="pricing_build_first_optimize_later"><a href="#pricing_build_first_optimize_later" class="header-anchor">Pricing: Build First, Optimize Later</a></h2>
+<h3 id="how_do_you_think_about_token_pricing_and_cost_structure"><a href="#how_do_you_think_about_token_pricing_and_cost_structure" class="header-anchor">How do you think about token pricing and cost structure?</a></h3>
+<h3 id="quality_first"><a href="#quality_first" class="header-anchor">Quality First</a></h3>
+<p>Many people don&#39;t particularly care about token costs. At least not in the way you&#39;d expect. When you&#39;re building something genuinely useful with AI, you should optimize for quality first. Your engineering time costs more. Your opportunity cost of shipping slower costs more. The difference between building something valuable and building nothing matters far more than spending \(50 versus \)500 a month on API calls.</p>
+<p>Letta does usage-based pricing where you&#39;re billed per <em>message</em>, not per token. The idea is to get people thinking in terms of agents rather than trying to optimize token consumption. The entire token-counting optimization game is a distraction from building something that actually works.</p>
+<h3 id="when_to_use_cheaper_models"><a href="#when_to_use_cheaper_models" class="header-anchor">When to Use Cheaper Models</a></h3>
+<p>There is a use case for smaller, cheaper models, but you have to be extremely specific about why you&#39;re using them. They aren&#39;t designed for high-power stateful agents.</p>
+<p>Start with a powerful model while building your agent. Get it working. Then step down to progressively cheaper models until you find the performance threshold where things start breaking.</p>
+<p>You&#39;ll learn what actually matters. Maybe your agent&#39;s creative reasoning needs Claude Opus, but its routine database queries work fine with Haiku. Maybe your customer support agent needs Sonnet for complex troubleshooting but can use Haiku for FAQ responses. Maybe your code review agent needs GPT-4 for architecture feedback but can use GPT-4 Mini for style checks. You can&#39;t know these trade-offs until you&#39;ve built something that works first.</p>
+<p>If you&#39;re particularly price sensitive, design using an evals framework from the get-go so you can systematically test different model tiers. Letta&#39;s eval framework is open source at <a href="https://github.com/letta-ai/letta-evals">github.com/letta-ai/letta-evals</a>.</p>
+<h3 id="non-agent_use_cases"><a href="#non-agent_use_cases" class="header-anchor">Non-Agent Use Cases</a></h3>
+<p>You can use cheaper models outside of agents entirely. Good use cases: content classification, sentiment analysis, data extraction. Any narrow task that needs speed over sophisticated reasoning.</p>
+<h3 id="what_actually_matters"><a href="#what_actually_matters" class="header-anchor">What Actually Matters</a></h3>
+<p>Beyond token cost, I don&#39;t look at any other pricing features significantly. Latency matters far more than marginal cost differences. Reliability matters even more than latency.</p>
+<h2 id="open_source_models_getting_better_but_still_behind"><a href="#open_source_models_getting_better_but_still_behind" class="header-anchor">Open Source Models: Getting Better, But Still Behind</a></h2>
+<h3 id="whats_your_view_on_open-source_llms"><a href="#whats_your_view_on_open-source_llms" class="header-anchor">What&#39;s your view on open-source LLMs?</a></h3>
+<p>Open-source and open-weight models are getting better, but they&#39;re still primarily suited for hobbyist use cases rather than production deployments. Most people doing serious work in AI aren&#39;t using open-weight models for their core functionality. The projects built on open-weight models tend to be much smaller in scale.</p>
+<h3 id="the_privacy_argument"><a href="#the_privacy_argument" class="header-anchor">The Privacy Argument</a></h3>
+<p>The privacy argument deserves examination. Yes, if you&#39;re handling extremely sensitive data, running models on-premises might be necessary. But most companies invoking privacy concerns are either over-estimating their risk or under-estimating the operational burden of self-hosting.</p>
+<p>The actual cost of running open-weight models at any meaningful scale &#40;infrastructure, engineering time, reliability engineering, keeping up with model updates&#41; almost always exceeds what you&#39;d pay Anthropic or OpenAI for API access. And you get worse quality in the bargain.</p>
+<h3 id="the_quality_gap"><a href="#the_quality_gap" class="header-anchor">The Quality Gap</a></h3>
+<p>Current Chinese models and open-weight models are roughly on par with frontier models from 8-12 months ago. That&#39;s a decade in the AI world. I expect them to remain behind frontier models for the foreseeable future. The gap might narrow from 12 months to 6 months, but the gap will persist because the frontier labs have more resources, more data, and more ability to push the boundaries.</p>
+<h3 id="the_speed_advantage"><a href="#the_speed_advantage" class="header-anchor">The Speed Advantage</a></h3>
+<p>The big advantage of open-weight models is the companies that serve them: Groq, Cerebras, and SambaNova. These three companies have the fastest inference, and it is not close. If you want raw speed and are okay with tolerating lower-quality models, you have to go to the open-weight providers. OpenAI, Anthropic, and Google just can&#39;t compete on speed yet.</p>
+<p>This speed advantage is real and meaningful. If you&#39;re building something where sub-second latency is more important than response quality &#40;autocomplete, real-time suggestions, interactive experiences where users expect instant feedback&#41;, the speed tier providers become extremely attractive. A slightly worse answer delivered in 100ms is often better than the perfect answer delivered in 2 seconds. But know what you&#39;re trading off.</p>
+<h2 id="the_real_trade-offs"><a href="#the_real_trade-offs" class="header-anchor">The Real Trade-Offs</a></h2>
+<p>The AI landscape is moving fast, but the fundamental trade-offs remain consistent. You&#39;re choosing between quality, speed, cost, and interoperability. The trick is knowing which dimensions actually matter for your use case.</p>
+<p>Most people are optimizing for the wrong things. They obsess over token counts, self-hosting complexity, and marginal cost differences. Meanwhile, they ignore what actually determines whether their AI project succeeds: building something that works, shipping it quickly, and iterating based on real usage.</p>
+<p>Pick Anthropic if you&#39;re building stateful agents. Pick OpenAI if tool calling reliability is critical. Pick Groq/Cerebras/SambaNova if you need raw speed. Design for interoperability from day one so you can switch when requirements change. Start with quality, then optimize for cost once you understand what actually matters.</p>
+<p>The models themselves are becoming commoditized. The differentiation is shifting to architecture, memory management, and how well you understand your specific requirements. Don&#39;t get locked into a provider because you built your entire system around their quirks. Build on top of persistent memory and structured state instead.</p>
+<p>Most importantly: optimize for building something that works before you optimize for anything else. Engineering time is expensive. Opportunity cost is expensive. Model costs are cheap.</p>
+<p>– Cameron</p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+    
+        <!-- Mermaid.js initialization -->
+<script>
+    // Initialize Mermaid with theme support
+    const initializeMermaid = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: theme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                // Additional theme customization can go here
+            }
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+    
+    // Re-initialize when theme changes
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Small delay to allow theme change to complete
+            setTimeout(() => {
+                // Re-render all mermaid diagrams with new theme
+                const mermaidDivs = document.querySelectorAll('.mermaid');
+                mermaidDivs.forEach(div => {
+                    const originalContent = div.getAttribute('data-original-content');
+                    if (originalContent) {
+                        div.innerHTML = originalContent;
+                        div.removeAttribute('data-processed');
+                    }
+                });
+                initializeMermaid();
+            }, 100);
+        });
+    }
+    
+    // Store original content for theme switching
+    document.addEventListener('DOMContentLoaded', () => {
+        const mermaidDivs = document.querySelectorAll('.mermaid');
+        mermaidDivs.forEach(div => {
+            if (!div.getAttribute('data-original-content')) {
+                div.setAttribute('data-original-content', div.textContent);
+            }
+        });
+    });
+</script>
+    
+  </body>
+</html>

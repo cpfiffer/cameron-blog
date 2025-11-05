@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Models for production AI  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/production-ai-landscape/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/production-ai-landscape/index.html </guid>
+  <description>
+    <![CDATA[  Some general notes on the landscape of AI right now.  ]]>
+  </description>  
+    
+  <pubDate>Tue, 04 Nov 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Four predictions about how AI agents will transform financial markets  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/ai-financial-markets/index.html </link>
