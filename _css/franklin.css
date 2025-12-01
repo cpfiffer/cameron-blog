@@ -5,7 +5,18 @@
 @import "dark.css";
 
 html {
-    font-family: "IBM Plex Sans", sans-serif;
+    /* Swap these to try different fonts */
+    /* font-family: "IBM Plex Sans", sans-serif; */
+    /* font-family: "Inter", sans-serif; */
+    /* font-family: "Roboto", sans-serif; */
+    font-family: "Open Sans", sans-serif;
+    /* font-family: "Merriweather", serif; */
+    /* font-family: "Crimson Text", serif; */
+    /* font-family: "Source Serif 4", serif; */
+    /* font-family: Georgia, serif; */
+    /* font-family: system-ui, sans-serif; */
+    /* font-family: "JetBrains Mono", monospace; */
+    
     font-size: 17px;
     color: var(--text-color);
 }

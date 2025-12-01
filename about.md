@@ -19,7 +19,7 @@ I worked on industrial organization with [Shoshana Vasserman](https://shoshanava
 I received my PhD in finance from the [University of Oregon](https://business.uoregon.edu/phd/concentrations/finance).
 I have a master's in finance from the [ICMA Centre](http://www.icmacentre.ac.uk/) at the [Henley Business School](http://www.henley.ac.uk/)
 (which itself is part of the [University of Reading](https://www.reading.ac.uk/)), and a BSc in Technical Theater
-from [Southern Oregon University](https://sou.edu/). I'm was a developer for [Turing.jl](https://turing.ml), a probabilistic programming tool.
+from [Southern Oregon University](https://sou.edu/). I was a developer for [Turing.jl](https://turing.ml), a probabilistic programming tool.
 
 I used to be an alpaca rancher and work for Cirque du Soleil. I'm really fun at parties, and I am a fantastic dancer.
 

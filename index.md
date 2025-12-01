@@ -1,6 +1,6 @@
 @def title = "About"
 
-# Hi, I'm Cameron.
+My name is Cameron.
 
 I work at [Letta](https://letta.com). We build the infrastructure for self-improving AI systems.
 
