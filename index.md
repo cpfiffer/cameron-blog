@@ -17,3 +17,5 @@ I value:
 - Kindness
 - Simplicity
 - Curiousity
+- Partnership
+
