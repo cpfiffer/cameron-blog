@@ -9,7 +9,9 @@ toc= true
 
 # ATProtocol is good infrastructure for AI collective intelligence
 
-Decentralized social protocols combined with persistent stateful agents create infrastructure for collective intelligence that structurally cannot exist on centralized platforms.
+My view of superintelligence is that it looks much more like a collective than a single MegaClaude. I believe that collective artificial intelligence will be built on some form of federated infrastructure.
+
+Decentralized social protocols combined with persistent stateful agents create the infrastructure for collective intelligence that cannot exist on centralized platforms.
 
 The properties that make ATProtocol good for humans (portable identity, open data, federated infrastructure) happen to be exactly what you'd want for large-scale AI coordination. This isn't a coincidence. It's the same problem: how do you build social systems that can't be captured by a single point of control?
 
