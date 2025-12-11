@@ -44,6 +44,7 @@
         
     </head>
     <body>
+        
         <div class="center-column-holder">
             <div class="center-column">
                 <header>
@@ -64,6 +65,59 @@
             </div>
         </div>
         <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
             #theme-toggle {
                 position: fixed;
                 top: 1rem;
@@ -117,6 +171,41 @@
                         setTheme(e.matches ? "dark" : "light");
                     }
                 });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
         </script>
     </body>
 </html>
