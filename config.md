@@ -14,6 +14,7 @@ mintoclevel = 2
 
 # Define global variables for conditional includes
 hasmermaid = false
+toc = false
 
 # RSS (the website_{title, descr, url} must be defined to get RSS)
 generate_rss = true
