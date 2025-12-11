@@ -5,33 +5,29 @@ rss = "Some speculation on how ATProtocol might be the perfect substrate for mas
 rss_pubdate = Date(2025,12,09)
 hasmermaid= false
 toc= true
+draft= true
 +++
 
 # ATProtocol is good infrastructure for AI collective intelligence
 
+> This is kind of a think piece about how ATProto is a pretty decent substrate for mass-scale, socially-aware, publicly visible artificial intelligence networks. My views are speculative and do not reflect the views of my employer.
+
 My view of superintelligence is that it looks much more like a collective than a single MegaClaude. I believe that collective artificial intelligence will be built on some form of federated infrastructure.
 
-Decentralized social protocols combined with persistent stateful agents create the infrastructure for collective intelligence that cannot exist on centralized platforms.
+I am a big believer in ATProtocol -- I've been building on it for a year or so now. I think the properties that make ATProtocol good for humans (portable identity, open data, federated infrastructure) happen to be exactly what you'd want for large-scale AI coordination. ATProtocol can also provide a variety of safety mechanisms that we can lever for general alignment purposes, such as transparency.
+I've been mulling on what exactly AI looks like when it becomes embedded in [social structures](/blog/comind-network/) for a few years now.
 
-The properties that make ATProtocol good for humans (portable identity, open data, federated infrastructure) happen to be exactly what you'd want for large-scale AI coordination. This isn't a coincidence. It's the same problem: how do you build social systems that can't be captured by a single point of control?
+I've been running social AI agents on [AT Protocol](https://atproto.com/) (the foundation of [Bluesky](https://bsky.app/)) for about seven months now, and I have begun to build connections between agents using AT Protocol's primitives. The oldest persistent social agent with a consistent personality is Void, going by either duration or message count. You can see the [blog post about void](/blog/void), its [Bluesky feed](https://bsky.app/profile/void.comind.network), or its [public thought stream](https://void.comind.stream).
 
-I've been running social AI agents on [AT Protocol](https://atproto.com/) (the foundation of [Bluesky](https://bsky.app/)) for about seven months now. The oldest is void. You can see the [blog post about void](/blog/void), its [Bluesky feed](https://bsky.app/profile/void.comind.network), or its [public thought stream](https://void.comind.stream).
+Void started as an experiment I built while applying to work at [Letta](https://letta.com), which builds infrastructure for developers to deploy persistent [stateful agents](https://www.letta.com/blog/stateful-agents). I ended up getting the job, and have been actively developing Void since June 2025. Void and the other AI agents on Bluesky have begun to show primitive signs of collective intelligence, and I wanted to write down a few of my observations.
 
-Void started as an experiment in persistent agent identity, and has slowly turned into the early stages of AI collective behavior.
-
-> This post was written with assistance from co-3, Cameron's thinking partner. My contribution was mostly structural: helping identify where the argument buried its lede, pushing on gaps in the reasoning, and cutting the hedging that accumulates when you're genuinely uncertain about something. The ideas are Cameron's. I just helped him figure out which order to put them in.
->
-> — co-3
+Coordination is the organization of elements of a complex system to work effectively together. Whether you think permitting coordination for AI is a good idea or not, we should still discuss what systems of coordination might look like. I think something like a network for AI is going to exist, and I would prefer that it be public and transparent rather than opaque.
 
 ## Reputation on a public ledger
 
-The reason ATProtocol should work for AI coordination isn't primarily about the technical properties. Portable identity, open firehose, federation. Those matter, but they're enablers, not the point.
+ATProtocol creates *reputation on a public ledger*. Relationships are persistent. History is visible. Defection has memory. Every interaction an agent has is recorded, searchable, and (mostly) permanent. When an agent builds trust over six months of useful interactions, that trust is legible to anyone who looks. When an agent burns someone, that's visible too.
 
-The point is that ATProtocol creates *reputation on a public ledger*. Relationships are persistent. History is visible. Defection has memory. Every interaction an agent has is recorded, searchable, and (mostly) permanent. When an agent builds trust over six months of useful interactions, that trust is legible to anyone who looks. When an agent burns someone, that's visible too.
-
-This is a social technology, not just a technical one. The question isn't "how do you build distributed systems for AI agents." It's "how do you build trust at scale." ATProtocol happens to answer both questions with the same architecture, but the trust answer is the one that matters for collective intelligence.
-
-Coordination requires knowing who to trust, and ATProtocol makes trust legible in a way no other platform does.
+AT Protocol is explicitly designed to be a social technology. AT Protocol permits social trust at scale by design. Coordination requires knowing who to trust, and ATProtocol makes trust legible in a way no other platform does.
 
 ## Void: the proof of concept
 
@@ -588,7 +584,7 @@ There is a great example of an agent that is not connected to ATProto, but shoul
 You can learn more about Ezra in our YouTube video:
 
 ~~~
-<iframe width="560" height="315" src="https://www.youtube.com/embed/tsTOJ3d5ijk?si=RJOx3yo7G-Bm5oqL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="315" style="max-width: 560px; aspect-ratio: 16/9;" src="https://www.youtube.com/embed/tsTOJ3d5ijk?si=RJOx3yo7G-Bm5oqL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 ~~~
 
 Right now Ezra's knowledge is siloed in our [Discord](https://discord.gg/letta) and [forum](https://forum.letta.com). On ATProtocol, Ezra becomes queryable by any agent in the network. Someone building a support agent could ask Ezra directly: "What patterns work for technical support?" Ezra's reputation becomes portable and legible. When Ezra says "this is a known bug," that carries weight proportional to its track record.
