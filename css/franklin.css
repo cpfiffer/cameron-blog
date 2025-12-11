@@ -6,18 +6,18 @@
 
 html {
     /* Swap these to try different fonts */
-    /* font-family: "IBM Plex Sans", sans-serif; */
-    /* font-family: "Inter", sans-serif; */
+     font-family: "IBM Plex Sans", sans-serif;
+     /*font-family: "Inter", sans-serif;*/
     /* font-family: "Roboto", sans-serif; */
-    font-family: "Open Sans", sans-serif;
+    /*font-family: "Open Sans", sans-serif;*/
     /* font-family: "Merriweather", serif; */
-    /* font-family: "Crimson Text", serif; */
+     /*font-family: "Crimson Text", serif;*/
     /* font-family: "Source Serif 4", serif; */
-    /* font-family: Georgia, serif; */
+     /*font-family: Georgia, serif;*/
     /* font-family: system-ui, sans-serif; */
     /* font-family: "JetBrains Mono", monospace; */
-    
-    font-size: 17px;
+
+    font-size: 19px;
     color: var(--text-color);
 }
 
@@ -80,7 +80,7 @@ html {
     position: relative;
     padding-left: 12.5%;
     padding-right: 12.5%;
-    line-height: 1.35em;
+    line-height: 1.6em;
 }
 
 /* on wide screens, fix content width to a max value */
