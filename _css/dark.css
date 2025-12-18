@@ -1,6 +1,6 @@
 :root[data-theme="dark"] {
-  --bg-color: #1a1a1a; /* Deep charcoal */
-  --text-color: #e6e1d7; /* Warm off-white */
+  --bg-color: #000000; /* Pure black */
+  --text-color: #ffffff; /* Warm off-white */
   --link-color: var(--text-color);
   --link-hover-color: #b4a8d1; /* Soft lavender */
   --heading-color: var(--text-color);
@@ -15,7 +15,7 @@
 }
 
 :root[data-theme="light"] {
-  --bg-color: #ffffff; 
+  --bg-color: #ffffff;
   --text-color: #2a2a2a; /* Soft black */
   --link-color: var(--text-color);
   --link-hover-color: #23a64d; /* Deeper sage green for better contrast */

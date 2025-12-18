@@ -8,7 +8,29 @@ tags = ["syntax", "code"]
 
 # About me
 
-Howdy, I'm Cameron Pfiffer.
+
+My name is Cameron Pfiffer.
+
+I work at [Letta](https://letta.com). We build infrastructure for self-improving AI systems.
+
+I am a recovering financial economist.
+
+See my [blog](/blog). Find me on [Bluesky](https://bsky.app/profile/cameron.stream).
+
+## Values
+
+I value:
+
+- Personal integrity
+- Clarity
+- Kindness
+- Simplicity
+- Curiousity
+- Partnership
+- Curiousity
+- Partnership
+
+## Background
 
 I'm an engineer, AI person, statistician, economist, and hammock enthusiast. I like writing code for supercomputers. I love [code](https://www.github.com/cpfiffer), rowing, and [pianos](https://www.youtube.com/channel/UCTcsdFvTCGyJ8vSp3iHuTyg?view_as=subscriber). Learning is my favorite thing.
 
