@@ -1,6 +1,6 @@
 :root[data-theme="dark"] {
   --bg-color: #000000; /* Pure black */
-  --text-color: #ffffff; /* Warm off-white */
+  --text-color: #d4d4d4; /* Softer gray for reduced brightness */
   --link-color: var(--text-color);
   --link-hover-color: #b4a8d1; /* Soft lavender */
   --heading-color: var(--text-color);
@@ -8,8 +8,8 @@
   --code-color: #e6e1d7;
   --blockquote-color: #a39e95; /* Muted warm gray */
   --date-color: #a39e95;
-  /* Inverted code block colors (light mode colors) */
-  --code-block-bg: #ffffff;
+  /* Inverted but subtle code block colors */
+  --code-block-bg: #d4d4d4;
   --code-block-color: #2a2a2a;
   --code-block-link-hover: #23a64d; /* Light mode's hover color */
 }
@@ -24,9 +24,9 @@
   --code-color: #2a2a2a;
   --blockquote-color: #666666;
   --date-color: #666666;
-  /* Inverted code block colors (dark mode colors) */
-  --code-block-bg: #1a1a1a;
-  --code-block-color: #e6e1d7;
+  /* Inverted but subtle code block colors */
+  --code-block-bg: #2a2a2a;
+  --code-block-color: #d4d4d4;
   --code-block-link-hover: #b4a8d1; /* Dark mode's hover color */
 }
 
