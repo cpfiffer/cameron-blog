@@ -5,7 +5,7 @@
   <div style="text-align: center;">
     <img src="/assets/ring.svg" alt="Ring" style="max-width: 300px; width: 100%; padding-left: 0;" />
     <h1 style="text-align: center; margin-bottom: 0; margin-top: 0; font-size: 2.5em;">Cameron</h1>
-    <p style="margin-top: -0.5em; margin-bottom: 0.5em; font-size: 0.95em;"><a href="https://bsky.app/profile/cameron.stream" target="_blank" style="text-decoration: none; color: inherit; opacity: 0.9; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">@cameron.stream</a></p>
+    <p style="margin-top: -0.5em; margin-bottom: 0.5em; font-size: 0.95em;"><a href="https://bsky.app/profile/cameron.stream" target="_blank" style="text-decoration: none; color: inherit; opacity: 0.9; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.9'">@cameron.stream</a></p>
     <p style="margin-top: 0; margin-bottom: 1em; font-size: 0.9em;"><span style="opacity: 0.5;">devrel @ </span><a href="https://letta.com" target="_blank" style="color: inherit; text-decoration: none; opacity: 0.5; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">letta</a></p>
     <div style="display: flex; justify-content: center; gap: 0.8em; font-size: 1em;">
     <a href="https://bsky.app/profile/cameron.stream" target="_blank" title="Bluesky" style="opacity: 0.5; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">

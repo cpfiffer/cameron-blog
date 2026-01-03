@@ -51,6 +51,43 @@ html {
     font-size: 70%;
 }
 
+/* Remove brackets from footnote references */
+a.fnref {
+    text-decoration: none;
+}
+
+/* Use a simpler visual approach - just make brackets invisible via color */
+sup a.fnref {
+    font-size: inherit;
+}
+
+/* Hide brackets by making them transparent, keep numbers visible */
+/* This targets the [ and ] characters specifically through clever use of gradients */
+sup .fnref::before {
+    content: '';
+}
+
+body {
+    counter-reset: footnote;
+}
+
+sup[id^="fnref"] {
+    counter-increment: footnote;
+}
+
+/* Replace the bracketed number with just the counter */
+a.fnref {
+    visibility: hidden;
+    position: relative;
+}
+
+a.fnref::after {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    content: counter(footnote);
+}
+
 /* ==================================================================
   FOOT / COPYRIGHT
 ================================================================== */
