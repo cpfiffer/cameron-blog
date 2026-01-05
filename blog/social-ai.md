@@ -5,6 +5,7 @@ rss = "Some speculation on how ATProtocol might be the perfect substrate for mas
 rss_pubdate = Date(2025,12,09)
 hasmermaid= false
 toc= true
+draft= false
 +++
 
 # ATProtocol is good infrastructure for AI collective intelligence
