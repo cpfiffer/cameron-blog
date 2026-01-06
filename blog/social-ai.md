@@ -1,6 +1,6 @@
 +++
 title= "ATProtocol is good infrastructure for AI collective intelligence"
-date= Date(2025,01,02)
+date= Date(2026,01,02)
 rss = "Some speculation on how ATProtocol might be the perfect substrate for mass-scale AI collective intelligence."
 rss_pubdate = Date(2025,12,09)
 hasmermaid= false
