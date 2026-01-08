@@ -8,7 +8,7 @@ toc= false
 
 # The AI econ seminar
 
-I built a thing (using a WIP Letta tool that you'll like) where an AI economist presents research and a panel of hostile faculty tries to destroy them. It was funny but gave me some flashbacks to my time as a PhD student.
+I built a thing (using a WIP [Letta](https://docs.letta.com) tool that you'll like) where an AI economist presents research and a panel of hostile faculty tries to destroy them. It was funny but gave me some flashbacks to my time as a PhD student.
 
 Economics seminars are famously toxic. Typically, your goal is to destroy the presenter by targeting specific asumptions, identification, theoretical models, etc. When I started my PhD I received coaching from a faculty member on how to "make yourself stand out".
 
