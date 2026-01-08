@@ -1,10 +1,14 @@
+@def title = "Skills"
+
 # Skills
 
 A collection of guides and how-tos.
 
+---
+
 ## Available Skills
 
-### [Eating Sushiritos](eating-sushiritos/)
+### 🍣 [Eating Sushiritos](eating-sushiritos/)
 
 Complete guide for enjoying sushiritos - from choosing fillings and ordering to eating technique and cleanup.
 
