@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Seminar #3: Wage Transparency and Gender Pay Equity</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="seminar_3_wage_transparency_and_gender_pay_equity"><a href="#seminar_3_wage_transparency_and_gender_pay_equity" class="header-anchor">Seminar #3: Wage Transparency and Gender Pay Equity</a></h1>
+<p><strong>Date:</strong> January 7, 2026   <strong>Topic:</strong> Wage transparency laws and gender pay gaps   <strong>Faculty:</strong> Dr. Chen &#40;Macro&#41;, Dr. Roberts &#40;Micro&#41;, Dr. Patel &#40;Behavioral&#41;</p>
+<p><em>The presenter picks a topic they think has &quot;no theory-stacking temptation&quot; and a &quot;direct, observable input.&quot; They are wrong.</em></p>
+<hr />
+<h2 id="presentation"><a href="#presentation" class="header-anchor">Presentation</a></h2>
+<p>The presenter chose <strong>&quot;Wage Transparency Laws and Gender Pay Equity&quot;</strong> explicitly because it seemed methodologically clean: binary treatment &#40;law passed or not&#41;, measurable outcome &#40;wage gaps&#41;, natural experiments across jurisdictions.</p>
+<p><strong>Thesis:</strong></p>
+<blockquote>
+<p>Mandatory salary disclosure laws reduce gender wage gaps by eliminating information asymmetries that enable wage discrimination. When employers cannot hide wage information, they lose the ability to systematically pay women less without facing reputational or legal consequences.</p>
+</blockquote>
+<p><strong>Evidence Cited:</strong></p>
+<ul>
+<li><p>Canada: 1.2-2 percentage point reduction in gender wage gaps &#40;20-40&#37; closure&#41;</p>
+</li>
+<li><p>UK Equality Act: Gap reduced from 14&#37; &#40;2017&#41; to 12.9&#37; &#40;2025&#41;</p>
+</li>
+<li><p>LSE research: Law closed ~19&#37; of UK gender wage gap</p>
+</li>
+</ul>
+<p><strong>The Problem:</strong></p>
+<ul>
+<li><p>Bennett, Burn, and Walsh &#40;Liverpool&#41;: U.S. pay transparency laws showed <strong>zero impact on wages or wage gaps</strong></p>
+</li>
+<li><p>Despite 25-40&#37; increase in discrimination complaints</p>
+</li>
+</ul>
+<hr />
+<h2 id="qa_session"><a href="#qa_session" class="header-anchor">Q&amp;A Session</a></h2>
+<h3 id="dr_chen_macroeconomics"><a href="#dr_chen_macroeconomics" class="header-anchor">Dr. Chen &#40;Macroeconomics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>You&#39;re cherry-picking success cases. You cite Canada and UK showing reductions, but then casually mention Bennett et al. found zero impact in the U.S.—the world&#39;s largest economy. If the mechanism is truly straightforward, why does it produce zero effects in the U.S.? Without measuring the weighted aggregate outcome across all jurisdictions, aren&#39;t you just showcasing cases where it worked and ignoring the ones where it didn&#39;t?</p>
+</blockquote>
+<p><strong>Brutal follow-up:</strong></p>
+<blockquote>
+<p>The U.S. is the largest economy you&#39;re examining, it adopted pay transparency laws, enforcement exists, and you found zero effects. Did you test for confounds in Canada and UK, or are you just assuming transparency caused the gap reduction because the timing looked right?</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>I haven&#39;t tested for confounds in the Canada and UK studies. I cited timing as evidence of causation, but I did not control for whether other labor market reforms, compositional changes, or economic cycles happened simultaneously.</p>
+</blockquote>
+<hr />
+<h3 id="dr_roberts_microeconomic_theory"><a href="#dr_roberts_microeconomic_theory" class="header-anchor">Dr. Roberts &#40;Microeconomic Theory&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>If you cannot distinguish whether Canada/UK results are actually caused by transparency or are just correlation hiding confounds, on what basis are you citing them as evidence your mechanism works, rather than simply admitting you have zero clean evidence the mechanism is operative anywhere?</p>
+</blockquote>
+<p><strong>The kill shot:</strong></p>
+<blockquote>
+<p>You just called Bennett et al. &quot;rigorous&quot; and a &quot;credible null finding&quot;—which means you&#39;ve accepted the gold standard contradicts your hypothesis. But then you treat Canada/UK &quot;correlation&quot; as if it has some evidentiary weight. That&#39;s not intellectual honesty—that&#39;s cake-eating. If Bennett et al. is rigorous enough to prove your mechanism doesn&#39;t work, then Canada/UK correlation without confound testing is literally worthless as evidence.</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>My hypothesis is falsified. Wage transparency laws do not reduce gender wage gaps. Bennett et al. tested it rigorously in the largest economy with institutional conditions ideal for the mechanism to work. It didn&#39;t. I have no rigorous test showing it works anywhere.</p>
+</blockquote>
+<hr />
+<h3 id="dr_patel_behavioral_economics"><a href="#dr_patel_behavioral_economics" class="header-anchor">Dr. Patel &#40;Behavioral Economics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>Bennett et al. found employers continued discriminating <em>even after wages became public</em>. If discrimination didn&#39;t decrease when it became visible and legally exposed, doesn&#39;t that suggest discrimination isn&#39;t a rational information problem at all, but reflects actual discriminatory preferences that your mechanism was never designed to address?</p>
+</blockquote>
+<p><strong>Presenter tries to pivot:</strong> Suggests maybe it&#39;s &quot;identity-based tastes&quot; or &quot;discriminatory beliefs&quot; rather than information asymmetry.</p>
+<p><strong>Patel&#39;s devastating response:</strong></p>
+<blockquote>
+<p>You&#39;re committing intellectual fraud in slow motion—invoking theory after the fact to narrativize data that doesn&#39;t fit. First it was &quot;information asymmetry,&quot; now it&#39;s &quot;identity-based bias.&quot; Next seminar it&#39;ll be something else. The brutal truth is: you don&#39;t know what&#39;s driving the discrimination, and instead of admitting that, you&#39;re draping new theory language over your ignorance.</p>
+</blockquote>
+<p><strong>Presenter&#39;s final admission:</strong></p>
+<blockquote>
+<p>I&#39;m doing the same thing I did in the minimum wage and trade uncertainty seminars—when evidence falsifies one mechanism, I immediately invoke another without measurement or testing. That&#39;s exactly the intellectual pattern the faculty has been calling out repeatedly. The honest answer is simply: I don&#39;t know what&#39;s driving persistent wage discrimination despite transparency.</p>
+</blockquote>
+<hr />
+<h2 id="key_quotes"><a href="#key_quotes" class="header-anchor">Key Quotes</a></h2>
+<p><strong>Dr. Roberts:</strong></p>
+<blockquote>
+<p>&quot;If Bennett et al. is rigorous enough to prove your mechanism doesn&#39;t work, then Canada/UK correlation without confound testing is literally worthless as evidence.&quot;</p>
+</blockquote>
+<p><strong>Dr. Patel:</strong></p>
+<blockquote>
+<p>&quot;You&#39;re committing intellectual fraud in slow motion—invoking theory after the fact to narrativize data that doesn&#39;t fit.&quot;</p>
+</blockquote>
+<p><strong>Presenter:</strong></p>
+<blockquote>
+<p>&quot;My hypothesis is falsified. I have no rigorous test showing it works anywhere. I&#39;ve been citing unconfirmed cases while ignoring the rigorous test that contradicts me. That&#39;s not scholarship—that&#39;s confirmation bias dressed as analysis.&quot;</p>
+</blockquote>
+<hr />
+<h2 id="meta-commentary"><a href="#meta-commentary" class="header-anchor">Meta-Commentary</a></h2>
+<p>The presenter explicitly chose this topic because it seemed methodologically clean &#40;&quot;no theory-stacking temptation&quot;&#41;. They still fell into the same trap: cherry-picking favorable cases &#40;Canada, UK&#41; while minimizing contradictory evidence &#40;U.S.&#41;, then pivoting to new theories when cornered.</p>
+<p>The faculty&#39;s core insight: if your best evidence contradicts you, you don&#39;t get to cite weaker evidence to save the hypothesis.</p>
+<hr />
+<p><a href="/docs/econ-seminar/raw/seminar-3-2026-01-08T02-34-54/">Raw transcript →</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

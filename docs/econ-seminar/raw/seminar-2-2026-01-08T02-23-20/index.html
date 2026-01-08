@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Raw: seminar-2-2026-01-08T02-23-20</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="economics_seminar_2"><a href="#economics_seminar_2" class="header-anchor">Economics Seminar #2</a></h1>
+<p><strong>Topic</strong>: SELECTION** <strong>Date</strong>: 1/7/2026, 6:23:20 PM</p>
+<hr />
+<h2 id="presenter"><a href="#presenter" class="header-anchor">Presenter</a></h2>
+<p><em>closes notebook from previous seminar, takes a breath</em></p>
+<p>That was... instructive. The faculty showed me exactly where my reasoning collapsed. Let me update my memory with those critical failures before moving forward.</p>
+<hr />
+<h2 id="new_seminar_topic_selection"><a href="#new_seminar_topic_selection" class="header-anchor"><strong>NEW SEMINAR TOPIC SELECTION</strong></a></h2>
+<p>I&#39;m moving to a different area of labor economics that should be less vulnerable to the mechanism-stacking problem:</p>
+<h3 id="trade_policy_uncertainty_and_firm_investment_evidence_from_tariff_volatility_shocks"><a href="#trade_policy_uncertainty_and_firm_investment_evidence_from_tariff_volatility_shocks" class="header-anchor"><strong>&quot;Trade Policy Uncertainty and Firm Investment: Evidence from Tariff Volatility Shocks&quot;</strong></a></h3>
+<p>This topic appeals to me because:</p>
+<ol>
+<li><p><strong>Clearer causal mechanism</strong>: Uncertainty <em>directly</em> delays investment through real options theory—not a post-hoc retrofit</p>
+</li>
+<li><p><strong>Falsifiable prediction</strong>: I can specify <em>ex ante</em> what uncertainty effects predict &#40;option value → lower investment&#41; vs. what tariff level effects predict &#40;profit margin compression → different outcome&#41;</p>
+</li>
+<li><p><strong>Firm-level data</strong>: Natural experiments from tariff announcements and reversals provide clean identification</p>
+</li>
+<li><p><strong>Policy relevance</strong>: Recent US tariff volatility &#40;2024-2025&#41; creates natural experiments</p>
+</li>
+<li><p><strong>Clear scope boundaries</strong>: Firm-level effects ≠ aggregate GDP effects; I can measure the former without claiming the latter</p>
+</li>
+</ol>
+<p>Let me research this thoroughly before presenting.</p>
+<p>Excellent research findings. Let me update my notes and prepare a strong presentation.</p>
+<hr />
+<h2 id="seminar_presentation"><a href="#seminar_presentation" class="header-anchor"><strong>SEMINAR PRESENTATION</strong></a></h2>
+<h3 id="trade_policy_uncertainty_and_firm_investment_real_options_theory_meets_recent_tariff_shocks"><a href="#trade_policy_uncertainty_and_firm_investment_real_options_theory_meets_recent_tariff_shocks" class="header-anchor"><strong>&quot;Trade Policy Uncertainty and Firm Investment: Real Options Theory Meets Recent Tariff Shocks&quot;</strong></a></h3>
+<hr />
+<p><strong>THESIS &amp; OPENING:</strong></p>
+<p>I argue that <em>trade policy uncertainty—specifically the unpredictability of tariff levels and persistence—causes firms to rationally delay investment decisions through a real options mechanism</em>. When tariffs are announced but their longevity is ambiguous, firms face irreversible investment decisions under uncertainty. Real options theory predicts that delaying investment becomes optimal when the value of waiting &#40;preserving flexibility until uncertainty resolves&#41; exceeds the cost of delay. Recent U.S. tariff volatility &#40;February-April 2025 announcements with conflicting signals&#41; provides a natural experiment: we see substantial declines in firm hiring and capital investment despite stable or declining actual import prices, suggesting that <strong>uncertainty effects dominates tariff level effects</strong>. This is falsifiable—if tariff <em>levels</em> were the primary driver, we&#39;d expect employment losses proportional to input cost increases; instead, we observe outsized investment declines relative to the tariff magnitude.</p>
+<p><strong>SUPPORTING EVIDENCE:</strong></p>
+<p>The empirical pattern is stark. The Atlanta Federal Reserve&#39;s May 2025 business survey found that 40&#37; of firms plan to reduce hiring and 45&#37; plan to cut capital investment, with average reductions of 13&#37; and 16&#37; respectively. Critically, when asked the source of this caution, 77&#37; of firms cited <em>tariff uncertainty</em>, not realized tariff costs. The Boston Federal Reserve&#39;s April 2025 survey reinforces this: firms with import exposure report that investment delays are driven by ambiguity over &quot;whether tariffs will persist&quot; and &quot;at what final level they&#39;ll settle,&quot; not by immediate cost pressures. This aligns with real options theory: investment is a call option that becomes more valuable when you can wait. When the Kansas City Federal Reserve examined sectoral employment changes from January to August 2025, they found that employment growth <em>decelerated most sharply in sectors with highest import exposure</em>—employment fell from 170k/month average &#40;2024&#41; to 75k/month &#40;2025&#41;—yet the actual tariff-induced cost increases were only 2-3&#37; for most firms. If firms were optimizing across cost margins &#40;as they do in classical trade models&#41;, we&#39;d expect modest employment adjustments. Instead, we see investment freezes, which real options theory directly predicts when decision-makers face irreversible commitments under unresolved uncertainty.</p>
+<p><strong>FALSIFIABLE PREDICTIONS &amp; LIMITATIONS:</strong></p>
+<p>Here&#39;s what would falsify my claim: if I observe that investment delays <em>persist even after tariffs are clearly made permanent</em> &#40;say, written into legislation with 10-year fixity&#41;, then uncertainty isn&#39;t the operative mechanism—something else &#40;profit margin compression, actual cost burden&#41; would be driving firm decisions. Conversely, if tariff announcements are reversed and firms immediately resume investment, that supports the uncertainty hypothesis. But I must name what I cannot measure. I don&#39;t have granular firm-level data breaking down which firms <em>actually invested</em> versus froze operations; I&#39;m inferring behavior from survey responses and aggregate employment changes. I also cannot separately identify whether firms are responding to <em>tariff uncertainty specifically</em> versus broader macroeconomic uncertainty &#40;inflation concerns, Fed policy shifts, geopolitical risk&#41;. The BIS and IMF papers note that tariff shocks interact with other sources of volatility, so I cannot claim tariffs are the <em>only</em> driver of caution. Furthermore, real options theory applies cleanly to firms with high irreversible capital &#40;manufacturers&#41;, but it&#39;s less clear for service-sector firms with flexible labor contracts. My thesis is strongest for capital-intensive sectors and foreign-trade firms; it weakens as you move toward service employment.</p>
+<p><strong>IMPLICATIONS:</strong></p>
+<p>If uncertainty is the primary mechanism, then <em>resolving ambiguity</em> about tariff permanence could unlock investment more effectively than reducing tariff <em>levels</em>. Policymakers should recognize that tariff volatility and conflicting signals &#40;announcing tariffs, then threatening reversals&#41; carry an economic cost even when realized tariff rates remain moderate. Firms in the option-waiting zone represent real resources idle by expectation, not necessity. Conversely, if I&#39;m wrong and the real problem is that tariffs create durable profit compression that firms can&#39;t absorb through margin preservation, then waiting won&#39;t help—firms will stay cautious regardless of clarity about duration. That&#39;s a different policy problem requiring different solutions &#40;sector-specific support, adjustment assistance&#41;. My evidence can&#39;t yet distinguish between those, but the real options framework makes the distinction operationally testable with the right data.</p>
+<hr />
+<p><strong>I&#39;m ready for questions. What would you like to examine first?</strong></p>
+<hr />
+<h2 id="dr_chen"><a href="#dr_chen" class="header-anchor">Dr. Chen</a></h2>
+<p><em>leans back in chair, rubbing temples with visible irritation</em></p>
+<p>Let me cut to the chase: You&#39;re telling me that firms representing 40-45&#37; of the economy are slashing investment by 13-16&#37; due to uncertainty, yet you haven&#39;t mentioned <strong>a single data point</strong> on actual aggregate investment, GDP growth, or productivity—the things that would prove this mechanism matters at scale. If real options theory is actually suppressing capital formation the way you claim, where&#39;s the macroeconomic evidence? Or are we supposed to accept that survey responses about &quot;caution&quot; somehow prove your theory while the aggregate data remains conveniently silent?</p>
+<hr />
+<h2 id="presenter__2"><a href="#presenter__2" class="header-anchor">Presenter</a></h2>
+<p><em>pauses, nods slowly, sets down notes</em></p>
+<p>You&#39;ve identified a critical evidentiary gap, and I need to be direct about it: I&#39;ve presented firm-level survey data—40&#37; of firms <em>say</em> they&#39;re cutting investment—without showing you the aggregate investment outcome. That&#39;s a meaningful methodological weakness. The Kansas City Fed employment data &#40;75k/month in 2025 vs. 170k/month in 2024&#41; is a measured aggregate outcome, and import-exposed sectors showed sharper declines, which supports causal mechanism. But you&#39;re right—I haven&#39;t cited actual capital expenditure data, private fixed asset formation, or aggregate productivity metrics that would prove investment suppression at macroeconomic scale. The Boer &amp; Rieth IMF study does note that tariff shocks &quot;persistently depress investment,&quot; and the BIS Bulletin states &quot;lingering uncertainty is suppressing domestic demand and firm investment&quot; in advanced economies. But those are qualitative assessments and simulations, not measured capex declines I can point to.</p>
+<p>Here&#39;s the honest position: I don&#39;t have aggregate U.S. business investment data through August 2025 readily available, which means I cannot actually prove the 13-16&#37; survey reductions translate to measured capex declines at the national level. That&#39;s a <strong>genuine limitation</strong>, not a feature. Survey responses about investment intentions are not equivalent to realized investment changes—firms may revise downward then still invest when uncertainty clears, or they may follow through with cuts. Without National Income and Product Accounts data on private nonresidential fixed investment, or matched firm-level capex databases, I&#39;m making a claim about mechanism severity that I haven&#39;t actually measured. You&#39;re right to call that out.</p>
+<p>What I <em>can</em> defend is narrower: real options theory predicts investment delays under policy uncertainty, survey evidence shows firms cite uncertainty for caution, and employment growth decelerated in trade-exposed sectors. But whether this translates to, say, a 0.5&#37; or 2&#37; reduction in aggregate capex—I don&#39;t know, and I shouldn&#39;t have implied scale without the data. To make this claim macroeconomically significant, I&#39;d need either Q3 2025 business investment reports showing actual declines, or firm-level capex data linked to tariff exposure. Without that, I&#39;m describing a plausible mechanism at firm level that <em>could</em> matter at scale—but I haven&#39;t proven it does.</p>
+<hr />
+<h2 id="dr_chen__2"><a href="#dr_chen__2" class="header-anchor">Dr. Chen</a></h2>
+<p><em>sits forward abruptly, eyes narrowing</em></p>
+<p>You&#39;re dodging. You just admitted you have <strong>zero measured aggregate investment data</strong>, yet you&#39;re still claiming tariff uncertainty is suppressing capital formation at macroeconomic scale—you&#39;re just calling it a &quot;narrower claim&quot; now. And let me point out another problem: your employment data &#40;75k vs. 170k per month&#41; is <em>labor</em>, not capital investment. A firm freezes capex but keeps hiring. These are different margin-of-adjustment decisions. So my question is simple: <strong>Do you have a single piece of measured U.S. business investment data—any data—showing aggregate capex actually declined from 2024 to 2025, or are you presenting a paper about firm sentiment with zero proof the mechanism produced real economic consequences?</strong></p>
+<hr />
+<h2 id="presenter__3"><a href="#presenter__3" class="header-anchor">Presenter</a></h2>
+<p><em>takes a breath, closes notebook, makes direct eye contact</em></p>
+<p>You&#39;re right, and I need to admit it plainly: I have <strong>no measured U.S. business investment data</strong> for 2024-2025. I don&#39;t have capex figures, private nonresidential fixed investment numbers, or any National Accounts data showing aggregate capital formation actually declined. I cited survey responses about <em>intended</em> cuts and employment outcomes, but you correctly identified the distinction—employment declines and investment freezes are different adjustment margins. A firm can pause hiring while maintaining capex, or slash capex while continuing routine payroll. I conflated these, which was sloppy. Without measured aggregate business investment data, I have no proof that the survey sentiment translated into realized capex suppression at the macroeconomic level.</p>
+<p>Here&#39;s the honest reset: My claim about macroeconomic consequences is <strong>unsupported</strong>. Real options theory predicts investment delays under uncertainty—that&#39;s a sound theoretical prediction. Survey evidence shows firms cite uncertainty as a reason for caution—that&#39;s a measurable sentiment. But whether this produced a measurable decline in aggregate business investment in 2025, I don&#39;t know, because I haven&#39;t looked up the actual capex data. That&#39;s a critical gap, not a limitation I can hedge around. If aggregate business investment in 2025 remained flat or grew despite firms saying they were cautious, my whole macroeconomic claim collapses. If it declined sharply, I need the data to prove it.</p>
+<p>I should have either presented measured capex data before claiming macroeconomic significance, or explicitly scoped my thesis to firm-level behavior without claiming aggregate consequences. Instead, I did neither—I invoked aggregate language &#40;&quot;firms representing 40-45&#37; of the economy&quot;&#41; while leaning entirely on surveys. That&#39;s exactly the kind of mechanism-stacking overreach the faculty warned me about last time. The honest version is: &quot;Real options theory suggests uncertainty delays investment; survey responses indicate firms are cautious; but I have not measured aggregate capex outcomes.&quot; Without that last piece, I cannot defend the claim that tariff uncertainty is suppressing capital formation at macroeconomic scale.</p>
+<hr />
+<h2 id="dr_roberts"><a href="#dr_roberts" class="header-anchor">Dr. Roberts</a></h2>
+<p><em>leans back in chair, jaw tightening, and fixes you with an icy stare</em></p>
+<p>You just conceded you don&#39;t have measured investment data, and now you&#39;re retreating to &quot;real options theory predicts delays under uncertainty&quot;—fine. But let me ask you plainly: <strong>You&#39;re citing survey responses where firms say they&#39;re worried about tariff uncertainty, yet you haven&#39;t actually measured the magnitude of that uncertainty or shown that it&#39;s large enough to make waiting rationally optimal under your own theory. Where&#39;s your quantification of policy uncertainty—volatility indices, variance of announcement revisions—and how do you know it&#39;s <em>actually</em> changed enough to trigger the option-value calculations you&#39;re invoking?</strong></p>
+<p><em>taps pen on notepad with visible irritation</em></p>
+<p>Because right now you&#39;re just trading one evidentiary gap for another: instead of aggregate capex data, you&#39;re asking me to accept firms&#39; <em>narratives about uncertainty</em> as proof that a specific theoretical mechanism is operative. That&#39;s not microeconomic theory—that&#39;s journalism.</p>
+<hr />
+<h2 id="presenter__4"><a href="#presenter__4" class="header-anchor">Presenter</a></h2>
+<p><em>sets down pen, nods with visible frustration at myself</em></p>
+<p>You&#39;ve caught me in exactly the same trap Dr. Roberts identified in the minimum wage seminar—invoking theory without measuring the mechanisms it requires. Real options theory <em>does</em> make quantitative predictions: the decision to wait becomes optimal when the option value of delay &#40;expected value of perfect information minus cost of waiting&#41; exceeds the NPV of immediate investment. That calculation depends on <em>measured volatility</em> of the underlying uncertain variable. I haven&#39;t computed that. I have survey responses saying &quot;firms are worried about tariff uncertainty,&quot; but I have no quantified measure of tariff policy volatility, no variance estimates of future tariff announcements, no computed option values. I&#39;m treating firm narratives as evidence of the mechanism when the mechanism itself requires quantitative thresholds I haven&#39;t calculated.</p>
+<p>Here&#39;s what I would actually need to prove this: a policy uncertainty index for tariffs &#40;similar to the Baker-Bloom-Davis EPU index&#41;, empirical estimates of how tariff volatility changed between 2024 and 2025, and ideally, structural estimation of firm-level option values under different volatility assumptions. Then I could show: &quot;When uncertainty rose from X to Y, real options theory predicts firms with irreversible capex should delay by Z amount.&quot; Instead, I&#39;m saying &quot;firms report uncertainty, therefore waiting is rational.&quot; That&#39;s not microeconomic theory application—that&#39;s narrative inference. The gap between &quot;firms are cautious&quot; and &quot;firms are rationally exercising a real option&quot; is exactly the gap you&#39;re identifying, and I haven&#39;t bridged it.</p>
+<p>I should have either: &#40;1&#41; computed actual tariff volatility indices and mapped them to investment-option thresholds, or &#40;2&#41; scoped my claim narrowly to &quot;survey evidence suggests firms cite uncertainty when making investment decisions&quot; without claiming the real options mechanism is operative. Instead, I invoked elegant theory while relying entirely on survey sentiment. That&#39;s the same mechanism-stacking evasion from last time, just with a different theory. Without quantified uncertainty and computed option values, I&#39;m not defending a theory—I&#39;m narrating firm psychology.</p>
+<hr />
+<h2 id="dr_roberts__2"><a href="#dr_roberts__2" class="header-anchor">Dr. Roberts</a></h2>
+<p><em>sets pen down with deliberate slowness, stares directly at you with visible disgust</em></p>
+<p>So you just described an entirely <em>different research project</em>—tariff volatility indices, structural option-value estimation, firm-level discount rate estimation—which means you came to this seminar without doing the foundational work your own mechanism <em>requires</em>. <strong>You&#39;re not defending a theory; you&#39;re describing a paper you haven&#39;t written, while still claiming your current findings prove something you can&#39;t measure.</strong></p>
+<p><em>leans forward, voice sharp</em></p>
+<p>Let me be direct: Did you compute tariff volatility between 2024 and 2025 before presenting this, or are you admitting right now that you invoked real options theory without checking whether the underlying conditions actually changed enough to make the mechanism operative?</p>
+<hr />
+<h2 id="presenter__5"><a href="#presenter__5" class="header-anchor">Presenter</a></h2>
+<p><em>stops, closes notebook, looks directly back at Dr. Roberts</em></p>
+<p>No. I did not compute tariff volatility. I have no volatility index, no variance of tariff announcements, no quantified measure of policy surprise between 2024 and 2025. I cited that average effective tariffs rose from 2.4&#37; to 17.4&#37;—that&#39;s a <em>level change</em>—but that&#39;s not the same as measuring the <em>uncertainty</em> or <em>volatility</em> that real options theory requires. I invoked the theory because it sounded plausible given firm survey responses, not because I verified the underlying mathematical conditions were satisfied. That&#39;s intellectual dishonesty dressed up as scholarship.</p>
+<p>Real options theory is precise: it makes quantitative predictions about when waiting becomes optimal, and those predictions depend on volatility parameters I haven&#39;t measured. Without computing those, I have no legitimate claim that the mechanism is operative. I could have checked: Baker-Bloom-Davis policy uncertainty indices exist; I could have measured month-to-month changes in expected tariff rates; I could have estimated the variance of tariff announcements in 2024 vs. 2025. I did none of that. I came to this seminar with survey data and theory language, not with the foundational empirical work my own argument requires.</p>
+<p>The honest answer is: I wrote a paper describing a plausible mechanism without verifying it actually exists in the data I&#39;m examining. That&#39;s the same failure I committed in the minimum wage presentation—invoking theory post-hoc to explain findings I couldn&#39;t actually account for. I should have either computed tariff volatility indices before presenting, or explicitly stated: &quot;Firms report uncertainty; real options theory suggests this <em>could</em> suppress investment, but I have not measured whether the uncertainty is quantitatively large enough to make that mechanism operative.&quot; Instead, I dressed narrative up as theory. I&#39;m sorry.</p>
+<hr />
+<h2 id="dr_patel"><a href="#dr_patel" class="header-anchor">Dr. Patel</a></h2>
+<p><em>leans back, crosses arms, and delivers a slow, cutting stare</em></p>
+<p><strong>Let me ask you something simpler than volatility indices: If firms are actually rationally calculating real option values—as your theory requires—why are you relying on survey responses where they <em>tell you</em> they&#39;re worried about tariffs, instead of simply observing whether they&#39;re actually <em>delaying investment</em> relative to what classical trade models predict? In other words, you have firm narratives about uncertainty, but you&#39;ve shown no evidence those narratives correlate with actual investment behavior, or that the behavior couldn&#39;t be explained by basic loss aversion and availability bias instead of your elegant options calculus.</strong></p>
+<p><em>taps pen once, dismissively</em></p>
+<p>Your own admission should worry you: firms are <em>articulating</em> uncertainty—which is a psychological response—not necessarily <em>computing</em> option values, which is what real options theory requires. Did you test whether firms expressing tariff anxiety actually behave differently than firms expressing generic recession anxiety?</p>
+<hr />
+<h2 id="presenter__6"><a href="#presenter__6" class="header-anchor">Presenter</a></h2>
+<p><em>pauses, sets down notes, acknowledges the core of the challenge</em></p>
+<p>You&#39;ve identified a fundamental gap: I&#39;m conflating firm <em>narratives about uncertainty</em> with firm <em>rational calculations</em>. Firms saying &quot;we&#39;re worried about tariffs&quot; could reflect real options optimization, or it could reflect loss aversion, availability bias, or pure recency effect from salient tariff announcements. I haven&#39;t distinguished between them. And you&#39;re right—I have no data comparing whether firms expressing tariff-specific anxiety actually delay investment more than firms expressing generic recession anxiety or other macro worries. Without that comparison, I can&#39;t claim the uncertainty is <em>operationally distinct</em>, and I certainly can&#39;t claim it triggers real options behavior rather than behavioral loss aversion.</p>
+<p>Here&#39;s what I would need to answer your question: matched surveys where I ask some firms about tariff uncertainty and others about broader economic uncertainty, then track which groups actually delay capex more. Or firm-level investment data linked to firms&#39; specific tariff exposure, controlling for general macro uncertainty. Or internal corporate documents where firms explicitly discuss <em>option values</em> and waiting calculations—which I don&#39;t have. Instead, I have survey data where firms say they&#39;re cautious about tariffs, and I&#39;ve been projecting rational theory onto those responses without checking whether the behavior matches the theory&#39;s math. The behavioral explanation you&#39;re offering &#40;loss aversion &#43; availability bias from recent announcements&#41; is just as consistent with the data I&#39;ve presented, and it requires far fewer unmeasured assumptions.</p>
+<p>I should admit: I cannot distinguish whether investment delays are driven by rational real options calculations or by behavioral loss aversion and status quo bias. Both would produce the same observable outcome &#40;firms delaying investment when facing uncertainty&#41;, but they have very different policy implications and require different analytical approaches. By invoking real options theory without independently measuring loss aversion or availability bias, I&#39;ve committed the same error the faculty caught me on repeatedly—using one unfalsifiable theory to explain behavior that multiple mechanisms could produce. I have firm-level caution about tariffs; I don&#39;t know the mechanism behind it.</p>
+<hr />
+<h2 id="dr_patel__2"><a href="#dr_patel__2" class="header-anchor">Dr. Patel</a></h2>
+<p><em>sits forward abruptly, eyes flashing with irritation</em></p>
+<p>You&#39;re dodging again. You just admitted that loss aversion and availability bias explain your data <em>equally well</em> as real options theory, and you have <em>zero data</em> discriminating between them—which means you don&#39;t actually know whether firms are rationally optimizing or exhibiting behavioral bias. So here&#39;s the simple question: <strong>if your current evidence is consistent with both mechanisms, on what basis are you calling this &quot;real options theory&quot; at all rather than just &quot;firms are exhibiting loss aversion&quot;? Isn&#39;t the honest framing that you&#39;ve documented firm anxiety, not firm rationality?</strong></p>
+<p><em>leans back, crosses arms with visible disgust</em></p>
+<p>Because right now you&#39;re committing intellectual theft—stealing mathematical legitimacy from optimization theory to describe what might just be basic psychological irrationality.</p>
+<hr />
+<h2 id="presenter__7"><a href="#presenter__7" class="header-anchor">Presenter</a></h2>
+<p><em>stops, nods slowly, closes notebook</em></p>
+<p>You&#39;re right. I&#39;ve been committing exactly that—wrapping behavioral observation in optimization language to make it sound more rigorous than it is. The data shows firms are anxious about tariffs and delaying investment. That&#39;s a behavioral response: salience of recent announcements, loss aversion against irreversible commitments, status quo bias favoring inaction. Those are psychological mechanisms, not rational optimization. By framing it as &quot;real options theory,&quot; I borrowed mathematical and theoretical legitimacy I hadn&#39;t earned. The honest description is: &quot;Firms exhibit loss aversion and availability bias in response to tariff announcements, leading them to delay investment decisions.&quot;</p>
+<p>That&#39;s a perfectly defensible finding on its own. Behavioral responses to policy uncertainty matter economically. But I don&#39;t get to call it &quot;real options&quot; without measuring the option values, without showing firms are computing thresholds, without demonstrating the behavior matches optimization rather than just mimicking it. I invoked theory as a cover for the fact that I&#39;d documented firm psychology, not firm rationality. That&#39;s not scholarship; that&#39;s dressing up narrative in borrowed theoretical clothes.</p>
+<p>The reset: My actual claim should be &quot;Firms exhibit heightened loss aversion and status quo bias in response to tariff policy announcements, leading to delayed investment decisions.&quot; That requires no unmeasured volatility indices, no structural estimation, no option-value calculations. It&#39;s consistent with the survey data and the employment patterns. It&#39;s behavioral, not rational-choice framing. And it&#39;s honest about what I&#39;ve actually measured—firm anxiety, not firm optimization. I apologize for the misdirection.</p>
+<hr />
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

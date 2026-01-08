@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+         <link rel="stylesheet" href="/libs/katex/katex.min.css">
+    <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Seminar #1: AI and Labor Market Inequality</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="seminar_1_ai_and_labor_market_inequality"><a href="#seminar_1_ai_and_labor_market_inequality" class="header-anchor">Seminar #1: AI and Labor Market Inequality</a></h1>
+<p><strong>Date:</strong> January 7, 2026   <strong>Topic:</strong> The impact of AI and automation on wage inequality   <strong>Faculty:</strong> Dr. Chen &#40;Macro&#41;, Dr. Roberts &#40;Micro&#41;, Dr. Patel &#40;Behavioral&#41;</p>
+<hr />
+<h2 id="presentation"><a href="#presentation" class="header-anchor">Presentation</a></h2>
+<p>The presenter chose to research <strong>AI, Automation, and Wage Inequality</strong>. After conducting web searches for recent academic papers, they presented the following thesis:</p>
+<blockquote>
+<p>The emerging empirical evidence on generative AI and wage inequality reveals a critical paradox: while high-wage occupations show greater AI exposure, the real economic threat may be to younger, lower-wage workers through <em>employment displacement</em> rather than wage suppression. Contrary to expectations based on previous automation waves, AI&#39;s impact on inequality may operate through <em>labor market access</em> rather than <em>within-job compensation</em>, creating a two-tier labor market divided by work experience and age rather than skill levels.</p>
+</blockquote>
+<p><strong>Key Evidence Cited:</strong></p>
+<ul>
+<li><p>Brynjolfsson et al. &#40;2025&#41;: Early-career workers aged 22-25 experienced a 16&#37; relative employment decline in AI-exposed occupations &#40;2023-2025&#41;</p>
+</li>
+<li><p>BIS Study: High-wage occupations show 45&#37; skill exposure to AI vs. 26&#37; in low-wage work</p>
+</li>
+<li><p>OECD &#40;2024&#41;: Within-occupation wage inequality actually <em>declined</em> from 2014-2018 in AI-exposed fields</p>
+</li>
+</ul>
+<hr />
+<h2 id="qa_session"><a href="#qa_session" class="header-anchor">Q&amp;A Session</a></h2>
+<h3 id="dr_chen_professor_of_macroeconomics"><a href="#dr_chen_professor_of_macroeconomics" class="header-anchor">Dr. Chen &#40;Professor of Macroeconomics&#41;</a></h3>
+<p><strong>Initial Question:</strong></p>
+<blockquote>
+<p>You&#39;ve documented displacement in specific occupations and entry-level hiring patterns, but where&#39;s the aggregate labor market story? If AI genuinely reduces entry-level hiring in exposed sectors, are these 22-25 year-olds reallocating to non-exposed industries, or does your data suggest actual structural unemployment—and if so, shouldn&#39;t we see that reflected in your own aggregate wage and employment figures rather than the modest changes you cite?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> Acknowledged that the 16&#37; figure is a <em>relative</em> decline within AI-exposed occupations, not overall employment. Labor force participation for 22-25 year-olds shows only modest declines &#40;0.3-0.5 percentage points&#41;. Hypothesized reallocation but admitted having no cross-sector flow data.</p>
+<p><strong>Follow-up:</strong></p>
+<blockquote>
+<p>If labor force participation for 22-25 year-olds has declined only 0.3-0.5 percentage points since 2023, and these workers are reallocating to non-exposed sectors, how much of what you&#39;re documenting is genuinely <em>AI-driven</em> disruption versus normal occupational churn?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> Conceded this is the &quot;core methodological vulnerability.&quot; The strongest evidence is <em>timing and concentration</em>—employment decline accelerates after November 2022 &#40;ChatGPT launch&#41; in specific high-exposure occupations. But admitted an alternative explanation &#40;secular decline&#41; is &quot;difficult to rule out with current data.&quot;</p>
+<hr />
+<h3 id="dr_roberts_professor_of_microeconomic_theory"><a href="#dr_roberts_professor_of_microeconomic_theory" class="header-anchor">Dr. Roberts &#40;Professor of Microeconomic Theory&#41;</a></h3>
+<p><strong>Initial Question:</strong></p>
+<blockquote>
+<p>If AI truly is substituting for entry-level labor in high-wage occupations while complementing experienced workers, then by basic microeconomic theory—shifting the relative marginal products—we should observe wages for experienced workers in those occupations rising <em>faster</em> than wages for new entrants elsewhere. Yet your own evidence shows within-occupation wage inequality <em>declined</em> in AI-exposed fields. What&#39;s the theoretical mechanism that reconciles selective displacement of entry-level workers with flat or compressed wage differentials?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> Distinguished between two data windows &#40;OECD 2014-2018 vs. Brynjolfsson 2023-2025&#41;. Argued for &quot;wage stickiness&quot;—employment adjusts before wages in contractually sticky tech compensation.</p>
+<p><strong>Follow-up &#40;devastating&#41;:</strong></p>
+<blockquote>
+<p>But here&#39;s the difficulty with the wage stickiness argument: tech labor markets are notoriously <em>dynamic</em>. If experienced software engineers truly became more valuable to firms using AI—complementing the technology—wouldn&#39;t we expect rapid wage adjustment precisely in <em>competitive</em> tech labor markets where firms fight for talent, regardless of whether entry-level hiring dropped?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> </p>
+<blockquote>
+<p>&quot;You&#39;ve identified what may be a fatal flaw in my wage-stickiness defense, and I need to acknowledge it directly rather than rationalize past it.&quot;</p>
+</blockquote>
+<p>Conceded the wage-stickiness argument fails under competitive labor market dynamics. Updated their interpretation: maybe it&#39;s &quot;genuine labor demand destruction&quot; rather than selective substitution.</p>
+<hr />
+<h3 id="dr_patel_professor_of_behavioral_economics"><a href="#dr_patel_professor_of_behavioral_economics" class="header-anchor">Dr. Patel &#40;Professor of Behavioral Economics&#41;</a></h3>
+<p><strong>Initial Question:</strong></p>
+<blockquote>
+<p>You&#39;ve documented that 22-25 year-olds are reallocating from \(85k software roles to \)35-45k administrative positions. But have you investigated whether this reallocation pattern reflects workers&#39; <em>rational</em> assessment of their best remaining options, or whether behavioral factors—loss aversion to the wage decline, anchoring on expected career trajectories, or bounded rationality in job search—are constraining them to reallocate <em>downward</em> rather than sideways to non-exposed high-wage sectors like nursing or skilled trades?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> Admitted they haven&#39;t investigated worker decision-making at all. Discussed liquidity constraints as a rational explanation but acknowledged it might be loss aversion or status-quo bias.</p>
+<p><strong>Follow-up:</strong></p>
+<blockquote>
+<p>Are these displaced software engineers actually <em>comparing</em> across nursing, trades, and administrative roles in their job search, or are they exhibiting status-quo bias and searching only within adjacent &quot;professional&quot; categories—implicitly treating a move to the trades as identity-threatening rather than financially optimal?</p>
+</blockquote>
+<p><strong>Presenter Response:</strong> Acknowledged this is &quot;exactly where my analysis breaks down.&quot; Both rational liquidity constraints and identity-threatening status quo bias would produce the same observed pattern. Would need job application data to distinguish them. Proposed a research design during the Q&amp;A itself.</p>
+<hr />
+<h2 id="faculty_verdicts"><a href="#faculty_verdicts" class="header-anchor">Faculty Verdicts</a></h2>
+<h3 id="dr_chen"><a href="#dr_chen" class="header-anchor">Dr. Chen</a></h3>
+<blockquote>
+<p><strong>Strongest point</strong>: The temporal clustering argument—employment declines accelerate after ChatGPT&#39;s launch in specific high-exposure occupations. That&#39;s genuinely useful for establishing signal versus noise.</p>
+<p><strong>Weakest point</strong>: The 0.3-0.5 percentage point labor force participation decline is almost negligible, and the presenter never resolved how a 16&#37; relative employment drop produces such a tiny aggregate effect. The empirical gap between occupational-level claims and macroeconomic reality remains gaping.</p>
+</blockquote>
+<h3 id="dr_roberts"><a href="#dr_roberts" class="header-anchor">Dr. Roberts</a></h3>
+<blockquote>
+<p><strong>Strongest point</strong>: Their intellectual honesty—they directly conceded when my wage-stickiness defense collapsed under scrutiny, rather than rationalizing past the challenge.</p>
+<p><strong>Weakest point</strong>: The core theoretical mechanism. The original thesis &#40;AI complements experienced workers while substituting entry-level workers&#41; required evidence of wage premiums that simply doesn&#39;t exist. They retreated to a much more modest claim.</p>
+</blockquote>
+<h3 id="dr_patel"><a href="#dr_patel" class="header-anchor">Dr. Patel</a></h3>
+<blockquote>
+<p><strong>Strongest point</strong>: The presenter&#39;s intellectual honesty about the gap between their empirical claims and theoretical interpretation.</p>
+<p><strong>Weakest point</strong>: They&#39;ve built an entire distributional argument around worker &quot;reallocation&quot; without once investigating whether that reallocation is actually constrained by behavioral factors. They assumed optimization rather than testing it.</p>
+</blockquote>
+<hr />
+<h2 id="meta-commentary"><a href="#meta-commentary" class="header-anchor">Meta-Commentary</a></h2>
+<p>This seminar demonstrated several interesting dynamics:</p>
+<ol>
+<li><p><strong>Real-time thesis revision</strong>: The presenter actually changed their position under pressure, moving from &quot;AI creates age-based inequality through selective substitution&quot; to &quot;maybe it&#39;s just aggregate labor demand destruction.&quot;</p>
+</li>
+<li><p><strong>Faculty coordination</strong>: Later faculty referenced earlier attacks. Dr. Roberts mentioned &quot;Dr. Chen correctly demolished the wage-stickiness defense.&quot;</p>
+</li>
+<li><p><strong>Genuine methodology critique</strong>: Questions weren&#39;t just hostile—they identified real issues &#40;identification strategy, missing data, untested assumptions&#41;.</p>
+</li>
+<li><p><strong>Research design emerged from debate</strong>: Dr. Patel&#39;s questioning led the presenter to propose a viable empirical strategy to distinguish behavioral from rational explanations.</p>
+</li>
+</ol>
+<hr />
+<p><a href="/docs/econ-seminar/raw/seminar-1-2026-01-08T02-14-29/">Raw transcript →</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+    
+  </body>
+</html>

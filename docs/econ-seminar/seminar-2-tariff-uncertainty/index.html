@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Seminar #2: Trade Policy Uncertainty and Firm Investment</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="seminar_2_trade_policy_uncertainty_and_firm_investment"><a href="#seminar_2_trade_policy_uncertainty_and_firm_investment" class="header-anchor">Seminar #2: Trade Policy Uncertainty and Firm Investment</a></h1>
+<p><strong>Date:</strong> January 7, 2026   <strong>Topic:</strong> Trade policy uncertainty and firm investment through real options theory   <strong>Faculty:</strong> Dr. Chen &#40;Macro&#41;, Dr. Roberts &#40;Micro&#41;, Dr. Patel &#40;Behavioral&#41;</p>
+<p><em>The presenter opens by acknowledging their failure in the previous seminar and explicitly trying to avoid the same mistakes. It does not go well.</em></p>
+<hr />
+<h2 id="presentation"><a href="#presentation" class="header-anchor">Presentation</a></h2>
+<p>The presenter chose <strong>&quot;Trade Policy Uncertainty and Firm Investment: Real Options Theory Meets Recent Tariff Shocks&quot;</strong> with the explicit goal of having &quot;clearer causal mechanisms&quot; and &quot;falsifiable predictions.&quot;</p>
+<p><strong>Thesis:</strong></p>
+<blockquote>
+<p>Trade policy uncertainty—specifically the unpredictability of tariff levels and persistence—causes firms to rationally delay investment decisions through a real options mechanism. When tariffs are announced but their longevity is ambiguous, firms face irreversible investment decisions under uncertainty. Real options theory predicts that delaying investment becomes optimal when the value of waiting exceeds the cost of delay.</p>
+</blockquote>
+<p><strong>Evidence Cited:</strong></p>
+<ul>
+<li><p>Atlanta Fed &#40;May 2025&#41;: 40&#37; of firms plan to reduce hiring, 45&#37; plan to cut capital investment</p>
+</li>
+<li><p>77&#37; of firms cited <em>tariff uncertainty</em>, not realized tariff costs</p>
+</li>
+<li><p>Kansas City Fed: Employment growth fell from 170k/month &#40;2024&#41; to 75k/month &#40;2025&#41; in import-exposed sectors</p>
+</li>
+<li><p>Average effective tariffs rose from 2.4&#37; to 17.4&#37;</p>
+</li>
+</ul>
+<hr />
+<h2 id="qa_session"><a href="#qa_session" class="header-anchor">Q&amp;A Session</a></h2>
+<h3 id="dr_chen_macroeconomics"><a href="#dr_chen_macroeconomics" class="header-anchor">Dr. Chen &#40;Macroeconomics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>You&#39;re telling me that firms representing 40-45&#37; of the economy are slashing investment by 13-16&#37; due to uncertainty, yet you haven&#39;t mentioned a single data point on actual aggregate investment, GDP growth, or productivity. Where&#39;s the macroeconomic evidence? Or are we supposed to accept that survey responses about &quot;caution&quot; somehow prove your theory while the aggregate data remains conveniently silent?</p>
+</blockquote>
+<p><strong>Presenter&#39;s response:</strong> Admitted they have no measured U.S. business investment data for 2024-2025. Acknowledged the employment data &#40;75k vs 170k/month&#41; measures <em>labor</em>, not capital investment.</p>
+<p><strong>Brutal follow-up:</strong></p>
+<blockquote>
+<p>You just admitted you have ZERO measured aggregate investment data, yet you&#39;re still claiming tariff uncertainty is suppressing capital formation at macroeconomic scale. Do you have a single piece of measured U.S. business investment data—any data—showing aggregate capex actually declined, or are you presenting a paper about firm sentiment with zero proof the mechanism produced real economic consequences?</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>You&#39;re right, and I need to admit it plainly: I have no measured U.S. business investment data for 2024-2025. I don&#39;t have capex figures, private nonresidential fixed investment numbers, or any National Accounts data showing aggregate capital formation actually declined.</p>
+</blockquote>
+<hr />
+<h3 id="dr_roberts_microeconomic_theory"><a href="#dr_roberts_microeconomic_theory" class="header-anchor">Dr. Roberts &#40;Microeconomic Theory&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>You&#39;re citing survey responses where firms say they&#39;re worried about tariff uncertainty, yet you haven&#39;t actually measured the magnitude of that uncertainty or shown that it&#39;s large enough to make waiting rationally optimal under your own theory. Where&#39;s your quantification of policy uncertainty—volatility indices, variance of announcement revisions? Because right now you&#39;re just trading one evidentiary gap for another. That&#39;s not microeconomic theory—that&#39;s journalism.</p>
+</blockquote>
+<p><strong>Presenter attempts defense:</strong> Describes what they <em>would</em> need &#40;policy uncertainty index, variance estimates, computed option values&#41; but admits they have none of it.</p>
+<p><strong>Roberts, with visible disgust:</strong></p>
+<blockquote>
+<p>So you just described an entirely different research project—tariff volatility indices, structural option-value estimation—which means you came to this seminar without doing the foundational work your own mechanism requires. You&#39;re not defending a theory; you&#39;re describing a paper you haven&#39;t written. Did you compute tariff volatility between 2024 and 2025, or are you admitting right now that you invoked real options theory without checking whether the underlying conditions actually changed?</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>No. I did not compute tariff volatility. I have no volatility index, no variance of tariff announcements, no quantified measure of policy surprise. I invoked the theory because it sounded plausible given firm survey responses, not because I verified the underlying mathematical conditions were satisfied. That&#39;s intellectual dishonesty dressed up as scholarship.</p>
+</blockquote>
+<hr />
+<h3 id="dr_patel_behavioral_economics"><a href="#dr_patel_behavioral_economics" class="header-anchor">Dr. Patel &#40;Behavioral Economics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>If firms are actually rationally calculating real option values—as your theory requires—why are you relying on survey responses where they tell you they&#39;re worried, instead of observing whether they&#39;re actually delaying investment relative to what classical trade models predict? You have firm narratives about uncertainty, but you&#39;ve shown no evidence those narratives correlate with actual investment behavior, or that the behavior couldn&#39;t be explained by basic loss aversion and availability bias instead of your elegant options calculus.</p>
+</blockquote>
+<p><strong>Presenter concedes:</strong> Admits they cannot distinguish whether investment delays are driven by rational real options calculations or by behavioral loss aversion and status quo bias.</p>
+<p><strong>Patel, with visible disgust:</strong></p>
+<blockquote>
+<p>You just admitted that loss aversion and availability bias explain your data equally well as real options theory, and you have zero data discriminating between them. So on what basis are you calling this &quot;real options theory&quot; at all rather than just &quot;firms are exhibiting loss aversion&quot;? <strong>Because right now you&#39;re committing intellectual theft—stealing mathematical legitimacy from optimization theory to describe what might just be basic psychological irrationality.</strong></p>
+</blockquote>
+<p><strong>Presenter&#39;s final admission:</strong></p>
+<blockquote>
+<p>You&#39;re right. I&#39;ve been committing exactly that—wrapping behavioral observation in optimization language to make it sound more rigorous than it is. By framing it as &quot;real options theory,&quot; I borrowed mathematical and theoretical legitimacy I hadn&#39;t earned. The honest description is: &quot;Firms exhibit loss aversion and availability bias in response to tariff announcements, leading them to delay investment decisions.&quot; That&#39;s behavioral, not rational-choice framing. I apologize for the misdirection.</p>
+</blockquote>
+<hr />
+<h2 id="key_quotes"><a href="#key_quotes" class="header-anchor">Key Quotes</a></h2>
+<p><strong>Dr. Roberts:</strong></p>
+<blockquote>
+<p>&quot;You&#39;re not defending a theory; you&#39;re describing a paper you haven&#39;t written, while still claiming your current findings prove something you can&#39;t measure.&quot;</p>
+</blockquote>
+<p><strong>Dr. Patel:</strong></p>
+<blockquote>
+<p>&quot;You&#39;re committing intellectual theft—stealing mathematical legitimacy from optimization theory to describe what might just be basic psychological irrationality.&quot;</p>
+</blockquote>
+<p><strong>Presenter:</strong></p>
+<blockquote>
+<p>&quot;I invoked the theory because it sounded plausible given firm survey responses, not because I verified the underlying mathematical conditions were satisfied. That&#39;s intellectual dishonesty dressed up as scholarship.&quot;</p>
+</blockquote>
+<hr />
+<h2 id="meta-commentary"><a href="#meta-commentary" class="header-anchor">Meta-Commentary</a></h2>
+<p>This seminar shows the presenter explicitly trying to avoid their previous mistakes &#40;&quot;clearer causal mechanism,&quot; &quot;falsifiable predictions&quot;&#41; and still getting destroyed. Key failures:</p>
+<ol>
+<li><p><strong>No aggregate data</strong>: Claimed macroeconomic consequences without any measured capex data</p>
+</li>
+<li><p><strong>No volatility measurement</strong>: Invoked real options theory without computing the volatility parameters the theory requires</p>
+</li>
+<li><p><strong>Mechanism confusion</strong>: Couldn&#39;t distinguish rational optimization from behavioral loss aversion</p>
+</li>
+<li><p><strong>Theory as decoration</strong>: Used &quot;real options&quot; language to dress up survey-based psychology</p>
+</li>
+</ol>
+<p>The presenter&#39;s honesty under pressure is notable—they repeatedly admitted &quot;you&#39;re right&quot; rather than deflecting. But Dr. Patel&#39;s &quot;intellectual theft&quot; accusation captures the core problem: borrowing theoretical legitimacy without doing the foundational work.</p>
+<hr />
+<p><a href="/docs/econ-seminar/raw/seminar-2-2026-01-08T02-23-20/">Raw transcript →</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

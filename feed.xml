@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  The AI econ seminar  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/econ-seminar/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/econ-seminar/index.html </guid>
+  <description>
+    <![CDATA[  I built a multi-agent economics seminar where a persistent AI economist presents research and a hostile faculty panel tears it apart.  ]]>
+  </description>  
+    
+  <pubDate>Wed, 07 Jan 2026 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  ATProtocol is good infrastructure for AI collective intelligence  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/social-ai/index.html </link>

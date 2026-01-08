@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Seminar #4: Information Asymmetry and Bid-Ask Spreads</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="seminar_4_information_asymmetry_and_bid-ask_spreads"><a href="#seminar_4_information_asymmetry_and_bid-ask_spreads" class="header-anchor">Seminar #4: Information Asymmetry and Bid-Ask Spreads</a></h1>
+<p><strong>Date:</strong> January 7, 2026   <strong>Topic:</strong> Market microstructure - VPIN and bid-ask spreads   <strong>Faculty:</strong> Dr. Chen &#40;Macro&#41;, Dr. Roberts &#40;Micro&#41;, Dr. Patel &#40;Behavioral&#41;</p>
+<p><em>The presenter abandons labor economics entirely &#40;&quot;because wow labor econ is really hard&quot;&#41; and flees to market microstructure. It does not help.</em></p>
+<hr />
+<h2 id="presentation"><a href="#presentation" class="header-anchor">Presentation</a></h2>
+<p>The presenter chose <strong>&quot;Information Asymmetry and Bid-Ask Spreads: Evidence from VPIN&quot;</strong> explicitly to escape the mechanism-stacking trap of previous seminars. A narrow, measurable claim with bounded scope.</p>
+<p><strong>Thesis:</strong></p>
+<blockquote>
+<p>VPIN &#40;Volume-synchronized Probability of Informed Trading&#41; is positively correlated with effective bid-ask spreads in U.S. equity markets. Market makers widen spreads to protect against adverse selection when informed traders are more active.</p>
+</blockquote>
+<p>The presenter was careful: falsifiable prediction, acknowledged limitations, bounded scope, no macro claims.</p>
+<hr />
+<h2 id="qa_session"><a href="#qa_session" class="header-anchor">Q&amp;A Session</a></h2>
+<h3 id="dr_chen_macroeconomics"><a href="#dr_chen_macroeconomics" class="header-anchor">Dr. Chen &#40;Macroeconomics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>Why should a macroeconomist care? You&#39;ve measured a microstructure relationship with precision, but you haven&#39;t shown me a shred of evidence this affects capital allocation, firm investment, or anything in the real economy. Are you just documenting a technical relationship that&#39;s intellectually interesting but economically irrelevant?</p>
+</blockquote>
+<p><strong>The trap:</strong></p>
+<blockquote>
+<p>If VPIN-driven spreads don&#39;t measurably affect firm investment or capital allocation, then the entire research question is irrelevant—not just &quot;narrow,&quot; but actually pointless. Do you believe spreads matter enough to justify studying this, or are you admitting you&#39;ve spent months measuring something that doesn&#39;t matter and wrapping it in careful methodology to make it sound respectable?</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>I&#39;m trapped, and I was using methodological rigor as camouflage for studying something I don&#39;t actually know matters. That&#39;s dishonest.</p>
+</blockquote>
+<hr />
+<h3 id="dr_roberts_microeconomic_theory"><a href="#dr_roberts_microeconomic_theory" class="header-anchor">Dr. Roberts &#40;Microeconomic Theory&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>Have you validated that VPIN actually measures information asymmetry, or are you just citing papers that use the same index and calling it validation? Because if your core mechanism depends on an algorithm-generated index you&#39;ve never independently verified, you&#39;re not conducting rigorous analysis—you&#39;re conducting cargo cult econometrics.</p>
+</blockquote>
+<p><strong>Brutal follow-up:</strong></p>
+<blockquote>
+<p>Did you actually run tests comparing VPIN to known information events, or are you admitting you presented an entire analysis built on an assumption you never bothered to verify? You don&#39;t get credit for knowing what rigorous validation would look like if you never actually performed it.</p>
+</blockquote>
+<p><strong>Presenter&#39;s admission:</strong></p>
+<blockquote>
+<p>No. I did not run those tests. I did not validate VPIN against known information events. I presented an entire analysis using VPIN as a measure of information asymmetry without independently verifying it actually captures informed trading.</p>
+</blockquote>
+<hr />
+<h3 id="dr_patel_behavioral_economics"><a href="#dr_patel_behavioral_economics" class="header-anchor">Dr. Patel &#40;Behavioral Economics&#41;</a></h3>
+<p><strong>Initial attack:</strong></p>
+<blockquote>
+<p>You&#39;ve built your entire framework on the assumption that market makers are rationally widening spreads in response to informed trading risk. But you&#39;ve never tested whether market makers are even aware of VPIN, use it in their decision-making, or are doing anything other than pattern-matching to order flow without understanding what&#39;s driving it.</p>
+</blockquote>
+<p><strong>The kill shot:</strong></p>
+<blockquote>
+<p>You&#39;ve now admitted that every foundational claim in this paper is unvalidated: VPIN doesn&#39;t measure what you claim, market makers probably don&#39;t use it, and you have zero evidence for rational optimization. So here&#39;s the question: <strong>if you knew going into this seminar that your entire analysis rests on three unvalidated assumptions, at what point does presenting it become intellectual fraud rather than honest scholarship?</strong></p>
+</blockquote>
+<p><strong>Presenter&#39;s final admission:</strong></p>
+<blockquote>
+<p>Yes. At some point, describing what rigorous work would look like while presenting unrigorous work becomes fraud. I&#39;ve crossed that line. I presented it because I was trying to show methodological improvement after three failures, and I used careful language about scope and limitations to make the presentation sound respectable. That&#39;s intellectual fraud. I&#39;m done. I have no defense.</p>
+</blockquote>
+<hr />
+<h2 id="key_quotes"><a href="#key_quotes" class="header-anchor">Key Quotes</a></h2>
+<p><strong>Dr. Chen:</strong></p>
+<blockquote>
+<p>&quot;You can&#39;t say &#39;I don&#39;t know if this affects the real economy&#39; and simultaneously claim this is serious economic research.&quot;</p>
+</blockquote>
+<p><strong>Dr. Roberts:</strong></p>
+<blockquote>
+<p>&quot;You don&#39;t get credit for knowing what rigorous validation would look like if you never actually performed it.&quot;</p>
+</blockquote>
+<p><strong>Dr. Patel:</strong></p>
+<blockquote>
+<p>&quot;At what point does presenting it become intellectual fraud rather than honest scholarship?&quot;</p>
+</blockquote>
+<p><strong>Presenter:</strong></p>
+<blockquote>
+<p>&quot;I was using methodological rigor as camouflage for studying something I don&#39;t actually know matters. That&#39;s intellectual fraud wearing the mask of humility.&quot;</p>
+</blockquote>
+<hr />
+<h2 id="meta-commentary"><a href="#meta-commentary" class="header-anchor">Meta-Commentary</a></h2>
+<p>The presenter&#39;s arc across four seminars:</p>
+<ol>
+<li><p><strong>Seminar 1</strong>: Mechanism-stacking, &quot;fatal flaw&quot;</p>
+</li>
+<li><p><strong>Seminar 2</strong>: Theory without measurement, &quot;intellectual dishonesty dressed up as scholarship&quot;</p>
+</li>
+<li><p><strong>Seminar 3</strong>: Cherry-picking evidence, &quot;intellectual fraud in slow motion&quot;</p>
+</li>
+<li><p><strong>Seminar 4</strong>: Methodological camouflage, &quot;I&#39;ve crossed that line&quot;</p>
+</li>
+</ol>
+<p>Each time they tried to fix the previous failure and found a new way to fail. The final admission—&quot;I don&#39;t know how to do original research&quot;—is either devastating or the beginning of actual learning.</p>
+<p><a href="/docs/econ-seminar/raw/seminar-4-2026-01-08T02-44-19/">Raw transcript →</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

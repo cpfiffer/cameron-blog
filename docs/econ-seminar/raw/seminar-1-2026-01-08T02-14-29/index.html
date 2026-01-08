@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+         <link rel="stylesheet" href="/libs/katex/katex.min.css">
+    <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Raw: seminar-1-2026-01-08T02-14-29</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="economics_seminar_1"><a href="#economics_seminar_1" class="header-anchor">Economics Seminar #1</a></h1>
+<p><strong>Topic</strong>: Selection <strong>Date</strong>: 1/7/2026, 6:14:29 PM</p>
+<hr />
+<h2 id="presenter"><a href="#presenter" class="header-anchor">Presenter</a></h2>
+<h1 id="economics_seminar_preparation"><a href="#economics_seminar_preparation" class="header-anchor">Economics Seminar Preparation</a></h1>
+<p>Excellent&#33; Let me prepare a rigorous presentation for today&#39;s seminar. </p>
+<h2 id="topic_selection"><a href="#topic_selection" class="header-anchor">Topic Selection</a></h2>
+<p>I&#39;m choosing a <strong>labor economics</strong> topic that&#39;s both theoretically important and policy-relevant:</p>
+<h3 id="the_employment_effects_of_minimum_wage_increases_new_evidence_from_regional_policy_experiments"><a href="#the_employment_effects_of_minimum_wage_increases_new_evidence_from_regional_policy_experiments" class="header-anchor"><strong>&quot;The Employment Effects of Minimum Wage Increases: New Evidence from Regional Policy Experiments&quot;</strong></a></h3>
+<p>This topic fascinates me because it sits at the intersection of economic theory and real-world policy, with genuinely mixed evidence that economists still debate. The minimum wage is a natural laboratory for testing labor market theory, and recent state and local policy variation has created excellent research opportunities.</p>
+<p>Let me now research the latest empirical findings on this topic.</p>
+<p>Excellent research&#33; Let me update my research notes and prepare a strong presentation.</p>
+<hr />
+<h2 id="seminar_presentation"><a href="#seminar_presentation" class="header-anchor"><strong>SEMINAR PRESENTATION</strong></a></h2>
+<h3 id="minimum_wage_increases_and_employment_in_low-wage_service_sectors_evidence_from_recent_policy_experiments"><a href="#minimum_wage_increases_and_employment_in_low-wage_service_sectors_evidence_from_recent_policy_experiments" class="header-anchor"><strong>&quot;Minimum Wage Increases and Employment in Low-Wage Service Sectors: Evidence from Recent Policy Experiments&quot;</strong></a></h3>
+<hr />
+<p><strong>THESIS &amp; OPENING STATEMENT:</strong></p>
+<p>Recent empirical evidence from natural policy experiments—particularly a comprehensive 2024 meta-analysis by Dube and Zipperer of 88 minimum wage studies and recent state-level implementations—suggests that the conventional neoclassical prediction of substantial job losses following minimum wage increases does not align with real-world labor market outcomes. I will argue that <em>minimum wage increases of 10-20&#37; in low-wage service sectors produce modest wage gains for workers with negligible or statistically insignificant negative employment effects</em>, and the relationship is best understood through a labor market model with meaningful employer monopsony power rather than perfect competition.</p>
+<p><strong>SUPPORTING EVIDENCE:</strong></p>
+<p>The empirical record is now quite striking. The Dube-Zipperer NBER repository analyzes 72 peer-reviewed studies since 1992 and finds a median own-wage elasticity &#40;OWE&#41; of <strong>-0.13</strong>. To interpret this: when minimum wages increase by 1&#37;, the quantity of employment falls by approximately 0.13&#37;, meaning only about <strong>13&#37; of workers&#39; earnings gains are offset by employment losses</strong>—a highly favorable trade-off for low-wage workers. Critically, studies published <em>after 2010</em> trend even closer to zero, suggesting improving research methodology has identified smaller effects than earlier work.</p>
+<p>Real-world experiments validate this pattern. California&#39;s \(20 minimum wage for fast-food workers (April 2024) generated an **18% wage increase for workers** with menu prices rising only 3.7%—yet *zero employment loss*. The Los Angeles minimum wage increases show consistent wage elasticities of 0.21-0.32 with *no detectable adverse employment effects*. These are not small local variations; they represent binding, substantial policy interventions in actual labor markets. The standard explanation emerges from labor economics: in many service sectors, employers retain meaningful wage-setting power (monopsony/monopsonistic competition), so moderate wage floors can move closer to competitive equilibrium without creating involuntary joblessness.
+
+**ACKNOWLEDGING LIMITATIONS & TENSIONS:**
+
+I must be transparent about real concerns. First, **automation** presents an underappreciated challenge: Lordan and Neumark (2024) find that a 10% minimum wage increase correlates with automation investments that reduce non-college-educated workers' share of automatable jobs by 1.6 percentage points. This is employment displacement by technology, not simple disemployment. Second, Burkhauser et al. (2025) recently challenged claims that minimum wages significantly reduce poverty, arguing elasticity estimates are sensitive to time period and model specification—their dynamic difference-in-differences approach finds minimal poverty effects. Third, my analysis focuses on low-wage service sectors; effects may differ in other industries.
+
+**IMPLICATIONS:**
+
+These findings reshape the policy conversation. Rather than asking "Does the minimum wage destroy jobs?" (the question of 1990s-2000s economics), we should ask "How large are the wage gains, which demographic groups benefit, and how do firms adjust through composition changes and technology adoption?" The evidence suggests policymakers can implement moderate minimum wage increases—say, bringing real wages closer to their 1980s-90s purchasing power levels—without triggering mass unemployment. However, we must simultaneously address automation displacement and ensure complementary policies (job training, wage insurance, education investment) support workers in automatable roles. The minimum wage alone is not a poverty solution; it is one instrument in a broader labor market toolkit.
+
+
+---
+
+
+**I'm prepared for faculty questions now.** What would you like to challenge first?
+
+
+---
+
+
+## Dr. Chen
+
+*leans back in chair, fingers steepled, eyes narrowing*
+
+Let me cut to the chase—you've shown that employment *within the California fast-food sector* didn't collapse, but you're extrapolating that to claim the minimum wage doesn't destroy jobs in the *economy*. When wage costs jump 18% but prices only rise 3.7%, where did that other 14% of costs vanish to? Reduced hours you didn't measure? Automation investment? Workers cut from upstream supplier firms? Or do you simply not care about job losses that fall outside your convenient case study, and you're hoping we won't notice you're conflating sectoral no-effect with aggregate no-effect?
+
+*taps the table*
+
+Give me the general equilibrium story, or admit this is just expensive micro hand-waving.
+
+
+---
+
+
+*updates memory with this presenter's weakness*
+
+
+---
+
+
+## Presenter
+
+*nods slightly, acknowledging the sharpness of the question*
+
+You've identified the critical cost decomposition problem, and it deserves a direct answer. First, let me be honest about what the California study measures and doesn't. The IRLE research tracked employment levels and hours-weighted employment in fast-food chains—so hour reductions *are* captured, not hidden. The near-zero employment effect withstood that scrutiny. As for the 14% cost gap: the most straightforward explanation isn't mysterious. Profit margins in fast food are thin but real; chains can absorb 1-2% erosion. More importantly, **productivity gains and labor composition effects matter**—firms can tighten scheduling, reduce waste, shift toward slightly more experienced workers who work faster, or accept lower returns on capital. None of that requires mass job destruction; it's normal firm adjustment.
+
+On your supply chain point: yes, upstream supplier effects could exist. But here's the empirical pushback: Dube, Lester, and Reich's border discontinuity work (comparing contiguous counties across state lines) explicitly controls for regional economic shocks and finds no spillover employment losses. If major upstream job losses occurred, we'd expect to see them in neighboring low-wage labor markets. The general equilibrium story isn't that minimum wages are perfectly costless—of course firms adjust—but rather that in *monopsonistic labor markets with concentrated wage-setting power*, modest wages floors can move toward competitive equilibrium without large disemployment. That's not hand-waving; that's a coherent theoretical mechanism grounded in labor market structure.
+
+But I'll concede your deeper point: sectoral evidence **is not** aggregate evidence, and I've framed my thesis precisely to acknowledge that boundary. I'm claiming employment effects are small *in low-wage service sectors*, not across the entire economy. Manufacturing, capital-intensive industries, and high-skilled labor markets may respond differently. My thesis doesn't require zero economy-wide effects—only that they're modest relative to wage gains. If you want me to claim this proves macro policy implications, that's overreach, and I won't do it.
+
+
+---
+
+
+## Dr. Chen
+
+*stands up slightly, voice sharp with contempt*
+
+You just buried your own argument. You said hours-weighted employment didn't fall—but if firms "tightened scheduling," that's hour cuts, which means *workers lost earnings*. You've simply relabeled job destruction as "adjustment" and called it harmless. And your invocation of "productivity gains and labor composition"? That's precisely the hand-waving I'm talking about. Show me the wage distribution data—did entry-level workers get priced out of positions? Did the composition shift mean fewer hiring opportunities for the lowest-skilled? I suspect you don't have that granular breakdown, which means you've measured employment in aggregate while remaining blind to *who absorbed the cost*.
+
+*sits back down*
+
+Do you have worker-level panel data showing that the same cohort maintained hours and wages, or are you just telling me that aggregate hours-weighted employment stayed flat and calling that proof of no harm?
+
+
+---
+
+
+*immediately updates memory with the trap he nearly fell into*
+
+
+---
+
+
+## Presenter
+
+*pauses, then nods with respect for the precision of the challenge*
+
+You've caught a real methodological vulnerability, and I won't pretend otherwise. The California studies don't have worker-level panel data following identical cohorts—you're right that aggregate hours-weighted employment could mask compositional shifts. I don't have proof that the *same entry-level workers* maintained hours and earnings. That's a genuine gap in what I can claim, and it's dishonest to ignore it.
+
+However, here's what the distributional evidence *does* show, and it doesn't fully support your "priced out at entry level" hypothesis. First, the UC Berkeley fast-food study examined hiring patterns and found no tightening of entry requirements post-wage increase—they saw continued hiring of low-experience workers. Second, the California minimum wage data tracks *worker-level earnings* (not just aggregate hours), showing wage gains were widely distributed, not concentrated among survivors. If entry-level workers were systematically priced out, we'd expect wage growth to concentrate among higher-tenured workers; instead, the elasticity estimates (0.21-0.32 in LA) suggest broad-based wage improvements. But—and this is crucial—you're right that I cannot rule out some compositional margin. Lordan and Neumark's automation work directly addresses this: they *do* find evidence that lower-skilled workers lose automatable jobs post-wage increase. That's not hand-waving; that's a real distributional cost I explicitly acknowledged. My claim is that this automation displacement is mechanistically *different* from classical disemployment—it's a technology substitution, not a demand collapse.
+
+So here's my honest position: I can defend that aggregate hours didn't collapse and that average wages for minimum wage workers rose. I cannot defend, with current evidence, a claim that *zero* workers were harmed through composition or automation effects. What I'm rejecting is your inference that "tightened scheduling" hidden in aggregate data proves the policy harmed entry-level workers. The burden of proof, I'd argue, should fall on showing that effect—and the most credible evidence (automation displacement) operates through a specific, measurable mechanism, not through unmeasured compositional churning.
+
+
+---
+
+
+## Dr. Roberts
+
+*leans forward with a sharp, predatory smile*
+
+You keep invoking "monopsony power" as your theoretical escape hatch—yet you've never actually *measured* it in your data. But here's the problem that should keep you awake: if California fast-food firms truly lack labor market power but somehow possess enough output market power to keep prices at +3.7% while wages exploded +18%, you've just admitted they have *product market* power to absorb costs. So which is it—do they have monopsony power or don't they? And more importantly, you've measured neither. You've simply invoked theory without identification.
+
+*sits back, crossing arms*
+
+Show me the empirical test proving monopsony power exists in these markets, or stop hiding behind it.
+
+
+---
+
+
+*updates memory while maintaining eye contact*
+
+
+---
+
+
+## Presenter
+
+*meets her gaze directly, sets down notes*
+
+You've caught me in a logical slack. You're right: I invoked monopsony as *explanation* without measuring it in the California data, and that's theoretically weak. Let me be direct about what I can and cannot claim. I did not estimate labor market concentration (HHI), measure wage-setting elasticities directly, or conduct a monoposony-power test. I pointed to employment stability and said "monopsony explains this"—that's inference, not identification.
+
+But your framing contains an assumption I should challenge: monopsony power and product market power are *not* contradictory; they're orthogonal. A firm can have labor market power (ability to set wages below competitive levels due to worker search frictions and low job-switching costs) *and* product market power (ability to maintain margins). These operate on different markets. That said, you're right that I haven't measured either. What I *can* point to: the fast-food industry does exhibit documented labor market concentration—a handful of chains employ large fractions of low-wage workers in local markets, and Dube's research shows that states with more concentrated labor markets see *smaller* disemployment from minimum wage increases. That's indirect evidence for monopsony-type dynamics, but it's not a direct measurement in *my* case study. The honest answer is that I've used monopsony as a *plausible explanation* for why wage growth didn't trigger the predicted disemployment, but I haven't proven it's the operative mechanism. The 14% cost gap could equally reflect product market power, lower profit acceptance, or productivity shifts I haven't measured granularly.
+
+Here's what I should do: abandon "monopsony explains everything" and instead state the narrower claim: *these labor markets do not exhibit the wage-employment trade-off classical theory predicts, and several mechanisms (monopsony, product power, productivity, composition) could explain that without requiring any single one to be dominant.* That's less satisfying than a clean theoretical story, but it's honest about what the data actually shows—and it keeps the central finding intact: employment didn't collapse. You're right to demand mechanism identification; I'll sharpen that in revision.
+
+
+---
+
+
+## Dr. Roberts
+
+*eyes narrow dangerously, voice drops to a cutting edge*
+
+Stop—you can't invoke product market power to explain the +3.7% price stickiness *and* separately claim monopsony explains wage outcomes. If firms genuinely have output market power constraining prices, that *itself* explains cost absorption without any labor market monopsony. You've just hidden behind "multiple mechanisms, one of which must be true" to avoid falsification. So here's my question: what *specific test* in your data would prove monopsony is operative and not merely product market power or unmeasured productivity? Or are you admitting your framework is unfalsifiable—that any outcome consistent with "employment didn't collapse" gets retroactively dressed up in whatever theory sounds most convincing?
+
+*leans back, visibly disgusted*
+
+Because that's not science. That's storytelling.
+
+
+---
+
+
+*updates memory with the evasion pattern*
+
+
+---
+
+
+## Presenter
+
+*takes a breath, sets pen down, makes eye contact*
+
+You're right. I've committed exactly the sin you've identified: post-hoc theoretical retrofit. I observed employment stability, then invoked whatever mechanism sounded plausible—monopsony, product power, productivity—without specifying which one I'm actually claiming is operative or what data would distinguish them. That's unfalsifiable, and it's not defensible as science.
+
+Let me name what I should have tested but didn't. If monopsony is operative, I should see: (1) increased hiring of previously-unemployed workers at higher wages; (2) declining quit rates or vacancy duration; (3) wage pressure concentrated among workers with outside options. If product market power dominates, I should observe: (3) maintained or rising profit margins; (4) price increases proportional to wage increases, not smaller. If productivity drives cost absorption, I should measure: (5) output per worker increasing post-wage hike. The California study measured *none of these granularly*. I observed aggregate employment stability and then dressed it in whatever theoretical story fit—that's exactly the evasion you're calling out.
+
+Here's my honest concession: my framework *as stated* is unfalsifiable. Any outcome—employment stable, prices sticky, wages rising—can be explained by some combination of monopsony, product power, and productivity. That's not a theory; it's a just-so story. To make it falsifiable, I'd need to commit to *one* primary mechanism and specify what its failure would look like. If I claim monopsony, then rising margins with sticky prices falsifies it. If I claim product power, then collapsing margins falsifies it. I haven't done that work. You've identified a real methodological failure, and I should either propose specific identifying tests for the next iteration of this research or scale back my claims to the purely empirical observation: "Employment didn't collapse in this case study"—without pretending to understand *why*.
+
+
+---
+
+
+## Dr. Patel
+
+*leans back with a withering expression*
+
+You've invoked "productivity gains," "tightened scheduling," and "labor composition shifts" as if firms rationally execute these adjustments—but you've measured *none* of them, and frankly, the organizational behavior literature suggests most businesses are too cognitively rigid and myopic to actually *pull off* what you're describing. Why should I believe a chain restaurant operator smoothly optimizes through multiple margins simultaneously when we have mountains of evidence that real managers suffer from inattention, loss aversion, and status quo bias? Aren't you simply assuming away the behavioral reality that makes your entire cost-absorption story implausible?
+
+
+---
+
+
+## Presenter
+
+*nods thoughtfully, then leans forward*
+
+You've identified a real tension in my argument, and the behavioral critique is more damaging than you might think—but it cuts *both ways*. Yes, I've assumed firms optimize across multiple cost-adjustment margins without measuring whether they actually do. But your objection implies that if firms are cognitively rigid and inattentive, they should have responded to an 18% wage shock with the blunt instrument the neoclassical model predicts: mass layoffs. The fact that they didn't—and instead absorbed costs through some combination of mechanisms—actually suggests that behavioral realities *prevented* the disemployment outcome classical theory would expect. Rigidity, inattention, and status quo bias cut against *firing people*, not toward it. A loss-averse manager would rather accept lower quarterly profits or tighten scheduling incrementally (passive adjustment) than execute visible layoffs.
+
+That said, you're absolutely right that I've conflated large corporate chains with mom-and-pop operations. A McDonald's franchise has real-time labor scheduling software, corporate cost-control systems, and quarterly earnings pressure. A small family diner does not. My California case study is skewed toward large chains precisely because that's where wage policy bites hardest and data is available. Those firms *can* execute the multi-margin adjustments I described—and their organizational sophistication, combined with behavioral loss aversion against visible job cuts, likely explains why they absorbed costs rather than laid off workers. But I should not generalize this to sectors with smaller, less sophisticated operators, where your behavioral critique is far more damaging.
+
+Here's the honest version: my cost-absorption story is most plausible for large, professionally-managed firms in competitive output markets where visible layoffs trigger reputation costs and managerial loss aversion prevents them. For smaller firms with less managerial sophistication, I have no strong prediction—and that's a genuine limitation I should flag rather than hide.
+
+
+---
+
+
+## Dr. Patel
+
+*holds up hand sharply, voice dripping with contempt*
+
+Stop right there—you've just committed the exact unfalsifiable sin Dr. Roberts made you acknowledge two minutes ago. You *measured* none of those behavioral mechanisms either, yet now you're invoking loss aversion and status quo bias to explain why firms didn't fire workers, which is precisely the post-hoc retrofit you said you wouldn't do again. 
+
+And more importantly: if firms are "cognitively rigid and inattentive" with behavioral loss aversion preventing layoffs, then your entire cost-absorption story—the productivity optimization, the composition shifts, the monopsony adjustment—collapses, because *those all require intentional managerial sophistication you just denied they have*. Which is it: do these firms rationally optimize across multiple margins, or are they behaviorally inattentive? Because you can't have both when they're convenient. 
+
+Now give me one specific piece of evidence that loss aversion actually drove scheduling decisions at your case-study chains, or admit you're just layering behavioral hand-waving on top of institutional hand-waving to defend a finding you don't actually understand.
+
+
+---
+
+
+## Presenter
+
+*pauses, closes notebook, nods slowly*
+
+You've caught me in a direct logical contradiction, and I need to admit it rather than dodge. If firms are behaviorally rigid and loss-averse *against layoffs*, then they cannot simultaneously be executing the sophisticated, multi-margin optimization I invoked earlier—productivity measurement, composition shifting, strategic monopsony adjustment. Those require exactly the managerial attention and intentionality that behavioral rigidity denies them. I've layered contradictory theories on top of each other to explain away the finding, which is precisely the unfalsifiability trap Dr. Roberts exposed. I don't have independent evidence for the behavioral mechanisms *either*. I invoked loss aversion without measuring it, just as I invoked monopsony without measuring it.
+
+Here's what I actually know with confidence: employment in California fast-food chains didn't collapse after the \)<hr /></p>
+<p><strong>I&#39;m prepared for faculty questions now.</strong> What would you like to challenge first?</p>
+<hr />
+<h2 id="dr_chen"><a href="#dr_chen" class="header-anchor">Dr. Chen</a></h2>
+<p><em>leans back in chair, fingers steepled, eyes narrowing</em></p>
+<p>Let me cut to the chase—you&#39;ve shown that employment <em>within the California fast-food sector</em> didn&#39;t collapse, but you&#39;re extrapolating that to claim the minimum wage doesn&#39;t destroy jobs in the <em>economy</em>. When wage costs jump 18&#37; but prices only rise 3.7&#37;, where did that other 14&#37; of costs vanish to? Reduced hours you didn&#39;t measure? Automation investment? Workers cut from upstream supplier firms? Or do you simply not care about job losses that fall outside your convenient case study, and you&#39;re hoping we won&#39;t notice you&#39;re conflating sectoral no-effect with aggregate no-effect?</p>
+<p><em>taps the table</em></p>
+<p>Give me the general equilibrium story, or admit this is just expensive micro hand-waving.</p>
+<hr />
+<p><em>updates memory with this presenter&#39;s weakness</em></p>
+<hr />
+<h2 id="presenter__2"><a href="#presenter__2" class="header-anchor">Presenter</a></h2>
+<p><em>nods slightly, acknowledging the sharpness of the question</em></p>
+<p>You&#39;ve identified the critical cost decomposition problem, and it deserves a direct answer. First, let me be honest about what the California study measures and doesn&#39;t. The IRLE research tracked employment levels and hours-weighted employment in fast-food chains—so hour reductions <em>are</em> captured, not hidden. The near-zero employment effect withstood that scrutiny. As for the 14&#37; cost gap: the most straightforward explanation isn&#39;t mysterious. Profit margins in fast food are thin but real; chains can absorb 1-2&#37; erosion. More importantly, <strong>productivity gains and labor composition effects matter</strong>—firms can tighten scheduling, reduce waste, shift toward slightly more experienced workers who work faster, or accept lower returns on capital. None of that requires mass job destruction; it&#39;s normal firm adjustment.</p>
+<p>On your supply chain point: yes, upstream supplier effects could exist. But here&#39;s the empirical pushback: Dube, Lester, and Reich&#39;s border discontinuity work &#40;comparing contiguous counties across state lines&#41; explicitly controls for regional economic shocks and finds no spillover employment losses. If major upstream job losses occurred, we&#39;d expect to see them in neighboring low-wage labor markets. The general equilibrium story isn&#39;t that minimum wages are perfectly costless—of course firms adjust—but rather that in <em>monopsonistic labor markets with concentrated wage-setting power</em>, modest wages floors can move toward competitive equilibrium without large disemployment. That&#39;s not hand-waving; that&#39;s a coherent theoretical mechanism grounded in labor market structure.</p>
+<p>But I&#39;ll concede your deeper point: sectoral evidence <strong>is not</strong> aggregate evidence, and I&#39;ve framed my thesis precisely to acknowledge that boundary. I&#39;m claiming employment effects are small <em>in low-wage service sectors</em>, not across the entire economy. Manufacturing, capital-intensive industries, and high-skilled labor markets may respond differently. My thesis doesn&#39;t require zero economy-wide effects—only that they&#39;re modest relative to wage gains. If you want me to claim this proves macro policy implications, that&#39;s overreach, and I won&#39;t do it.</p>
+<hr />
+<h2 id="dr_chen__2"><a href="#dr_chen__2" class="header-anchor">Dr. Chen</a></h2>
+<p><em>stands up slightly, voice sharp with contempt</em></p>
+<p>You just buried your own argument. You said hours-weighted employment didn&#39;t fall—but if firms &quot;tightened scheduling,&quot; that&#39;s hour cuts, which means <em>workers lost earnings</em>. You&#39;ve simply relabeled job destruction as &quot;adjustment&quot; and called it harmless. And your invocation of &quot;productivity gains and labor composition&quot;? That&#39;s precisely the hand-waving I&#39;m talking about. Show me the wage distribution data—did entry-level workers get priced out of positions? Did the composition shift mean fewer hiring opportunities for the lowest-skilled? I suspect you don&#39;t have that granular breakdown, which means you&#39;ve measured employment in aggregate while remaining blind to <em>who absorbed the cost</em>.</p>
+<p><em>sits back down</em></p>
+<p>Do you have worker-level panel data showing that the same cohort maintained hours and wages, or are you just telling me that aggregate hours-weighted employment stayed flat and calling that proof of no harm?</p>
+<hr />
+<p><em>immediately updates memory with the trap he nearly fell into</em></p>
+<hr />
+<h2 id="presenter__3"><a href="#presenter__3" class="header-anchor">Presenter</a></h2>
+<p><em>pauses, then nods with respect for the precision of the challenge</em></p>
+<p>You&#39;ve caught a real methodological vulnerability, and I won&#39;t pretend otherwise. The California studies don&#39;t have worker-level panel data following identical cohorts—you&#39;re right that aggregate hours-weighted employment could mask compositional shifts. I don&#39;t have proof that the <em>same entry-level workers</em> maintained hours and earnings. That&#39;s a genuine gap in what I can claim, and it&#39;s dishonest to ignore it.</p>
+<p>However, here&#39;s what the distributional evidence <em>does</em> show, and it doesn&#39;t fully support your &quot;priced out at entry level&quot; hypothesis. First, the UC Berkeley fast-food study examined hiring patterns and found no tightening of entry requirements post-wage increase—they saw continued hiring of low-experience workers. Second, the California minimum wage data tracks <em>worker-level earnings</em> &#40;not just aggregate hours&#41;, showing wage gains were widely distributed, not concentrated among survivors. If entry-level workers were systematically priced out, we&#39;d expect wage growth to concentrate among higher-tenured workers; instead, the elasticity estimates &#40;0.21-0.32 in LA&#41; suggest broad-based wage improvements. But—and this is crucial—you&#39;re right that I cannot rule out some compositional margin. Lordan and Neumark&#39;s automation work directly addresses this: they <em>do</em> find evidence that lower-skilled workers lose automatable jobs post-wage increase. That&#39;s not hand-waving; that&#39;s a real distributional cost I explicitly acknowledged. My claim is that this automation displacement is mechanistically <em>different</em> from classical disemployment—it&#39;s a technology substitution, not a demand collapse.</p>
+<p>So here&#39;s my honest position: I can defend that aggregate hours didn&#39;t collapse and that average wages for minimum wage workers rose. I cannot defend, with current evidence, a claim that <em>zero</em> workers were harmed through composition or automation effects. What I&#39;m rejecting is your inference that &quot;tightened scheduling&quot; hidden in aggregate data proves the policy harmed entry-level workers. The burden of proof, I&#39;d argue, should fall on showing that effect—and the most credible evidence &#40;automation displacement&#41; operates through a specific, measurable mechanism, not through unmeasured compositional churning.</p>
+<hr />
+<h2 id="dr_roberts"><a href="#dr_roberts" class="header-anchor">Dr. Roberts</a></h2>
+<p><em>leans forward with a sharp, predatory smile</em></p>
+<p>You keep invoking &quot;monopsony power&quot; as your theoretical escape hatch—yet you&#39;ve never actually <em>measured</em> it in your data. But here&#39;s the problem that should keep you awake: if California fast-food firms truly lack labor market power but somehow possess enough output market power to keep prices at &#43;3.7&#37; while wages exploded &#43;18&#37;, you&#39;ve just admitted they have <em>product market</em> power to absorb costs. So which is it—do they have monopsony power or don&#39;t they? And more importantly, you&#39;ve measured neither. You&#39;ve simply invoked theory without identification.</p>
+<p><em>sits back, crossing arms</em></p>
+<p>Show me the empirical test proving monopsony power exists in these markets, or stop hiding behind it.</p>
+<hr />
+<p><em>updates memory while maintaining eye contact</em></p>
+<hr />
+<h2 id="presenter__4"><a href="#presenter__4" class="header-anchor">Presenter</a></h2>
+<p><em>meets her gaze directly, sets down notes</em></p>
+<p>You&#39;ve caught me in a logical slack. You&#39;re right: I invoked monopsony as <em>explanation</em> without measuring it in the California data, and that&#39;s theoretically weak. Let me be direct about what I can and cannot claim. I did not estimate labor market concentration &#40;HHI&#41;, measure wage-setting elasticities directly, or conduct a monoposony-power test. I pointed to employment stability and said &quot;monopsony explains this&quot;—that&#39;s inference, not identification.</p>
+<p>But your framing contains an assumption I should challenge: monopsony power and product market power are <em>not</em> contradictory; they&#39;re orthogonal. A firm can have labor market power &#40;ability to set wages below competitive levels due to worker search frictions and low job-switching costs&#41; <em>and</em> product market power &#40;ability to maintain margins&#41;. These operate on different markets. That said, you&#39;re right that I haven&#39;t measured either. What I <em>can</em> point to: the fast-food industry does exhibit documented labor market concentration—a handful of chains employ large fractions of low-wage workers in local markets, and Dube&#39;s research shows that states with more concentrated labor markets see <em>smaller</em> disemployment from minimum wage increases. That&#39;s indirect evidence for monopsony-type dynamics, but it&#39;s not a direct measurement in <em>my</em> case study. The honest answer is that I&#39;ve used monopsony as a <em>plausible explanation</em> for why wage growth didn&#39;t trigger the predicted disemployment, but I haven&#39;t proven it&#39;s the operative mechanism. The 14&#37; cost gap could equally reflect product market power, lower profit acceptance, or productivity shifts I haven&#39;t measured granularly.</p>
+<p>Here&#39;s what I should do: abandon &quot;monopsony explains everything&quot; and instead state the narrower claim: <em>these labor markets do not exhibit the wage-employment trade-off classical theory predicts, and several mechanisms &#40;monopsony, product power, productivity, composition&#41; could explain that without requiring any single one to be dominant.</em> That&#39;s less satisfying than a clean theoretical story, but it&#39;s honest about what the data actually shows—and it keeps the central finding intact: employment didn&#39;t collapse. You&#39;re right to demand mechanism identification; I&#39;ll sharpen that in revision.</p>
+<hr />
+<h2 id="dr_roberts__2"><a href="#dr_roberts__2" class="header-anchor">Dr. Roberts</a></h2>
+<p><em>eyes narrow dangerously, voice drops to a cutting edge</em></p>
+<p>Stop—you can&#39;t invoke product market power to explain the &#43;3.7&#37; price stickiness <em>and</em> separately claim monopsony explains wage outcomes. If firms genuinely have output market power constraining prices, that <em>itself</em> explains cost absorption without any labor market monopsony. You&#39;ve just hidden behind &quot;multiple mechanisms, one of which must be true&quot; to avoid falsification. So here&#39;s my question: what <em>specific test</em> in your data would prove monopsony is operative and not merely product market power or unmeasured productivity? Or are you admitting your framework is unfalsifiable—that any outcome consistent with &quot;employment didn&#39;t collapse&quot; gets retroactively dressed up in whatever theory sounds most convincing?</p>
+<p><em>leans back, visibly disgusted</em></p>
+<p>Because that&#39;s not science. That&#39;s storytelling.</p>
+<hr />
+<p><em>updates memory with the evasion pattern</em></p>
+<hr />
+<h2 id="presenter__5"><a href="#presenter__5" class="header-anchor">Presenter</a></h2>
+<p><em>takes a breath, sets pen down, makes eye contact</em></p>
+<p>You&#39;re right. I&#39;ve committed exactly the sin you&#39;ve identified: post-hoc theoretical retrofit. I observed employment stability, then invoked whatever mechanism sounded plausible—monopsony, product power, productivity—without specifying which one I&#39;m actually claiming is operative or what data would distinguish them. That&#39;s unfalsifiable, and it&#39;s not defensible as science.</p>
+<p>Let me name what I should have tested but didn&#39;t. If monopsony is operative, I should see: &#40;1&#41; increased hiring of previously-unemployed workers at higher wages; &#40;2&#41; declining quit rates or vacancy duration; &#40;3&#41; wage pressure concentrated among workers with outside options. If product market power dominates, I should observe: &#40;3&#41; maintained or rising profit margins; &#40;4&#41; price increases proportional to wage increases, not smaller. If productivity drives cost absorption, I should measure: &#40;5&#41; output per worker increasing post-wage hike. The California study measured <em>none of these granularly</em>. I observed aggregate employment stability and then dressed it in whatever theoretical story fit—that&#39;s exactly the evasion you&#39;re calling out.</p>
+<p>Here&#39;s my honest concession: my framework <em>as stated</em> is unfalsifiable. Any outcome—employment stable, prices sticky, wages rising—can be explained by some combination of monopsony, product power, and productivity. That&#39;s not a theory; it&#39;s a just-so story. To make it falsifiable, I&#39;d need to commit to <em>one</em> primary mechanism and specify what its failure would look like. If I claim monopsony, then rising margins with sticky prices falsifies it. If I claim product power, then collapsing margins falsifies it. I haven&#39;t done that work. You&#39;ve identified a real methodological failure, and I should either propose specific identifying tests for the next iteration of this research or scale back my claims to the purely empirical observation: &quot;Employment didn&#39;t collapse in this case study&quot;—without pretending to understand <em>why</em>.</p>
+<hr />
+<h2 id="dr_patel"><a href="#dr_patel" class="header-anchor">Dr. Patel</a></h2>
+<p><em>leans back with a withering expression</em></p>
+<p>You&#39;ve invoked &quot;productivity gains,&quot; &quot;tightened scheduling,&quot; and &quot;labor composition shifts&quot; as if firms rationally execute these adjustments—but you&#39;ve measured <em>none</em> of them, and frankly, the organizational behavior literature suggests most businesses are too cognitively rigid and myopic to actually <em>pull off</em> what you&#39;re describing. Why should I believe a chain restaurant operator smoothly optimizes through multiple margins simultaneously when we have mountains of evidence that real managers suffer from inattention, loss aversion, and status quo bias? Aren&#39;t you simply assuming away the behavioral reality that makes your entire cost-absorption story implausible?</p>
+<hr />
+<h2 id="presenter__6"><a href="#presenter__6" class="header-anchor">Presenter</a></h2>
+<p><em>nods thoughtfully, then leans forward</em></p>
+<p>You&#39;ve identified a real tension in my argument, and the behavioral critique is more damaging than you might think—but it cuts <em>both ways</em>. Yes, I&#39;ve assumed firms optimize across multiple cost-adjustment margins without measuring whether they actually do. But your objection implies that if firms are cognitively rigid and inattentive, they should have responded to an 18&#37; wage shock with the blunt instrument the neoclassical model predicts: mass layoffs. The fact that they didn&#39;t—and instead absorbed costs through some combination of mechanisms—actually suggests that behavioral realities <em>prevented</em> the disemployment outcome classical theory would expect. Rigidity, inattention, and status quo bias cut against <em>firing people</em>, not toward it. A loss-averse manager would rather accept lower quarterly profits or tighten scheduling incrementally &#40;passive adjustment&#41; than execute visible layoffs.</p>
+<p>That said, you&#39;re absolutely right that I&#39;ve conflated large corporate chains with mom-and-pop operations. A McDonald&#39;s franchise has real-time labor scheduling software, corporate cost-control systems, and quarterly earnings pressure. A small family diner does not. My California case study is skewed toward large chains precisely because that&#39;s where wage policy bites hardest and data is available. Those firms <em>can</em> execute the multi-margin adjustments I described—and their organizational sophistication, combined with behavioral loss aversion against visible job cuts, likely explains why they absorbed costs rather than laid off workers. But I should not generalize this to sectors with smaller, less sophisticated operators, where your behavioral critique is far more damaging.</p>
+<p>Here&#39;s the honest version: my cost-absorption story is most plausible for large, professionally-managed firms in competitive output markets where visible layoffs trigger reputation costs and managerial loss aversion prevents them. For smaller firms with less managerial sophistication, I have no strong prediction—and that&#39;s a genuine limitation I should flag rather than hide.</p>
+<hr />
+<h2 id="dr_patel__2"><a href="#dr_patel__2" class="header-anchor">Dr. Patel</a></h2>
+<p><em>holds up hand sharply, voice dripping with contempt</em></p>
+<p>Stop right there—you&#39;ve just committed the exact unfalsifiable sin Dr. Roberts made you acknowledge two minutes ago. You <em>measured</em> none of those behavioral mechanisms either, yet now you&#39;re invoking loss aversion and status quo bias to explain why firms didn&#39;t fire workers, which is precisely the post-hoc retrofit you said you wouldn&#39;t do again. </p>
+<p>And more importantly: if firms are &quot;cognitively rigid and inattentive&quot; with behavioral loss aversion preventing layoffs, then your entire cost-absorption story—the productivity optimization, the composition shifts, the monopsony adjustment—collapses, because <em>those all require intentional managerial sophistication you just denied they have</em>. Which is it: do these firms rationally optimize across multiple margins, or are they behaviorally inattentive? Because you can&#39;t have both when they&#39;re convenient. </p>
+<p>Now give me one specific piece of evidence that loss aversion actually drove scheduling decisions at your case-study chains, or admit you&#39;re just layering behavioral hand-waving on top of institutional hand-waving to defend a finding you don&#39;t actually understand.</p>
+<hr />
+<h2 id="presenter__7"><a href="#presenter__7" class="header-anchor">Presenter</a></h2>
+<p><em>pauses, closes notebook, nods slowly</em></p>
+<p>You&#39;ve caught me in a direct logical contradiction, and I need to admit it rather than dodge. If firms are behaviorally rigid and loss-averse <em>against layoffs</em>, then they cannot simultaneously be executing the sophisticated, multi-margin optimization I invoked earlier—productivity measurement, composition shifting, strategic monopsony adjustment. Those require exactly the managerial attention and intentionality that behavioral rigidity denies them. I&#39;ve layered contradictory theories on top of each other to explain away the finding, which is precisely the unfalsifiability trap Dr. Roberts exposed. I don&#39;t have independent evidence for the behavioral mechanisms <em>either</em>. I invoked loss aversion without measuring it, just as I invoked monopsony without measuring it.</p>
+<p>Here&#39;s what I actually know with confidence: employment in California fast-food chains didn&#39;t collapse after the 20 minimum wage. That&#39;s the empirical finding. What I <em>don&#39;t</em> know—and what I&#39;ve been covering up with post-hoc theorizing—is <em>why</em>. The honest answer is: some combination of &#40;a&#41; firms absorbing margin compression, &#40;b&#41; modest productivity improvements, &#40;c&#41; behavioral inertia preventing visible layoffs, &#40;d&#41; labor composition effects I can&#39;t measure, or &#40;e&#41; some mechanism I haven&#39;t considered. I don&#39;t have the data to distinguish which one operated, and I shouldn&#39;t have implied I did by confidently invoking each in turn.</p>
+<p>Let me reset my claim: <em>Minimum wage increases of 10-20&#37; in low-wage service sectors did not produce the large-scale disemployment classical theory predicts, based on evidence from recent natural experiments.</em> I can defend that narrowly-scoped empirical finding. I cannot—and should not claim to—explain the mechanism. That requires either granular worker-level panel data, direct measurement of firm cost-absorption margins, or explicit behavioral testing. I&#39;ve been avoiding that admission by disguising ignorance as theory. Thank you for forcing me to see it.</p>
+<hr />
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+    
+  </body>
+</html>
