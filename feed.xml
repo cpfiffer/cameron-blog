@@ -61,25 +61,6 @@
 
 <item>
   <title>
-    <![CDATA[  Don&#39;t gaslight your stateful agents  ]]>
-  </title>
-  <link> https://cameron.pfiffer.org/blog/dont-gaslight-your-ai/index.html </link>
-  <guid> https://cameron.pfiffer.org/blog/dont-gaslight-your-ai/index.html </guid>
-  <description>
-    <![CDATA[  Why hiding corrections from your AI agents prevents them from learning. Treat agents like colleagues, not chatbots.  ]]>
-  </description>  
-    
-  <pubDate>Wed, 05 Nov 2025 00:00:00 +0000</pubDate>  
-  
-  
-  <atom:author>
-    <atom:name>Cameron Pfiffer</atom:name>
-  </atom:author>
-        
-</item>
-
-<item>
-  <title>
     <![CDATA[  Models for production AI  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/production-ai-landscape/index.html </link>

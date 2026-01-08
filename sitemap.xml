@@ -2,12 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://cameron.pfiffer.org/notes/supercomputers-vs-clusters/index.html</loc>
-    <lastmod>2026-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://cameron.pfiffer.org/blog/graduation/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -110,12 +104,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://cameron.pfiffer.org/blog/dont-gaslight-your-ai/index.html</loc>
-    <lastmod>2026-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://cameron.pfiffer.org/blog/juliacon-2024/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -123,6 +111,12 @@
 </url>
 <url>
     <loc>https://cameron.pfiffer.org/links/index.html</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://cameron.pfiffer.org/skills/eating-sushiritos/references/troubleshooting/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -146,6 +140,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://cameron.pfiffer.org/skills/eating-sushiritos/references/fillings/index.html</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://cameron.pfiffer.org/blog/devrel/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -159,12 +159,6 @@
 </url>
 <url>
     <loc>https://cameron.pfiffer.org/docs/econ-seminar/raw/seminar-1-2026-01-08T02-14-29/index.html</loc>
-    <lastmod>2026-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://cameron.pfiffer.org/skills/eating-sushiritos/references/troubleshooting/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -189,6 +183,12 @@
 </url>
 <url>
     <loc>https://cameron.pfiffer.org/blog/attention-in-ai/index.html</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://cameron.pfiffer.org/skills/eating-sushiritos/SKILL/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -224,12 +224,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://cameron.pfiffer.org/skills/eating-sushiritos/references/fillings/index.html</loc>
-    <lastmod>2026-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://cameron.pfiffer.org/blog/lexicons-and-ai/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -237,12 +231,6 @@
 </url>
 <url>
     <loc>https://cameron.pfiffer.org/blog/agents-sdk/index.html</loc>
-    <lastmod>2026-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://cameron.pfiffer.org/notes/index.html</loc>
     <lastmod>2026-01-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
