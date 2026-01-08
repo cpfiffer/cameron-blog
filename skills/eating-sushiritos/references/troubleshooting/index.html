@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Sushirito Troubleshooting Guide</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content"><h1 id="sushirito_troubleshooting_guide"><a href="#sushirito_troubleshooting_guide" class="header-anchor">Sushirito Troubleshooting Guide</a></h1>
+<p>Solving common problems and disaster recovery.</p>
+<h2 id="table_of_contents"><a href="#table_of_contents" class="header-anchor">Table of Contents</a></h2>
+<ul>
+<li><p><a href="#structural-failures">Structural Failures</a></p>
+</li>
+<li><p><a href="#wrapper-problems">Wrapper Problems</a></p>
+</li>
+<li><p><a href="#filling-issues">Filling Issues</a></p>
+</li>
+<li><p><a href="#mess-management">Mess Management</a></p>
+</li>
+<li><p><a href="#emergency-protocols">Emergency Protocols</a></p>
+</li>
+</ul>
+<h2 id="structural_failures"><a href="#structural_failures" class="header-anchor">Structural Failures</a></h2>
+<h3 id="problem_rice_falling_out_the_bottom"><a href="#problem_rice_falling_out_the_bottom" class="header-anchor">Problem: Rice Falling Out the Bottom</a></h3>
+<p><strong>Cause</strong>: Too much filling, not enough wrapper support, or holding at wrong angle</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Immediately rotate 180° and eat from other end</p>
+</li>
+<li><p>Place on napkin nest and compress gently</p>
+</li>
+<li><p>If beyond repair: fork and knife &#40;no shame&#41;</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>: </p>
+<ul>
+<li><p>Never hold completely vertical</p>
+</li>
+<li><p>Support from below always</p>
+</li>
+<li><p>Don&#39;t order &quot;extra&quot; anything</p>
+</li>
+</ul>
+<h3 id="problem_everything_squeezing_out_the_ends"><a href="#problem_everything_squeezing_out_the_ends" class="header-anchor">Problem: Everything Squeezing Out the Ends</a></h3>
+<p><strong>Cause</strong>: Gripping too hard, uneven filling distribution</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Loosen grip immediately</p>
+</li>
+<li><p>Use palms, not fingers, to support</p>
+</li>
+<li><p>Eat problematic end first</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Gentle support, not compression</p>
+</li>
+<li><p>Check weight distribution when you first pick it up</p>
+</li>
+<li><p>If one end feels heavier, eat that end first</p>
+</li>
+</ul>
+<h3 id="problem_split_in_the_middle"><a href="#problem_split_in_the_middle" class="header-anchor">Problem: Split in the Middle</a></h3>
+<p><strong>Cause</strong>: Too much sauce, weak spot in wrapper, or angled bite</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Stop eating from that section</p>
+</li>
+<li><p>Flip and eat from opposite end</p>
+</li>
+<li><p>When you reach the split, use fork or fold it like a taco</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Bite perpendicular, never at angle</p>
+</li>
+<li><p>Always request light sauce</p>
+</li>
+<li><p>Check wrapper for weak spots before first bite</p>
+</li>
+</ul>
+<h2 id="wrapper_problems"><a href="#wrapper_problems" class="header-anchor">Wrapper Problems</a></h2>
+<h3 id="problem_nori_seaweed_wont_bite_through"><a href="#problem_nori_seaweed_wont_bite_through" class="header-anchor">Problem: Nori &#40;Seaweed&#41; Won&#39;t Bite Through</a></h3>
+<p><strong>Cause</strong>: Old or humid nori, too thick of wrapper</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Use teeth to score a line across</p>
+</li>
+<li><p>Pull gently while biting &#40;controlled tear&#41;</p>
+</li>
+<li><p>Switch to pulling small pieces off with fingers</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Order during off-peak &#40;fresher nori&#41;</p>
+</li>
+<li><p>Ask if nori is fresh that day</p>
+</li>
+<li><p>Consider soy paper wrapper instead</p>
+</li>
+</ul>
+<h3 id="problem_wrapper_sticking_to_filling"><a href="#problem_wrapper_sticking_to_filling" class="header-anchor">Problem: Wrapper Sticking to Filling</a></h3>
+<p><strong>Cause</strong>: Too much moisture, sauce soaking through</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Don&#39;t force it - peeling makes it worse</p>
+</li>
+<li><p>Take smaller bites, wrapper and all</p>
+</li>
+<li><p>If it&#39;s really stuck, eat it together &#40;it&#39;s edible&#41;</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Order sauce on side</p>
+</li>
+<li><p>Eat within 5 minutes of receiving &#40;clock starts at counter&#41;</p>
+</li>
+<li><p>Don&#39;t let it sit - nori absorbs moisture fast</p>
+</li>
+</ul>
+<h3 id="problem_soy_paper_tearing"><a href="#problem_soy_paper_tearing" class="header-anchor">Problem: Soy Paper Tearing</a></h3>
+<p><strong>Cause</strong>: Soy paper is more delicate than nori</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Extremely gentle handling required</p>
+</li>
+<li><p>Use napkin nest method religiously</p>
+</li>
+<li><p>Consider this wrapper expert mode</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Only order soy paper if experienced</p>
+</li>
+<li><p>Always eat immediately &#40;soy paper degrades faster&#41;</p>
+</li>
+<li><p>Don&#39;t order soy paper for delivery ever</p>
+</li>
+</ul>
+<h2 id="filling_issues"><a href="#filling_issues" class="header-anchor">Filling Issues</a></h2>
+<h3 id="problem_all_protein_in_one_bite_then_all_rice"><a href="#problem_all_protein_in_one_bite_then_all_rice" class="header-anchor">Problem: All Protein in One Bite, Then All Rice</a></h3>
+<p><strong>Cause</strong>: Uneven filling distribution by staff</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Before first bite, gently squeeze/massage to distribute</p>
+</li>
+<li><p>Rotate burrito as you eat to hit different sections</p>
+</li>
+<li><p>Cut in half with knife if distribution is really bad</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Watch them make it - if you see uneven layering, speak up</p>
+</li>
+<li><p>Order during off-peak when staff can take more care</p>
+</li>
+<li><p>Stick to restaurants with good reviews for consistency</p>
+</li>
+</ul>
+<h3 id="problem_too_spicysalty"><a href="#problem_too_spicysalty" class="header-anchor">Problem: Too Spicy/Salty</a></h3>
+<p><strong>Cause</strong>: Too much sauce or too much soy sauce</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Order a side of plain rice to eat between bites</p>
+</li>
+<li><p>Get water, not soda &#40;sugar makes spice worse&#41;</p>
+</li>
+<li><p>Avocado helps cut spice - order on the side if needed</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Always say &quot;light sauce&quot;</p>
+</li>
+<li><p>Never ask for soy sauce inside</p>
+</li>
+<li><p>If ordering spicy option, ask how spicy it is</p>
+</li>
+</ul>
+<h3 id="problem_too_bland"><a href="#problem_too_bland" class="header-anchor">Problem: Too Bland</a></h3>
+<p><strong>Cause</strong>: Not enough sauce, missing acid/brightness</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Ask for sauce on the side - add gradually</p>
+</li>
+<li><p>Soy sauce for dipping &#40;not pouring on&#41;</p>
+</li>
+<li><p>Pickled ginger between bites</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Order at least one sauce</p>
+</li>
+<li><p>Include pickled vegetables</p>
+</li>
+<li><p>Green onion adds brightness</p>
+</li>
+</ul>
+<h2 id="mess_management"><a href="#mess_management" class="header-anchor">Mess Management</a></h2>
+<h3 id="problem_sauce_dripping_on_clothes"><a href="#problem_sauce_dripping_on_clothes" class="header-anchor">Problem: Sauce Dripping on Clothes</a></h3>
+<p><strong>Cause</strong>: Too much sauce, holding at wrong angle</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Tuck napkin into collar immediately &#40;bib style&#41;</p>
+</li>
+<li><p>Lean over plate/napkins, not over lap</p>
+</li>
+<li><p>Keep emergency stain wipes in bag</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Always use napkin nest</p>
+</li>
+<li><p>Eat leaning forward, elbows on table</p>
+</li>
+<li><p>Sauce on side only</p>
+</li>
+</ul>
+<h3 id="problem_rice_everywhere_on_table"><a href="#problem_rice_everywhere_on_table" class="header-anchor">Problem: Rice Everywhere on Table</a></h3>
+<p><strong>Cause</strong>: Structural failure, aggressive biting</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>Clean as you go - push rice onto napkin nest</p>
+</li>
+<li><p>Ask for extra napkins mid-meal</p>
+</li>
+<li><p>Eat remaining rice with fork at end</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Proper napkin nest setup from start</p>
+</li>
+<li><p>Smaller, controlled bites</p>
+</li>
+<li><p>Don&#39;t eat while walking/moving</p>
+</li>
+</ul>
+<h3 id="problem_hands_covered_in_saucerice"><a href="#problem_hands_covered_in_saucerice" class="header-anchor">Problem: Hands Covered in Sauce/Rice</a></h3>
+<p><strong>Cause</strong>: Normal sushirito eating</p>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li><p>This is expected - embrace it</p>
+</li>
+<li><p>Keep wet wipes nearby</p>
+</li>
+<li><p>Eat with one hand, keep other clean for phone/door</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Can&#39;t fully prevent this</p>
+</li>
+<li><p>It&#39;s part of the experience</p>
+</li>
+<li><p>Some places provide gloves &#40;use them&#41;</p>
+</li>
+</ul>
+<h2 id="emergency_protocols"><a href="#emergency_protocols" class="header-anchor">Emergency Protocols</a></h2>
+<h3 id="critical_failure_complete_structural_collapse"><a href="#critical_failure_complete_structural_collapse" class="header-anchor">Critical Failure: Complete Structural Collapse</a></h3>
+<p><strong>What happened</strong>: It&#39;s everywhere. Total disaster.</p>
+<p><strong>Emergency Response</strong>:</p>
+<ol>
+<li><p>Don&#39;t panic - this happens to everyone eventually</p>
+</li>
+<li><p>Push everything into napkin nest/bowl</p>
+</li>
+<li><p>Eat with fork - it&#39;s now a &quot;deconstructed sushirito&quot;</p>
+</li>
+<li><p>Next time: order a poke bowl &#40;same ingredients, better format&#41;</p>
+</li>
+</ol>
+<p><strong>Learning moment</strong>: What went wrong? Too much sauce? Wrong wrapper? Bad bite technique? Apply lesson to next attempt.</p>
+<h3 id="social_disaster_collapse_during_business_lunch"><a href="#social_disaster_collapse_during_business_lunch" class="header-anchor">Social Disaster: Collapse During Business Lunch</a></h3>
+<p><strong>What happened</strong>: It fell apart in front of clients/colleagues</p>
+<p><strong>Emergency Response</strong>:</p>
+<ol>
+<li><p>Make a joke: &quot;This is why I usually get poke bowls&quot;</p>
+</li>
+<li><p>Switch to fork immediately and confidently</p>
+</li>
+<li><p>Offer to get extra napkins for table &#40;helpful recovery&#41;</p>
+</li>
+<li><p>Continue conversation like nothing happened</p>
+</li>
+</ol>
+<p><strong>Prevention for future</strong>:</p>
+<ul>
+<li><p>Never order sushirito for business meals</p>
+</li>
+<li><p>Stick to poke bowls or traditional sushi for professional settings</p>
+</li>
+<li><p>Save sushiritos for casual solo/friend meals</p>
+</li>
+</ul>
+<h3 id="delivery_disaster_arrived_completely_destroyed"><a href="#delivery_disaster_arrived_completely_destroyed" class="header-anchor">Delivery Disaster: Arrived Completely Destroyed</a></h3>
+<p><strong>What happened</strong>: Opened container to find chaos</p>
+<p><strong>Response</strong>:</p>
+<ol>
+<li><p>Take photo for potential refund request</p>
+</li>
+<li><p>Eat with fork - it still tastes good</p>
+</li>
+<li><p>Don&#39;t try to reassemble &#40;makes it worse&#41;</p>
+</li>
+<li><p>Leave review noting packaging issue</p>
+</li>
+</ol>
+<p><strong>Prevention</strong>:</p>
+<ul>
+<li><p>Don&#39;t order sushiritos for delivery</p>
+</li>
+<li><p>If you must: only from very close restaurants &#40;&lt;10 min&#41;</p>
+</li>
+<li><p>Consider poke bowls instead for delivery</p>
+</li>
+</ul>
+<h2 id="expert_recovery_techniques"><a href="#expert_recovery_techniques" class="header-anchor">Expert Recovery Techniques</a></h2>
+<h3 id="the_controlled_fold"><a href="#the_controlled_fold" class="header-anchor">The Controlled Fold</a></h3>
+<p>When structural integrity is compromised but not catastrophic:</p>
+<ol>
+<li><p>Fold wrapper over exposed section like a taco</p>
+</li>
+<li><p>Eat from the new &quot;top&quot; edge</p>
+</li>
+<li><p>Keeps filling contained while you finish</p>
+</li>
+</ol>
+<h3 id="the_strategic_sacrifice"><a href="#the_strategic_sacrifice" class="header-anchor">The Strategic Sacrifice</a></h3>
+<p>When one end is failing:</p>
+<ol>
+<li><p>Let that end fail completely onto napkin nest</p>
+</li>
+<li><p>Focus on eating the intact end</p>
+</li>
+<li><p>Eat fallen bits with fork at the end</p>
+</li>
+<li><p>You&#39;ve saved 75&#37; of burrito - that&#39;s a win</p>
+</li>
+</ol>
+<h3 id="the_fork_transition"><a href="#the_fork_transition" class="header-anchor">The Fork Transition</a></h3>
+<p>Knowing when to surrender:</p>
+<ol>
+<li><p>If you&#39;ve spent more time managing than eating: fork time</p>
+</li>
+<li><p>If more than 30&#37; has fallen out: fork time</p>
+</li>
+<li><p>If you&#39;re stressed instead of enjoying: fork time</p>
+</li>
+</ol>
+<p><strong>Wisdom</strong>: There&#39;s no shame in using a fork. The goal is to enjoy your meal, not prove your hand-roll skills.</p>
+<h2 id="when_to_give_up_and_order_a_bowl"><a href="#when_to_give_up_and_order_a_bowl" class="header-anchor">When to Give Up and Order a Bowl</a></h2>
+<h3 id="signs_you_should_order_a_bowl_instead"><a href="#signs_you_should_order_a_bowl_instead" class="header-anchor">Signs You Should Order a Bowl Instead</a></h3>
+<ul>
+<li><p>You&#39;re eating during a meeting or while working</p>
+</li>
+<li><p>You&#39;re wearing nice clothes</p>
+</li>
+<li><p>You&#39;re in a car &#40;never eat sushirito in car&#41;</p>
+</li>
+<li><p>It&#39;s being delivered</p>
+</li>
+<li><p>You&#39;ve had 3&#43; structural failures in a row</p>
+</li>
+<li><p>You want to eat while walking</p>
+</li>
+</ul>
+<p><strong>Truth</strong>: Poke bowls have all the same ingredients, taste just as good, and are 90&#37; less likely to end in disaster. Sometimes the bowl is the right choice.</p>
+<h2 id="practice_makes_perfect"><a href="#practice_makes_perfect" class="header-anchor">Practice Makes Perfect</a></h2>
+<h3 id="skill_progression"><a href="#skill_progression" class="header-anchor">Skill Progression</a></h3>
+<ol>
+<li><p><strong>Beginner</strong>: Shrimp, cucumber, white rice, nori wrapper, light sauce</p>
+</li>
+<li><p><strong>Intermediate</strong>: Salmon, multiple veggies, soy paper, moderate sauce</p>
+</li>
+<li><p><strong>Advanced</strong>: Multiple fish, complex builds, eating while standing</p>
+</li>
+<li><p><strong>Expert</strong>: Delivery sushirrito that still works &#40;this may be impossible&#41;</p>
+</li>
+</ol>
+<p><strong>Remember</strong>: Everyone has structural failures. The difference is experienced eaters know how to recover gracefully.</p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

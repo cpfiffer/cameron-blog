@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Sushirito Fillings Guide</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content"><h1 id="sushirito_fillings_guide"><a href="#sushirito_fillings_guide" class="header-anchor">Sushirito Fillings Guide</a></h1>
+<p>Comprehensive guide to filling combinations, flavor profiles, and what works structurally.</p>
+<h2 id="table_of_contents"><a href="#table_of_contents" class="header-anchor">Table of Contents</a></h2>
+<ul>
+<li><p><a href="#classic-combinations">Classic Combinations</a></p>
+</li>
+<li><p><a href="#protein-guide">Protein Guide</a></p>
+</li>
+<li><p><a href="#vegetable-strategy">Vegetable Strategy</a></p>
+</li>
+<li><p><a href="#sauce-science">Sauce Science</a></p>
+</li>
+<li><p><a href="#regional-variations">Regional Variations</a></p>
+</li>
+</ul>
+<h2 id="classic_combinations"><a href="#classic_combinations" class="header-anchor">Classic Combinations</a></h2>
+<h3 id="the_california"><a href="#the_california" class="header-anchor">The California</a></h3>
+<ul>
+<li><p>Imitation crab</p>
+</li>
+<li><p>Avocado</p>
+</li>
+<li><p>Cucumber</p>
+</li>
+<li><p>White rice</p>
+</li>
+<li><p>Soy paper or nori</p>
+</li>
+</ul>
+<p><strong>Why it works</strong>: Creamy avocado &#43; crunchy cucumber balance. Imitation crab sticks together well.</p>
+<h3 id="the_spicy_tuna"><a href="#the_spicy_tuna" class="header-anchor">The Spicy Tuna</a></h3>
+<ul>
+<li><p>Spicy tuna &#40;tuna &#43; sriracha mayo&#41;</p>
+</li>
+<li><p>Cucumber</p>
+</li>
+<li><p>Avocado</p>
+</li>
+<li><p>White rice</p>
+</li>
+<li><p>Nori wrapper</p>
+</li>
+</ul>
+<p><strong>Warning</strong>: Pre-mixed spicy tuna is wet. Skip additional sauce.</p>
+<h3 id="the_crispy_shrimp"><a href="#the_crispy_shrimp" class="header-anchor">The Crispy Shrimp</a></h3>
+<ul>
+<li><p>Tempura shrimp</p>
+</li>
+<li><p>Avocado</p>
+</li>
+<li><p>Lettuce or cabbage</p>
+</li>
+<li><p>Spicy mayo &#40;light&#41;</p>
+</li>
+<li><p>White rice</p>
+</li>
+</ul>
+<p><strong>Pro tip</strong>: Tempura texture contrasts nicely but can be hard to bite. Ask for shrimp cut in half lengthwise.</p>
+<h2 id="protein_guide"><a href="#protein_guide" class="header-anchor">Protein Guide</a></h2>
+<h3 id="raw_fish"><a href="#raw_fish" class="header-anchor">Raw Fish</a></h3>
+<p><strong>Salmon</strong>:</p>
+<ul>
+<li><p>Fatty, rich, holds shape</p>
+</li>
+<li><p>Pairs well with avocado, cucumber</p>
+</li>
+<li><p>Difficulty: Medium</p>
+</li>
+</ul>
+<p><strong>Tuna</strong>:</p>
+<ul>
+<li><p>Lean, clean flavor</p>
+</li>
+<li><p>Can be dry - needs creamy element</p>
+</li>
+<li><p>Difficulty: Medium</p>
+</li>
+</ul>
+<p><strong>Yellowtail</strong>:</p>
+<ul>
+<li><p>Buttery, delicate</p>
+</li>
+<li><p>Harder to bite cleanly</p>
+</li>
+<li><p>Difficulty: Hard</p>
+</li>
+</ul>
+<h3 id="cooked_options"><a href="#cooked_options" class="header-anchor">Cooked Options</a></h3>
+<p><strong>Shrimp</strong>:</p>
+<ul>
+<li><p>Clean, slightly chewy</p>
+</li>
+<li><p>Easy to bite through</p>
+</li>
+<li><p>Best choice for beginners</p>
+</li>
+</ul>
+<p><strong>Eel &#40;Unagi&#41;</strong>:</p>
+<ul>
+<li><p>Pre-sauced, very soft</p>
+</li>
+<li><p>Sweet flavor, tender texture</p>
+</li>
+<li><p>Warning: Extra sauce makes it slippery</p>
+</li>
+</ul>
+<p><strong>Tofu</strong>:</p>
+<ul>
+<li><p>Vegetarian option</p>
+</li>
+<li><p>Can be bland - needs strong flavors</p>
+</li>
+<li><p>Very easy to eat structurally</p>
+</li>
+</ul>
+<h2 id="vegetable_strategy"><a href="#vegetable_strategy" class="header-anchor">Vegetable Strategy</a></h2>
+<h3 id="essential_structure_vegetables"><a href="#essential_structure_vegetables" class="header-anchor">Essential Structure Vegetables</a></h3>
+<p>These provide crunch and structure:</p>
+<ul>
+<li><p><strong>Cucumber</strong>: Crunchy, hydrating, neutral flavor ⭐</p>
+</li>
+<li><p><strong>Carrot &#40;julienned&#41;</strong>: Adds sweetness and snap</p>
+</li>
+<li><p><strong>Cabbage</strong>: Cheap filler but adds good crunch</p>
+</li>
+</ul>
+<h3 id="flavor_vegetables"><a href="#flavor_vegetables" class="header-anchor">Flavor Vegetables</a></h3>
+<p>Add these for taste:</p>
+<ul>
+<li><p><strong>Avocado</strong>: Creamy, rich - but makes things slippery</p>
+</li>
+<li><p><strong>Pickled vegetables</strong>: Adds acid and brightness</p>
+</li>
+<li><p><strong>Green onion</strong>: Sharp flavor, minimal structure</p>
+</li>
+</ul>
+<h3 id="what_to_avoid"><a href="#what_to_avoid" class="header-anchor">What to Avoid</a></h3>
+<ul>
+<li><p><strong>Lettuce</strong>: Wilts fast, adds water</p>
+</li>
+<li><p><strong>Tomato</strong>: Too wet, destroys wrapper integrity</p>
+</li>
+<li><p><strong>Bean sprouts</strong>: Slippery, escape easily</p>
+</li>
+</ul>
+<h2 id="sauce_science"><a href="#sauce_science" class="header-anchor">Sauce Science</a></h2>
+<h3 id="safe_sauces_thick_controllable"><a href="#safe_sauces_thick_controllable" class="header-anchor">Safe Sauces &#40;Thick, Controllable&#41;</a></h3>
+<ul>
+<li><p>Spicy mayo</p>
+</li>
+<li><p>Eel sauce &#40;unagi sauce&#41;</p>
+</li>
+<li><p>Sriracha &#40;small amounts&#41;</p>
+</li>
+</ul>
+<h3 id="dangerous_sauces_thin_soaks_wrapper"><a href="#dangerous_sauces_thin_soaks_wrapper" class="header-anchor">Dangerous Sauces &#40;Thin, Soaks Wrapper&#41;</a></h3>
+<ul>
+<li><p>Soy sauce &#40;NEVER inside&#41;</p>
+</li>
+<li><p>Ponzu</p>
+</li>
+<li><p>Regular mayo</p>
+</li>
+<li><p>Wasabi cream &#40;too thin&#41;</p>
+</li>
+</ul>
+<h3 id="the_sauce_rule"><a href="#the_sauce_rule" class="header-anchor">The Sauce Rule</a></h3>
+<p><strong>Maximum 1 sauce, applied lightly</strong>. If ordering multiple ingredients &quot;with sauce,&quot; each adds wetness. Stick to one sauce type total.</p>
+<h2 id="regional_variations"><a href="#regional_variations" class="header-anchor">Regional Variations</a></h2>
+<h3 id="san_francisco_bay_area"><a href="#san_francisco_bay_area" class="header-anchor">San Francisco Bay Area</a></h3>
+<p>Origin of the sushirito. Most options available.</p>
+<ul>
+<li><p><strong>Sushirrito</strong> &#40;the chain&#41;: Large, heavily filled - difficulty: Hard</p>
+</li>
+<li><p>Try: &quot;Geisha&#39;s Kiss&quot; or custom build with light sauce</p>
+</li>
+</ul>
+<h3 id="southern_california"><a href="#southern_california" class="header-anchor">Southern California</a></h3>
+<p>Tends toward fusion and bold flavors.</p>
+<ul>
+<li><p>Common: Hot Cheetos crusted options &#40;very messy&#41;</p>
+</li>
+<li><p>Watch for: &quot;California-style&quot; means more mayo</p>
+</li>
+</ul>
+<h3 id="east_coast"><a href="#east_coast" class="header-anchor">East Coast</a></h3>
+<p>Smaller portions, more traditional flavors.</p>
+<ul>
+<li><p>Less experimental</p>
+</li>
+<li><p>Better rice quality on average</p>
+</li>
+</ul>
+<h3 id="midwest"><a href="#midwest" class="header-anchor">Midwest</a></h3>
+<p>Newer to the scene, conservative options.</p>
+<ul>
+<li><p>Cooked proteins more common</p>
+</li>
+<li><p>Expect fewer adventurous choices</p>
+</li>
+</ul>
+<h2 id="custom_build_strategy"><a href="#custom_build_strategy" class="header-anchor">Custom Build Strategy</a></h2>
+<p>When building from scratch:</p>
+<ol>
+<li><p><strong>Base</strong>: White rice</p>
+</li>
+<li><p><strong>Protein</strong>: One only - salmon or shrimp recommended</p>
+</li>
+<li><p><strong>Crunch</strong>: Cucumber &#43; carrot</p>
+</li>
+<li><p><strong>Cream</strong>: Avocado OR sauce, not both</p>
+</li>
+<li><p><strong>Accent</strong>: Pickled ginger or green onion</p>
+</li>
+<li><p><strong>Wrapper</strong>: Nori &#40;traditional seaweed&#41;</p>
+</li>
+</ol>
+<p><strong>Total ingredients</strong>: 5-6 max. More &#61; structural failure.</p>
+<h2 id="mistakes_to_avoid"><a href="#mistakes_to_avoid" class="header-anchor">Mistakes to Avoid</a></h2>
+<h3 id="the_everything_build"><a href="#the_everything_build" class="header-anchor">The &quot;Everything&quot; Build</a></h3>
+<p>Asking for &quot;a little of everything&quot; creates:</p>
+<ul>
+<li><p>Uneven density</p>
+</li>
+<li><p>Conflicting flavors</p>
+</li>
+<li><p>Structural chaos</p>
+</li>
+<li><p>Impossible-to-bite-through thickness</p>
+</li>
+</ul>
+<h3 id="double_protein"><a href="#double_protein" class="header-anchor">Double Protein</a></h3>
+<p>Two proteins sound good but create problems:</p>
+<ul>
+<li><p>Uneven thickness</p>
+</li>
+<li><p>One always tastes better, making other feel wasted</p>
+</li>
+<li><p>Harder to bite through</p>
+</li>
+</ul>
+<h3 id="extra_anything"><a href="#extra_anything" class="header-anchor">&quot;Extra&quot; Anything</a></h3>
+<p>&quot;Extra spicy mayo&quot; &#61; disaster &quot;Extra avocado&quot; &#61; slippery mess &quot;Extra rice&quot; &#61; can&#39;t fit in mouth</p>
+<p><strong>Rule</strong>: Never say &quot;extra&quot; when ordering a sushirito.</p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>
