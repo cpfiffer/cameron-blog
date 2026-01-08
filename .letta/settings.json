@@ -1,0 +1,14 @@
+{
+  "localSharedBlockIds": {
+    "project": "block-5750602d-afec-4c5b-85d2-b7366b0d48d2",
+    "skills": "block-c8c33665-5ad5-4422-94fc-71734ac73f04"
+  },
+  "permissions": {
+    "allow": [
+      "Edit(blog/**)",
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(git restore:*)"
+    ]
+  }
+}
