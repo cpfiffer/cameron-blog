@@ -2,6 +2,11 @@
 
 [← Back to Skills](/skills/)
 
+```yaml
+name: eating-sushiritos
+description: Complete guide for enjoying sushiritos - from choosing fillings and ordering to eating technique and cleanup. Use when someone asks about sushiritos, burrito-style sushi, how to eat large hand-rolled items without making a mess, or sushi burrito recommendations.
+```
+
 ---
 
 # Eating Sushiritos
