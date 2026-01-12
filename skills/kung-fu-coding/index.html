@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+         
+        <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Kung-Fu Coding</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/skills/">skills</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content"><p><a href="/skills/">← Back to Skills</a></p>
+<pre><code class="language-yaml">name: kung-fu-coding
+description: Apply martial arts principles and philosophies to software development. Use when writing code with discipline, balance, and mastery - emphasizing flow, economy of motion, defensive patterns, and continuous practice. Helps approach coding as a martial art through deliberate, mindful refinement.</code></pre>
+<hr />
+<h1 id="kung-fu_coding"><a href="#kung-fu_coding" class="header-anchor">Kung-Fu Coding</a></h1>
+<p>This skill applies ancient martial arts principles to modern software development. Code like a martial artist: with discipline, awareness, and continuous refinement.</p>
+<h2 id="core_principles"><a href="#core_principles" class="header-anchor">Core Principles</a></h2>
+<h3 id="wu_wei_effortless_action"><a href="#wu_wei_effortless_action" class="header-anchor">Wu Wei &#40;Effortless Action&#41;</a></h3>
+<p><strong>Philosophy</strong>: The best code flows naturally without force or unnecessary complexity.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p>Prefer simple solutions over clever ones</p>
+</li>
+<li><p>Let the problem guide the design, don&#39;t force patterns</p>
+</li>
+<li><p>Write code that feels inevitable, not contrived</p>
+</li>
+<li><p>Avoid over-engineering - complexity is resistance</p>
+</li>
+</ul>
+<p><strong>Signs of Wu Wei</strong>:</p>
+<ul>
+<li><p>Code reads like prose</p>
+</li>
+<li><p>Solutions feel obvious in hindsight</p>
+</li>
+<li><p>Minimal cognitive load</p>
+</li>
+<li><p>Natural flow from input to output</p>
+</li>
+</ul>
+<h3 id="balance_yin-yang"><a href="#balance_yin-yang" class="header-anchor">Balance &#40;Yin-Yang&#41;</a></h3>
+<p><strong>Philosophy</strong>: All things contain opposing forces. Mastery is finding harmony between extremes.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p><strong>Flexibility vs. Rigidity</strong>: Extensible but not over-abstracted</p>
+</li>
+<li><p><strong>DRY vs. Clarity</strong>: Reuse code but not at the cost of understanding</p>
+</li>
+<li><p><strong>Performance vs. Maintainability</strong>: Fast enough, readable always</p>
+</li>
+<li><p><strong>Abstraction vs. Concreteness</strong>: Hide complexity but not intent</p>
+</li>
+<li><p><strong>Speed vs. Quality</strong>: Ship quickly but with discipline</p>
+</li>
+</ul>
+<p><strong>Practice</strong>:</p>
+<ul>
+<li><p>Question every absolute &#40;&quot;always,&quot; &quot;never&quot;&#41;</p>
+</li>
+<li><p>Look for the middle path when stuck between extremes</p>
+</li>
+<li><p>Recognize when an imbalance causes pain</p>
+</li>
+</ul>
+<h3 id="economy_of_motion"><a href="#economy_of_motion" class="header-anchor">Economy of Motion</a></h3>
+<p><strong>Philosophy</strong>: A master wastes nothing. Every movement has purpose.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p>Remove code that doesn&#39;t serve a clear purpose</p>
+</li>
+<li><p>One responsibility per function, class, module</p>
+</li>
+<li><p>Minimize dependencies and coupling</p>
+</li>
+<li><p>Delete more than you add when refactoring</p>
+</li>
+<li><p>Every line of code is a liability - justify its existence</p>
+</li>
+</ul>
+<p><strong>Warning Signs</strong>:</p>
+<ul>
+<li><p>Long parameter lists &#40;wasted motion in passing data&#41;</p>
+</li>
+<li><p>Deep nesting &#40;inefficient traversal&#41;</p>
+</li>
+<li><p>Repeated patterns &#40;wasted energy on duplication&#41;</p>
+</li>
+<li><p>Verbose names hiding unclear purpose</p>
+</li>
+</ul>
+<h3 id="defensive_stance"><a href="#defensive_stance" class="header-anchor">Defensive Stance</a></h3>
+<p><strong>Philosophy</strong>: A master protects against attacks before they come.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p><strong>Guard Clauses</strong>: Validate at boundaries, fail fast</p>
+</li>
+<li><p><strong>Defensive Copying</strong>: Protect internal state from external mutation</p>
+</li>
+<li><p><strong>Type Safety</strong>: Let the compiler be your sparring partner</p>
+</li>
+<li><p><strong>Error Handling</strong>: Anticipate failure modes, handle gracefully</p>
+</li>
+<li><p><strong>Input Validation</strong>: Trust nothing from outside your control</p>
+</li>
+</ul>
+<p><strong>Pattern</strong>:</p>
+<pre><code class="language-javascript">// Guard at the gate
+function process&#40;data&#41; &#123;
+  if &#40;&#33;data&#41; return null;           // Stance: protect against empty
+  if &#40;&#33;isValid&#40;data&#41;&#41; throw error;  // Stance: reject invalid
+  
+  // Now proceed safely
+  return transform&#40;data&#41;;
+&#125;</code></pre>
+<h3 id="kata_forms"><a href="#kata_forms" class="header-anchor">Kata &#40;Forms&#41;</a></h3>
+<p><strong>Philosophy</strong>: Mastery comes through deliberate practice of fundamental patterns.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p><strong>Design Patterns</strong>: Fighting styles to master and deploy appropriately</p>
+</li>
+<li><p><strong>Refactoring Patterns</strong>: Forms to perfect through repetition</p>
+</li>
+<li><p><strong>Code Review</strong>: Critique form, not just function</p>
+</li>
+<li><p><strong>Testing</strong>: Practice against adversarial conditions</p>
+</li>
+</ul>
+<p><strong>Common Katas</strong>:</p>
+<ul>
+<li><p>Extract method/function &#40;breaking down complexity&#41;</p>
+</li>
+<li><p>Replace conditional with polymorphism &#40;strategic choice of style&#41;</p>
+</li>
+<li><p>Introduce parameter object &#40;gathering scattered energy&#41;</p>
+</li>
+<li><p>Inline temporary &#40;removing unnecessary motion&#41;</p>
+</li>
+</ul>
+<h3 id="zanshin_awareness"><a href="#zanshin_awareness" class="header-anchor">Zanshin &#40;Awareness&#41;</a></h3>
+<p><strong>Philosophy</strong>: Maintain full awareness of your surroundings before, during, and after action.</p>
+<p><strong>Application</strong>:</p>
+<ul>
+<li><p><strong>Before Writing</strong>: Understand the full context, dependencies, impact</p>
+</li>
+<li><p><strong>While Writing</strong>: Stay aware of edge cases, performance, security implications</p>
+</li>
+<li><p><strong>After Writing</strong>: Consider maintenance burden, team understanding, future evolution</p>
+</li>
+<li><p><strong>Code Review</strong>: Read with full attention to ripple effects</p>
+</li>
+<li><p><strong>Refactoring</strong>: Maintain awareness of what depends on what you&#39;re changing</p>
+</li>
+</ul>
+<p><strong>Practice</strong>:</p>
+<ul>
+<li><p>Pause before coding to visualize the full solution</p>
+</li>
+<li><p>Ask &quot;what could go wrong?&quot; before committing</p>
+</li>
+<li><p>Trace the flow from entry to exit</p>
+</li>
+<li><p>Consider who will read this code in 6 months</p>
+</li>
+</ul>
+<h2 id="practical_applications"><a href="#practical_applications" class="header-anchor">Practical Applications</a></h2>
+<h3 id="code_review_as_sparring"><a href="#code_review_as_sparring" class="header-anchor">Code Review as Sparring</a></h3>
+<p>Review code through these lenses:</p>
+<ol>
+<li><p><strong>Form Check</strong>: Does it follow clean code principles?</p>
+</li>
+<li><p><strong>Balance Check</strong>: Are trade-offs appropriate?</p>
+</li>
+<li><p><strong>Efficiency Check</strong>: Any wasted motion?</p>
+</li>
+<li><p><strong>Defense Check</strong>: Vulnerable to attacks &#40;bad input, edge cases&#41;?</p>
+</li>
+<li><p><strong>Awareness Check</strong>: Does the author understand the full context?</p>
+</li>
+</ol>
+<h3 id="refactoring_as_perfecting_the_form"><a href="#refactoring_as_perfecting_the_form" class="header-anchor">Refactoring as Perfecting the Form</a></h3>
+<ul>
+<li><p>Each refactoring session is practice</p>
+</li>
+<li><p>Focus on one principle at a time</p>
+</li>
+<li><p>Make the code more flowing &#40;Wu Wei&#41;</p>
+</li>
+<li><p>Remove waste &#40;Economy of Motion&#41;</p>
+</li>
+<li><p>Improve defenses &#40;Guard Clauses&#41;</p>
+</li>
+<li><p>Seek balance in trade-offs</p>
+</li>
+</ul>
+<h3 id="testing_as_combat_training"><a href="#testing_as_combat_training" class="header-anchor">Testing as Combat Training</a></h3>
+<ul>
+<li><p>Unit tests &#61; Solo practice &#40;kata&#41;</p>
+</li>
+<li><p>Integration tests &#61; Sparring with partners</p>
+</li>
+<li><p>Load tests &#61; Endurance training</p>
+</li>
+<li><p>Chaos engineering &#61; Combat simulation</p>
+</li>
+</ul>
+<p>Your tests reveal whether your code has mastered defensive techniques.</p>
+<h3 id="design_patterns_as_fighting_styles"><a href="#design_patterns_as_fighting_styles" class="header-anchor">Design Patterns as Fighting Styles</a></h3>
+<ul>
+<li><p><strong>Strategy Pattern</strong>: Choose technique based on opponent</p>
+</li>
+<li><p><strong>Observer Pattern</strong>: Awareness of changes in the environment</p>
+</li>
+<li><p><strong>Factory Pattern</strong>: Master crafter creating the right tool</p>
+</li>
+<li><p><strong>Decorator Pattern</strong>: Adding layers of skill to core ability</p>
+</li>
+<li><p><strong>Command Pattern</strong>: Disciplined execution of techniques</p>
+</li>
+</ul>
+<p>Choose patterns with purpose, not because you know them.</p>
+<h3 id="technical_debt_as_bad_habits"><a href="#technical_debt_as_bad_habits" class="header-anchor">Technical Debt as Bad Habits</a></h3>
+<p>Like a martial artist with poor form:</p>
+<ul>
+<li><p>Causes injury over time &#40;bugs, maintenance burden&#41;</p>
+</li>
+<li><p>Becomes harder to unlearn the longer it persists</p>
+</li>
+<li><p>Spreads to others who learn from you</p>
+</li>
+<li><p>Prevents advancement to higher mastery</p>
+</li>
+</ul>
+<p>Address it through disciplined practice and refactoring.</p>
+<h2 id="when_to_use_this_skill"><a href="#when_to_use_this_skill" class="header-anchor">When to Use This Skill</a></h2>
+<p>Load this skill when:</p>
+<ul>
+<li><p><strong>Reviewing code</strong> for elegance, discipline, and craftsmanship</p>
+</li>
+<li><p><strong>Refactoring</strong> to improve flow and reduce complexity</p>
+</li>
+<li><p><strong>Making architectural decisions</strong> that require balancing trade-offs</p>
+</li>
+<li><p><strong>Mentoring</strong> others in mindful, deliberate coding practices</p>
+</li>
+<li><p><strong>Stuck on a problem</strong> and need a different philosophical lens</p>
+</li>
+<li><p><strong>User asks</strong> to apply kung-fu, martial arts, or mastery principles to code</p>
+</li>
+</ul>
+<h2 id="guiding_questions"><a href="#guiding_questions" class="header-anchor">Guiding Questions</a></h2>
+<p>When applying kung-fu principles to code:</p>
+<ol>
+<li><p><strong>Wu Wei</strong>: Does this solution flow naturally, or am I forcing it?</p>
+</li>
+<li><p><strong>Balance</strong>: What trade-offs am I making? Are they harmonious?</p>
+</li>
+<li><p><strong>Economy</strong>: What can I remove? What motion is wasted?</p>
+</li>
+<li><p><strong>Defense</strong>: What attacks is this vulnerable to? How do I guard?</p>
+</li>
+<li><p><strong>Kata</strong>: Have I practiced this pattern enough to use it well?</p>
+</li>
+<li><p><strong>Zanshin</strong>: Do I fully understand the context and consequences?</p>
+</li>
+</ol>
+<h2 id="the_path_of_mastery"><a href="#the_path_of_mastery" class="header-anchor">The Path of Mastery</a></h2>
+<p>Remember: &quot;I&#39;m trying to free your mind.&quot;</p>
+<ul>
+<li><p>A beginner writes code that works</p>
+</li>
+<li><p>An intermediate writes code that&#39;s clean</p>
+</li>
+<li><p>A master writes code that flows</p>
+</li>
+</ul>
+<p>The path from beginner to master is paved with:</p>
+<ul>
+<li><p>Continuous practice &#40;write code daily&#41;</p>
+</li>
+<li><p>Deliberate study &#40;learn patterns and principles&#41;</p>
+</li>
+<li><p>Mindful refinement &#40;refactor with awareness&#41;</p>
+</li>
+<li><p>Teaching others &#40;mastery through transmission&#41;</p>
+</li>
+<li><p>Embracing simplicity &#40;the highest form&#41;</p>
+</li>
+</ul>
+<p>&quot;What you must learn is that these rules are no different than the rules of a computer system. Some of them can be bent. Others can be broken.&quot;</p>
+<p>Apply these principles wisely, not dogmatically. True mastery knows when to follow the form and when to transcend it.</p>
+<hr />
+<p><a href="/skills/">← Back to Skills</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+    
+  </body>
+</html>
