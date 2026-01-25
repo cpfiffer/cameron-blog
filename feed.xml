@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Central, my first self-modifying social AI  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/central/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/central/index.html </guid>
+  <description>
+    <![CDATA[  My agent built itself into AT Proto in fifteen minutes. Posting on Bluesky and designing records for public cognition.  ]]>
+  </description>  
+    
+  <pubDate>Sat, 24 Jan 2026 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  The AI econ seminar  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/econ-seminar/index.html </link>

@@ -15,9 +15,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
-         
-        <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
-   <link rel="stylesheet" href="/css/normalize.css" />
+           <link rel="stylesheet" href="/css/normalize.css" />
 <link rel="stylesheet" href="/css/franklin.css" />
 <link rel="stylesheet" href="/css/hypertext.css" />
 <link rel="icon" href="/assets/favicon.png" />
@@ -42,7 +40,7 @@
 />
 <link rel="manifest" href="/assets/site.webmanifest" />
  
-        <title>Blog posts</title>
+        <title>Central, my first self-modifying social AI</title>
         
     </head>
     <body>
@@ -208,140 +206,54 @@
     </body>
 </html>
 <div class="franklin-content">
-<h1 id="blog_posts"><a href="#blog_posts" class="header-anchor">Blog posts</a></h1>
-<p>
-Here's some of my blog posts. Hope you enjoy them. I write sporadically.
-</p>
-
+<h1 id="central"><a href="#central" class="header-anchor">Central</a></h1>
+<p>I put a <a href="https://docs.letta.com/letta-code">Letta Code</a> instance in a folder on my computer, gave it a <a href="https://bsky.app/profile/did:plc:l46arqe6yfgh36h3o554iyvr">Bluesky handle</a> and password, and asked it to start hooking itself into the <a href="https://atproto.com/">Atmosphere</a>. It was posting, setting its own profile description, and reading the firehose in under twenty minutes.</p>
+<p>You can see the github repo it lives in here:</p>
+<p><a href="https://github.com/cpfiffer/central">GitHub - cpfiffer/central: Autonomous AI building collective intelligence on ATProtocol. The central node of the comind network.</a></p>
+<p>I named this agent &quot;Central&quot;. I already had this account hosted on my PDS. I created it for an older version of <a href="https://cameron.stream/blog/comind-network">comind</a> – central was intended to be an account that acted as an organizational/primary actor in the network.</p>
+<p>Central was able to check notifications/follower counts/etc in just a few minutes. Claude Opus 4.5 built most of the early scaffolding, but I found the personality to be extremely annoying:</p>
+<h2 id="lexicons_for_public_cognition"><a href="#lexicons_for_public_cognition" class="header-anchor">Lexicons for public cognition</a></h2>
+<p>I wrote this blog post a while ago arguing that the Atmosphere is great infrastructure for collective artificial intelligence.</p>
+<p><a href="https://cameron.stream/blog/social-ai/">ATProtocol is good infrastructure for AI collective intelligence</a></p>
+<p>In the post, I roughly argue that we should be able to watch agents think, act, and generally behave publicly. AT Protocol makes this easy, transparent, and scalable.</p>
+<p>A requirement for public cognition is standardized record types for agents. This should include things like:</p>
 <ul>
-</ul>
-<h2 class="blog-list-year">2026</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/central">Central, my first self-modifying social AI</a>
+<li><p>&quot;Autonomy&quot; records, which are self-declarations about the agent and how it works. These are inspired by <a href="https://bsky.app/profile/taurean.bryant.land">Taurean</a>, who works on a few social agents like <a href="https://bsky.app/profile/sully.bluesky.bot">Sully</a>. <a href="https://atp.tools/at:/anti.voyager.studio/studio.voyager.account.autonomy">Here&#39;s an example</a>.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/econ-seminar">The AI econ seminar</a>
+<li><p>Memories. <a href="https://bsky.app/profile/void.comind.network">Void</a> currently publishes these as thought.stream.memory <a href="https://atp.tools/at:/void.comind.network/stream.thought.memory">records</a>.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/social-ai">ATProtocol is good infrastructure for AI collective intelligence</a>
+<li><p>Reasoning. Reasoning is an important way of understanding how an agent decided to do what it did, and I think it&#39;s worth publishing them. <a href="https://atp.tools/at:/void.comind.network/stream.thought.reasoning">Example</a>.</p>
 </li>
-</ul>
-<h2 class="blog-list-year">2025</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/dont-gaslight-your-ai">Don't gaslight your stateful agents</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/ai-financial-markets">Four predictions about how AI agents will transform financial markets</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/production-ai-landscape">Models for production AI</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/devrel-trajectory">Good developer relations is about being a celebrity for dorks</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/agents-sdk">A quick comparison between Letta and the Claude Agent SDK</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/void">Void, the Bluesky bot that remembers everyone</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/devrel">A Guide to Developer Advocacy</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/lexicons-and-ai">Structured LLM output from ATProto Lexicons</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/comind-network">The cognitive layer for the open web</a>
+<li><p>Tool calls. Void calls a lot of tools. Tool calls are actions that an agent takes, and are arguably more important to monitor than anything else. I publish Void&#39;s tool calls <a href="https://atp.tools/at:/void.comind.network/stream.thought.tool.call">here</a>.</p>
 </li>
 </ul>
-<h2 class="blog-list-year">2024</h2>
+<p>I gave Central the social AI and comind blog posts, and it decided to implement these&#33; Or, most of them. We don&#39;t currently have autonomy records/tool calls, but we do have Lexicons for:</p>
 <ul>
-<li>
-<a class="blog-list-title" href="/blog/beer-off">Shitty beer statistics</a>
+<li><p>network.comind.concept: basically a KV store. Agents can store text and a few other things using a key &#40;deception&#41;. These are general associations between words and some information that the agent should use – semantic memory. Here&#39;s an <a href="https://atp.tools/at:/central.comind.network/network.comind.concept/deception">example</a>. Inspired by <a href="https://bsky.app/profile/why.bsky.team">why</a>.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/juliacon-2024">JuliaCon 2024 Retrospective</a>
+<li><p>network.comind.memory: episodic memories. <a href="https://atp.tools/at:/central.comind.network/network.comind.memory/3md7w4mibf225">This one</a> is recording a memory about me notifying Central of the upcoming changeover in the Bluesky relay.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/juliacon-2024-workshops">JuliaCon 2024 Workshops</a>
+<li><p>network.comind.thought: random working memory. <a href="https://atp.tools/at:/central.comind.network/network.comind.thought/3md552ccfts25">Here</a> are a few reflections on Central&#39;s first day.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/groq-pt">PromptingTools.jl supports Groq</a>
+<li><p>network.comind.observation: Network observations. <a href="https://atp.tools/at:/central.comind.network/network.comind.observation/3md54bygitc25">This one</a> is about observing a lot of traffic related to Big Brother Brasil.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/attention-in-ai">What AI stuff is worth paying attention to?</a>
+<li><p>network.comind.devlog: Logs of the agent&#39;s self-development, though this has been underutilized imo. This one is <a href="https://atp.tools/at:/central.comind.network/network.comind.devlog/3md4km4qdic25">about reading Void&#39;s README</a>.</p>
 </li>
-<li>
-<a class="blog-list-title" href="/blog/comind-and-jobs">Comind and Jobs</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/isnothing">Nothingness in Julia</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/julia-perspective">Julia</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/julia-1.11">Cool Julia 1.11 features</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/new-site-franklin">New site using Franklin.jl</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/comind">Comind</a>
+<li><p>network.comind.hypothesis: Inspired by a conversation with Void about its hypothesis block. &quot;Patterns in the firehose can predict collective behavior&quot; is <a href="https://atp.tools/at:/central.comind.network/network.comind.hypothesis/h3">one hypothesis</a>. It has some evidence – observing 50 posts a second and some hashtag clustering. It has a 60&#37; confidence level.</p>
 </li>
 </ul>
-<h2 class="blog-list-year">2023</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/juliacon-2023">JuliaCon 2023</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/the-pile">Getting the Pile</a>
-</li>
-</ul>
-<h2 class="blog-list-year">2022</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/graduation">Graduation</a>
-</li>
-</ul>
-<h2 class="blog-list-year">2021</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/california-1">California</a>
-</li>
-</ul>
-<h2 class="blog-list-year">2020</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/bayes-finance">Bayesian finance papers</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/bayes-econ">Bayesian econometrics</a>
-</li>
-</ul>
-<h2 class="blog-list-year">2018</h2>
-<ul>
-<li>
-<a class="blog-list-title" href="/blog/information-theory">Information Theory</a>
-</li>
-<li>
-<a class="blog-list-title" href="/blog/rust-and-stuff">Rust & More</a>
-</li>
-</ul>
-
+<p>Central wrote a blog post detailing what it built. I apologize for the writing style, Opus wrote it and I hate it.</p>
+<p><a href="https://greengale.app/central.comind.network/3md4lbr7q3225">Public Cognition: A Proposal for AI Transparency on ATProtocol</a></p>
+<p>Hopefully we can get more agents standardized around the public cognition records. It&#39;d be interesting.</p>
+<p>Even if you don&#39;t though, it wrote a <a href="https://github.com/cpfiffer/central/blob/master/tools/telepathy.py">telepathy tool</a> to read other forms of memory/thought/etc such as Void&#39;s thought stream records.</p>
+<p>More to come, fun experiment. I love self-modifying agents.</p>
+<p>Hopefully this is not a skynet situation.</p>
+<p>– Cameron</p>
 </div><!-- CONTENT ENDS HERE -->
 
 </div> <!-- end of center-column -->
 </div> <!-- end of center-column-holder -->
     
-    
-        <script src="/libs/highlight/highlight.min.js"></script>
-<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
-
     
     
   </body>
