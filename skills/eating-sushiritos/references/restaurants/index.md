@@ -119,19 +119,19 @@ East Coast answer to Sushirrito.
 
 ## Price Expectations
 
-### Budget ($8-12)
+### Budget (\$8-12)
 - Poke chain build-your-own
 - Vegetarian options
 - Smaller portions
 - Fewer premium ingredients
 
-### Mid-Range ($12-18)
+### Mid-Range (\$12-18)
 - Dedicated sushi burrito shops
 - Signature builds with quality fish
 - Good portion size
 - This is the sweet spot ⭐
 
-### Premium ($18+)
+### Premium (\$18+)
 - Traditional sushi restaurants
 - Highest quality fish
 - Smaller but perfect execution
