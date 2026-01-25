@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Sushirito Restaurants Guide</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/skills/">skills</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content"><p><a href="/skills/eating-sushiritos/">← Back to Eating Sushiritos</a></p>
+<hr />
+<h1 id="sushirito_restaurants_guide"><a href="#sushirito_restaurants_guide" class="header-anchor">Sushirito Restaurants Guide</a></h1>
+<p>Popular chains, regional spots, and what to order.</p>
+<h2 id="major_chains"><a href="#major_chains" class="header-anchor">Major Chains</a></h2>
+<h3 id="sushirrito_san_francisco_bay_area"><a href="#sushirrito_san_francisco_bay_area" class="header-anchor">Sushirrito &#40;San Francisco Bay Area&#41;</a></h3>
+<p><strong>The original</strong>. Founded in San Francisco, 2011.</p>
+<p><strong>Locations</strong>: SF, Oakland, Berkeley, Palo Alto, and expanding</p>
+<p><strong>What to order</strong>:</p>
+<ul>
+<li><p><strong>Geisha&#39;s Kiss</strong>: Salmon, tuna, yellowtail, soy paper - expert level</p>
+</li>
+<li><p><strong>Sumo Crunch</strong>: Tempura shrimp, cucumber, avocado - beginner friendly ⭐</p>
+</li>
+<li><p><strong>Go Veg</strong>: Tofu, lots of vegetables - easiest to eat</p>
+</li>
+</ul>
+<p><strong>Pro tip</strong>: Order online to skip the line. They&#39;re always busy at lunch.</p>
+<p><strong>Difficulty rating</strong>: Hard - these are LARGE &#40;1&#43; lb&#41; and heavily filled</p>
+<h3 id="pokeworks_national_chain"><a href="#pokeworks_national_chain" class="header-anchor">Pokeworks &#40;National chain&#41;</a></h3>
+<p>Primarily poke bowls, but many locations offer sushi burritos.</p>
+<p><strong>Locations</strong>: 100&#43; across US</p>
+<p><strong>What to order</strong>:</p>
+<ul>
+<li><p>Build-your-own is best</p>
+</li>
+<li><p>Stick to their &quot;signature&quot; builds - staff knows how to balance them</p>
+</li>
+</ul>
+<p><strong>Pro tip</strong>: Smaller than Sushirrito, better for beginners.</p>
+<p><strong>Difficulty rating</strong>: Medium</p>
+<h3 id="buredo_new_york"><a href="#buredo_new_york" class="header-anchor">Buredo &#40;New York&#41;</a></h3>
+<p>East Coast answer to Sushirrito.</p>
+<p><strong>Locations</strong>: NYC area</p>
+<p><strong>What to order</strong>:</p>
+<ul>
+<li><p><strong>The Jade</strong>: Spicy salmon, cucumber, avocado</p>
+</li>
+<li><p><strong>The Dragon</strong>: Eel, avocado, cucumber</p>
+</li>
+</ul>
+<p><strong>Note</strong>: Smaller portions, more traditional flavors, easier to handle.</p>
+<p><strong>Difficulty rating</strong>: Easy-Medium</p>
+<h2 id="regional_recommendations"><a href="#regional_recommendations" class="header-anchor">Regional Recommendations</a></h2>
+<h3 id="san_francisco_bay_area"><a href="#san_francisco_bay_area" class="header-anchor">San Francisco Bay Area</a></h3>
+<ul>
+<li><p><strong>Sushirrito</strong> - The original, multiple locations</p>
+</li>
+<li><p><strong>Ichi Sushi</strong> - Has sushi burrito option, more traditional</p>
+</li>
+<li><p><strong>Various poke shops</strong> - Many now offer sushi burrito format</p>
+</li>
+</ul>
+<h3 id="los_angeles"><a href="#los_angeles" class="header-anchor">Los Angeles</a></h3>
+<ul>
+<li><p><strong>KazuNori</strong> - Hand roll bar, not burritos but similar technique</p>
+</li>
+<li><p><strong>Poke Bar</strong> - Build-your-own sushi burritos</p>
+</li>
+<li><p><strong>Sugarfish</strong> - No burritos, but best sushi technique in LA</p>
+</li>
+</ul>
+<h3 id="new_york"><a href="#new_york" class="header-anchor">New York</a></h3>
+<ul>
+<li><p><strong>Buredo</strong> - Dedicated sushi burrito shop</p>
+</li>
+<li><p><strong>Yū Sushi</strong> - Japanese-Hawaiian fusion, has burrito option</p>
+</li>
+<li><p><strong>Various poke shops in Manhattan</strong></p>
+</li>
+</ul>
+<h3 id="chicago"><a href="#chicago" class="header-anchor">Chicago</a></h3>
+<ul>
+<li><p><strong>Aloha Poke Co</strong> - Build-your-own format</p>
+</li>
+<li><p><strong>Poke Bros</strong> - Chain with sushi burrito option</p>
+</li>
+</ul>
+<h3 id="seattle"><a href="#seattle" class="header-anchor">Seattle</a></h3>
+<ul>
+<li><p><strong>Moshi Moshi</strong> - Sushi burrito option</p>
+</li>
+<li><p><strong>FOB Poke Bar</strong> - Build-your-own</p>
+</li>
+</ul>
+<h2 id="what_to_look_for"><a href="#what_to_look_for" class="header-anchor">What to Look For</a></h2>
+<h3 id="quality_indicators"><a href="#quality_indicators" class="header-anchor">Quality Indicators</a></h3>
+<p>✅ Rice made fresh daily ✅ Separate prep area for raw fish ✅ Staff wears gloves and changes them between orders ✅ Can see your burrito being made ✅ Nori &#40;seaweed&#41; is crispy, not limp</p>
+<h3 id="red_flags"><a href="#red_flags" class="header-anchor">Red Flags</a></h3>
+<p>❌ Pre-made burritos sitting out ❌ Soggy or limp nori wrapper ❌ Rice that looks dry or hard ❌ Strong fish smell &#40;should smell ocean-fresh, not fishy&#41; ❌ Staff doesn&#39;t change gloves between orders</p>
+<h2 id="ordering_tips_by_restaurant_type"><a href="#ordering_tips_by_restaurant_type" class="header-anchor">Ordering Tips by Restaurant Type</a></h2>
+<h3 id="fast-casual_chains_pokeworks_poke_bar_etc"><a href="#fast-casual_chains_pokeworks_poke_bar_etc" class="header-anchor">Fast-Casual Chains &#40;Pokeworks, Poke Bar, etc.&#41;</a></h3>
+<ul>
+<li><p>Build-your-own is the move</p>
+</li>
+<li><p>Staff are used to helping - ask questions</p>
+</li>
+<li><p>Specify &quot;light&quot; on sauces always</p>
+</li>
+<li><p>Peak hours &#61; assembly line quality drops</p>
+</li>
+</ul>
+<p><strong>Best time</strong>: 2-4 PM &#40;between lunch and dinner rush&#41;</p>
+<h3 id="dedicated_sushi_burrito_shops_sushirrito_buredo"><a href="#dedicated_sushi_burrito_shops_sushirrito_buredo" class="header-anchor">Dedicated Sushi Burrito Shops &#40;Sushirrito, Buredo&#41;</a></h3>
+<ul>
+<li><p>Signature rolls are tested and balanced</p>
+</li>
+<li><p>Custom builds can get expensive</p>
+</li>
+<li><p>These make the biggest burritos - come hungry</p>
+</li>
+<li><p>Always busy - order ahead if possible</p>
+</li>
+</ul>
+<p><strong>Best time</strong>: Order online for pickup</p>
+<h3 id="traditional_sushi_restaurants_with_burrito_option"><a href="#traditional_sushi_restaurants_with_burrito_option" class="header-anchor">Traditional Sushi Restaurants with Burrito Option</a></h3>
+<ul>
+<li><p>Usually highest quality fish</p>
+</li>
+<li><p>Smaller portions, higher price</p>
+</li>
+<li><p>Staff may not be experienced with burrito format</p>
+</li>
+<li><p>Sometimes use too much rice</p>
+</li>
+</ul>
+<p><strong>Pro tip</strong>: Order a hand roll instead - same concept, better execution</p>
+<h2 id="price_expectations"><a href="#price_expectations" class="header-anchor">Price Expectations</a></h2>
+<h3 id="budget_8-12"><a href="#budget_8-12" class="header-anchor">Budget &#40;&#36;8-12&#41;</a></h3>
+<ul>
+<li><p>Poke chain build-your-own</p>
+</li>
+<li><p>Vegetarian options</p>
+</li>
+<li><p>Smaller portions</p>
+</li>
+<li><p>Fewer premium ingredients</p>
+</li>
+</ul>
+<h3 id="mid-range_12-18"><a href="#mid-range_12-18" class="header-anchor">Mid-Range &#40;&#36;12-18&#41;</a></h3>
+<ul>
+<li><p>Dedicated sushi burrito shops</p>
+</li>
+<li><p>Signature builds with quality fish</p>
+</li>
+<li><p>Good portion size</p>
+</li>
+<li><p>This is the sweet spot ⭐</p>
+</li>
+</ul>
+<h3 id="premium_18"><a href="#premium_18" class="header-anchor">Premium &#40;&#36;18&#43;&#41;</a></h3>
+<ul>
+<li><p>Traditional sushi restaurants</p>
+</li>
+<li><p>Highest quality fish</p>
+</li>
+<li><p>Smaller but perfect execution</p>
+</li>
+<li><p>Worth it for special occasions</p>
+</li>
+</ul>
+<h2 id="ordering_for_delivery"><a href="#ordering_for_delivery" class="header-anchor">Ordering for Delivery</a></h2>
+<h3 id="packaging_matters"><a href="#packaging_matters" class="header-anchor">Packaging Matters</a></h3>
+<p>Sushiritos delivered poorly &#61; disaster</p>
+<p><strong>What to ask</strong>:</p>
+<ul>
+<li><p>How is it packaged? &#40;Should be in rigid container, not just wrapped&#41;</p>
+</li>
+<li><p>How long is delivery? &#40;Under 20 mins ideal, over 30 mins risky&#41;</p>
+</li>
+<li><p>Can I get sauce on the side? &#40;Always yes to this&#41;</p>
+</li>
+</ul>
+<h3 id="delivery_tips"><a href="#delivery_tips" class="header-anchor">Delivery Tips</a></h3>
+<ul>
+<li><p>Order from closest location only</p>
+</li>
+<li><p>Avoid peak hours &#40;rice quality suffers when rushed&#41;</p>
+</li>
+<li><p>Eat immediately upon arrival - nori gets soggy fast</p>
+</li>
+<li><p>Consider ordering a poke bowl instead for delivery &#40;holds up better&#41;</p>
+</li>
+</ul>
+<p><strong>Harsh truth</strong>: Sushiritos are best eaten fresh in-store. Delivery is always a compromise.</p>
+<h2 id="making_friends_with_staff"><a href="#making_friends_with_staff" class="header-anchor">Making Friends with Staff</a></h2>
+<h3 id="good_customer_behavior"><a href="#good_customer_behavior" class="header-anchor">Good Customer Behavior</a></h3>
+<ul>
+<li><p>Know what you want before reaching the counter</p>
+</li>
+<li><p>Don&#39;t ask for &quot;a little bit of everything&quot;</p>
+</li>
+<li><p>Tip well if you&#39;re building custom</p>
+</li>
+<li><p>Off-peak hours &#61; staff can give better recommendations</p>
+</li>
+</ul>
+<h3 id="questions_that_help"><a href="#questions_that_help" class="header-anchor">Questions That Help</a></h3>
+<ul>
+<li><p>&quot;What&#39;s most popular?&quot;</p>
+</li>
+<li><p>&quot;What&#39;s fresh today?&quot;</p>
+</li>
+<li><p>&quot;Can you go light on the sauce?&quot;</p>
+</li>
+<li><p>&quot;What do you recommend for a first-timer?&quot;</p>
+</li>
+</ul>
+<h3 id="questions_that_annoy"><a href="#questions_that_annoy" class="header-anchor">Questions That Annoy</a></h3>
+<ul>
+<li><p>&quot;Can I taste everything first?&quot;</p>
+</li>
+<li><p>&quot;Can you make it like &#91;describes complex custom thing&#93;?&quot;</p>
+</li>
+<li><p>&quot;Why is there an upcharge for &#91;premium ingredient&#93;?&quot;</p>
+</li>
+</ul>
+<p><strong>Pro tip</strong>: Staff who make sushiritos all day know the optimal builds. Trust their recommendations.</p>
+<hr />
+<p><a href="/skills/eating-sushiritos/">← Back to Eating Sushiritos</a></p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>
