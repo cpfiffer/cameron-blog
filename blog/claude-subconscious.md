@@ -10,7 +10,7 @@ toc= false
 
 If you've ever worked with Claude Code, you may have been a little disappointed with memory management. It tends to ignore CLAUDE.md, fail to store preferences you've specified, or forget the high-level goals of a particular session. And then a compaction happens and your Claude becomes a stranger.
 
-I work at Letta. Our specialty is memory. I figured -- why not add our memory to Claude?
+I work at [Letta](https://letta.com). Our specialty is memory. I figured -- why not add our memory to Claude?
 
 Of course, we have [Letta Code](https://docs.letta.com/letta-code) that's built for stateful agents. It's my daily driver and I love it. However, Claude Code is by far the dominant player in the industry, and I figured it'd be nice to offer Letta's memory and persistence with Claude (and people who use Claude).
 
