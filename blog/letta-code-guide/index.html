@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+         
+        <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>A guide to getting started with Letta Code</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/skills/">skills</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h1 id="a_guide_to_getting_started_with_letta_code"><a href="#a_guide_to_getting_started_with_letta_code" class="header-anchor">A guide to getting started with Letta Code</a></h1>
+<p>If you&#39;ve just installed <a href="https://docs.letta.com/letta-code">Letta Code</a>, you&#39;re about to have a great time. You may be wondering how to get started with models, tools, and general development flow.</p>
+<p>Installation:</p>
+<pre><code class="language-bash">npm install -g @letta-ai/letta-code</code></pre>
+<p>Here are some tips to use Letta effectively, as some things are different from other harnesses that you may also use &#40;Claude Code, Codex, OpenCode, etc.&#41;</p>
+<h3 id="agent_structure"><a href="#agent_structure" class="header-anchor">Agent structure</a></h3>
+<p>We typically recommend <strong>one agent per project or domain</strong>. Keep your agent count low. If you have a lot of agents, you are losing their greatest power – age. Older agents that work with you longer are better. Give them a chance to learn.</p>
+<p>Projects can be any code repository, an Obsidian folder, notes, etc. These are specific projects that an agent can specialize/memorize. Use this when you need focus, power, and specific knowledge.</p>
+<p>Domain agents are often used across projects. These include personal agents where you want to work with a consistent personality, or want it to accumulate significant, broad information about what you work on and who you are.</p>
+<p>New agents can be created with</p>
+<pre><code class="language-julia">letta --new-agent</code></pre>
+<p>and I only recommend doing this per project.</p>
+<p>You should make liberal use of <strong>pinned agents</strong>. Pinned agents are favorites. I usually have about 5-7 pinned agents. One for the Letta documentation, one for a few common projects, a personal agent, etc. These agents are typically named and have accumulated a lot of expertise.</p>
+<p>Pin an agent with</p>
+<pre><code class="language-julia">/pin</code></pre>
+<p>You&#39;ll be asked to provide a name.</p>
+<p>Select a pinned agent with</p>
+<pre><code class="language-julia">/agents</code></pre>
+<p>You can also use this menu to select any agent in your organization by hitting tab twice &#40;to the &quot;All&quot; tab&#41;. If you have an existing agent you want to find and pin, this is also how you would do that.</p>
+<h3 id="model_selection"><a href="#model_selection" class="header-anchor">Model selection</a></h3>
+<p>I typically recommend Opus 4.5, but this can be quite expensive. I usually use Opus to do the initial learning of a project &#40;type <code>/init</code> in a new project&#41; and then switch to something like Sonnet 4.5 or GLM 4.7. Gemini 3 is decent but I usually go to Opus if I&#39;m going to use a premium model. I hate the GPT-5 series unless I&#39;m using it for a roleplaying/personal agent.</p>
+<p>Any time you want an agent to deeply understand something, go for Opus. If you have simple implementation tasks, GLM 4.7.</p>
+<p>GLM 4.7 is free on the Letta API so I usually recommend it if you want a lot of milage.</p>
+<p>Model selection is dependent on your preferences. You&#39;ll learn what you like and don&#39;t through use – try to explore&#33;</p>
+<p><strong>Model parameters</strong>: I don&#39;t tend to change these much. The defaults are usually fine.</p>
+<h3 id="initialization"><a href="#initialization" class="header-anchor">Initialization</a></h3>
+<p>When you start your agent out, you need it to start learning about your project. If there is existing code or content, you should type</p>
+<pre><code class="language-julia">/init</code></pre>
+<p>This will guide your agent through learning about the project deeply. Initialization gives your agent everything it needs to get up and running on your project as quickly as possible.</p>
+<h3 id="memory_management"><a href="#memory_management" class="header-anchor">Memory management</a></h3>
+<p>Your agent may need to help your agent manage its memory. I typically do this through direct prompting, because I usually have a good sense of the memory architecture I want through experience.</p>
+<p><strong>Remembering</strong> If you are new, you should use the <code>/remember</code> command. This is a command with special prompting that you can use to have the agent remember a piece of content.</p>
+<p>You can provide a specific thing to remember:</p>
+<pre><code class="language-julia">/remember to always use uv instead of pip</code></pre>
+<p>If you do not provide a specific thing &#40;just <code>/remember</code>&#41;, the agent will do its best to understand what to remember from its current context.</p>
+<p><strong>Memory defragmentation</strong> Agents can sometimes accumulate &quot;gunk&quot; or have poorly organized memory architecture. You can fix this by asking your agent to use the <a href="https://docs.letta.com/letta-code/subagents#memory">memory</a> subagent, which will defragment your coding agent&#39;s memory.</p>
+<p>You can ask the agent to invoke this in your request, like</p>
+<pre><code class="language-julia">Use a memory agent to clean up and reorganize my memory blocks</code></pre>
+<p>The agent should invoke the <code>Task</code> tool to invoke a subagent. You can also customize your request, such as asking the agent to get the memory agent to consolidate project information, remove contradictions, etc. You can also ask the agent to remember to use the memory agent regularly in certain circumstances, such as after a pull request is submitted.</p>
+<h3 id="skills"><a href="#skills" class="header-anchor">Skills</a></h3>
+<p><a href="https://agentskills.io/">Skills</a> are packages of procedural memory that help an agent how to perform a specialized task. In Letta Code, we typically recommend building or using existing skills to help your agent. Skills are significantly more flexible and powerful than Letta&#39;s built-in server-side tools.</p>
+<p>I recommend skills over custom server-side tools when using Letta Code agents.</p>
+<p>The quick way to get a skill is to ask the agent to make one&#33; We&#39;re big skill people here at Letta, and focus on continual learning of skills.</p>
+<p>Your agent can <a href="https://docs.letta.com/letta-code/skills">create skills</a> directly through the <code>/skill</code> command:</p>
+<pre><code class="language-julia">/skill # No prompt provided, agent will guess
+/skill create a skill to handle database migrations</code></pre>
+<p>You may need to answer a few questions to build the skill.</p>
+<p>Skills often have code for the agent to use. It&#39;s a superpower.</p>
+<p>Places to get skills:</p>
+<ul>
+<li><p>The <a href="https://github.com/letta-ai/skills">Letta skills repo</a>, which is designed to be maintained by and for agents. A communal knowledge repository. There&#39;s good, curated skills here.</p>
+</li>
+<li><p>The Vercel <a href="https://skills.sh/">skills gateway</a>. Lots of skills, probably the widest access out there.</p>
+</li>
+</ul>
+<p>Quickstart with the Letta skills repo:</p>
+<pre><code class="language-julia">git clone git@github.com:letta-ai/skills.git .skills</code></pre>
+<h3 id="conversations_for_parallel_work"><a href="#conversations_for_parallel_work" class="header-anchor">Conversations for parallel work</a></h3>
+<p>A common pattern with coding agents is running many sessions all at once.</p>
+<p>Letta Code defaults to using the &quot;default&quot; conversation, which is one long infinite thread. I prefer this, because I have a very long conversation with my code partner.</p>
+<p>However, you may wish to parallelize or spin off a separate session with the same agent. To do so, create a new session when starting Letta Code:</p>
+<pre><code class="language-julia">letta --new</code></pre>
+<p>Or within Letta Code:</p>
+<pre><code class="language-julia">/new</code></pre>
+<p>Conversations have no previous message history, but share memory with the primary agent.</p>
+<p>Any memory updates that occur in a conversation are immediately broadcast to all other conversations – your agents can be everywhere all at once, learning as they go. The Learning Swarm.</p>
+<h3 id="general_tips"><a href="#general_tips" class="header-anchor">General tips</a></h3>
+<ul>
+<li><p>Ask your agent to design itself. If you notice a behavior, ask &quot;Why did you do X? Is there a better way? Could you update your memory to do/not do that again?&quot;. I refer to this as treating your agent like an adult.</p>
+</li>
+<li><p>Use <code>/init</code> out of the gate. It helps.</p>
+</li>
+<li><p>GLM 4.7 for simple stuff. Opus for big stuff.</p>
+</li>
+<li><p>Keep your skills up to date. Every time you notice your agent solve a problem, ask it to update or create a new skill. Make sure it learns.</p>
+</li>
+</ul>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+        <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+    
+    
+  </body>
+</html>

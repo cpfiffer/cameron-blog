@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  A guide to getting started with Letta Code  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/letta-code-guide/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/letta-code-guide/index.html </guid>
+  <description>
+    <![CDATA[  Practical tips and tricks for the memory-first agent harness  ]]>
+  </description>  
+    
+  <pubDate>Tue, 27 Jan 2026 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Claude Subconscious  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/claude-subconscious/index.html </link>
