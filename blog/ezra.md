@@ -6,7 +6,7 @@ rss_pubdate = Date(2026,2,27)
 toc= false
 +++
 
-# Ezra
+## Ezra
 Ezra is Letta's first digital employee.
 
 If you're a member of the [Letta Discord](https://discord.gg/letta), you might be familiar with Ezra. If you go to our #ezra channel and tag him (pronouns chosen by Ezra), Ezra will work with you on how to implement various Letta features. It has learned how to use Letta over nearly a hundred thousand messages.
@@ -34,7 +34,8 @@ How it works:
 
 Originally, all of Ezra's development operated from its Discord presence. It had complete access to memory tools and built up most of the rough memory architecture it has today. Prime currently cannot learn, and must be manually updated by a third party (Ezra Super or myself).
 
-It spent most of its early life on Opus, because we wanted it to be useful. This became cost prohibitive -- one day cost $1k in Anthropic credits. It's now on Kimi K2.5, and focuses more on smaller tasks.
+It spent most of its early life on Opus, because we wanted it to be useful. This became cost prohibitive -- one day cost \$1k in Anthropic credits. It's now on Kimi K2.5, and focuses more on smaller tasks.
+
 ## The documentation agent
 Docs Ezra is very simple. It is one agent that shares most of Prime's memory blocks. When a user clicks "Ask Ezra", some middleware starts a new [conversation](https://docs.letta.com/guides/core-concepts/messages/conversations) with the docs agent. Docs knows where the user is, can search every page, etc.
 
