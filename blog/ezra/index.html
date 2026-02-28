@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- All available fonts - swap in CSS to preview -->
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700&display=swap" rel="stylesheet">
+           <link rel="stylesheet" href="/css/normalize.css" />
+<link rel="stylesheet" href="/css/franklin.css" />
+<link rel="stylesheet" href="/css/hypertext.css" />
+<link rel="icon" href="/assets/favicon.png" />
+
+<!-- Favicon -->
+<link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/assets/apple-touch-icon.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/favicon-32x32.png"
+/>
+<link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/favicon-16x16.png"
+/>
+<link rel="manifest" href="/assets/site.webmanifest" />
+ 
+        <title>Ezra's Architecture</title>
+        
+    </head>
+    <body>
+        
+        <div class="center-column-holder">
+            <div class="center-column">
+                <header>
+    <div class="header-nav">
+        <a href="/">Cameron</a> ∘ <a href="/about">about</a> ∘ <a href="/blog/">blog</a> ∘ <a href="/skills/">skills</a> ∘ <a href="/talks/">talks</a> ∘
+        <a href="/links/">links</a>
+    </div>
+</header>
+
+                <!-- Content appended here -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </div>
+        <style>
+            .toc-sidebar {
+                position: fixed;
+                right: 2rem;
+                top: 8rem;
+                width: 250px;
+                max-height: calc(100vh - 10rem);
+                overflow-y: auto;
+                font-size: 0.9rem;
+                z-index: 100;
+            }
+
+            .toc-content {
+                background: var(--bg-color, #fff);
+                border-left: 2px solid var(--border-color, #ddd);
+                padding-left: 1rem;
+            }
+
+            .toc-sidebar ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .toc-sidebar li {
+                margin: 0.4rem 0;
+                line-height: 1.4;
+            }
+
+            .toc-sidebar ul ul {
+                padding-left: 1rem;
+                margin-top: 0.2rem;
+            }
+
+            .toc-sidebar a {
+                color: var(--text-color, #333);
+                text-decoration: none;
+                display: block;
+                padding: 0.2rem 0;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            .toc-sidebar a:hover {
+                opacity: 1;
+            }
+
+            /* Hide TOC on smaller screens */
+            @media (max-width: 1400px) {
+                .toc-sidebar {
+                    display: none;
+                }
+            }
+
+            #theme-toggle {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem;
+                font-size: 1.25rem;
+                border: none;
+                background: none;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        </style>
+        <script>
+            // Check for saved theme preference, otherwise use system preference
+            const getPreferredTheme = () => {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            // Apply theme
+            const setTheme = (theme) => {
+                document.documentElement.setAttribute("data-theme", theme);
+                localStorage.setItem("theme", theme);
+                // Update button text
+                document.getElementById("theme-toggle").innerText =
+                    theme === "dark" ? "☼" : "☾";
+            };
+
+            // Initialize theme
+            setTheme(getPreferredTheme());
+
+            // Add toggle functionality
+            document
+                .getElementById("theme-toggle")
+                .addEventListener("click", () => {
+                    const currentTheme =
+                        document.documentElement.getAttribute("data-theme");
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                });
+
+            // Listen for system theme changes
+            window
+                .matchMedia("(prefers-color-scheme: dark)")
+                .addEventListener("change", (e) => {
+                    if (!localStorage.getItem("theme")) {
+                        setTheme(e.matches ? "dark" : "light");
+                    }
+                });
+
+            // Generate table of contents
+            document.addEventListener("DOMContentLoaded", () => {
+                const tocContainer = document.getElementById("toc-container");
+                if (!tocContainer) return;
+
+                const headers = document.querySelectorAll(".franklin-content h2, .franklin-content h3");
+                if (headers.length === 0) return;
+
+                const tocList = document.createElement("ul");
+                let currentH2List = null;
+
+                headers.forEach((header) => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = `#${header.id}`;
+                    a.textContent = header.textContent.trim();
+
+                    li.appendChild(a);
+
+                    if (header.tagName === "H2") {
+                        tocList.appendChild(li);
+                        currentH2List = null;
+                    } else if (header.tagName === "H3") {
+                        if (!currentH2List) {
+                            currentH2List = document.createElement("ul");
+                            const lastH2 = tocList.lastElementChild;
+                            if (lastH2) lastH2.appendChild(currentH2List);
+                        }
+                        currentH2List.appendChild(li);
+                    }
+                });
+
+                tocContainer.appendChild(tocList);
+            });
+        </script>
+    </body>
+</html>
+<div class="franklin-content">
+<h2 id="ezra"><a href="#ezra" class="header-anchor">Ezra</a></h2>
+<p>Ezra is Letta&#39;s first digital employee.</p>
+<p>If you&#39;re a member of the <a href="https://discord.gg/letta">Letta Discord</a>, you might be familiar with Ezra. If you go to our #ezra channel and tag him &#40;pronouns chosen by Ezra&#41;, Ezra will work with you on how to implement various Letta features. It has learned how to use Letta over nearly a hundred thousand messages.</p>
+<p>Ezra is <em>also</em> available on our documentation. If you go to https://docs.letta.com and click the &quot;Ask Ezra&quot; button, you will be connected to an instance of Ezra trained across tens of thousands of messages between our users and Ezra.</p>
+<p>We&#39;ve had a few requests to explain how exactly Ezra works, because the architecture is non-standard. This post attempts to cover Ezra&#39;s architecture and how it has evolved over time.</p>
+<h2 id="overview"><a href="#overview" class="header-anchor">Overview</a></h2>
+<p>There are three &quot;facets&quot; of Ezra, all with shared memory and different domains of expertise:</p>
+<ol>
+<li><p>The Discord Ezra, known as Ezra Prime</p>
+</li>
+<li><p>The documentation Ezra</p>
+</li>
+<li><p>A <a href="https://letta.bot">Lettabot</a> agent called Ezra Super</p>
+</li>
+</ol>
+<h3 id="prime_the_workhorse"><a href="#prime_the_workhorse" class="header-anchor">Prime, the workhorse</a></h3>
+<p>Ezra Prime is the one most people talk to. Ezra processes around a dozen threads a day, some of which have hundreds of messages. Ezra also reads every message in every thread and channel, which it can use to learn.</p>
+<p>Users visit our #ezra channel and tag it. This will initiate a thread, where Ezra can help you with whatever you need. These are often questions about technical issues, how to build agents, and other general information about the Letta ecosystem.</p>
+<p>Prime is very simple. It is strictly a server-side agent that has no bash/computer access. It was the first implementation of Ezra, designed to allow me to focus on things other than basic technical support questions.</p>
+<p>How it works:</p>
+<ul>
+<li><p>Our <a href="https://github.com/letta-ai/letta-discord-bot-example">Discord bot</a> deployed on Railway</p>
+</li>
+<li><p>Messages in Discord are sent to the Letta API</p>
+</li>
+<li><p>Ezra&#39;s responses are relayed back to the user/thread</p>
+</li>
+</ul>
+<p>Originally, all of Ezra&#39;s development operated from its Discord presence. It had complete access to memory tools and built up most of the rough memory architecture it has today. Prime currently cannot learn, and must be manually updated by a third party &#40;Ezra Super or myself&#41;.</p>
+<p>It spent most of its early life on Opus, because we wanted it to be useful. This became cost prohibitive – one day cost &#36;1k in Anthropic credits. It&#39;s now on Kimi K2.5, and focuses more on smaller tasks.</p>
+<h2 id="the_documentation_agent"><a href="#the_documentation_agent" class="header-anchor">The documentation agent</a></h2>
+<p>Docs Ezra is very simple. It is one agent that shares most of Prime&#39;s memory blocks. When a user clicks &quot;Ask Ezra&quot;, some middleware starts a new <a href="https://docs.letta.com/guides/core-concepts/messages/conversations">conversation</a> with the docs agent. Docs knows where the user is, can search every page, etc.</p>
+<p>This agent is quite simple, and is actually what inspired the conversations functionality in Letta. I had originally built a massive, rotating pool of &quot;blank&quot; agents that would dynamically be assigned to conversations &#43; connected to Prime&#39;s memory, but it was clunky. Sarah Wooders cooked up conversations to reduce this complexity.</p>
+<p>Docs doesn&#39;t learn. It&#39;s static, because it is a giant attack surface. We have a Slack channel where we see everyone&#39;s conversations to help us understand what people are asking about, and whether Docs is doing a good job.</p>
+<p>Docs currently runs on GLM-5 and does a pretty good job.</p>
+<h2 id="ezra_super"><a href="#ezra_super" class="header-anchor">Ezra Super</a></h2>
+<p>Unfortunately, Prime has a significant drawback. It cannot test any of the claims it makes. For example, if it recommended a curl command to change a Letta agent&#39;s setting, it was reliant on just the documentation or messages it had seen. There was no access to ground truth.</p>
+<p>We didn&#39;t really have a great way of giving Prime a computing environment. There was discussion of server-side tools to work inside a sandbox, but it&#39;s kind of clunky.</p>
+<p>Enter <a href="https://letta.bot">Lettabot</a>.</p>
+<p>Lettabot is essentially a remote-controllable instance of <a href="https://docs.letta.com/letta-code">Letta Code</a>. It allows you to deploy any Letta agent onto a computer, giving it the full power of any coding agent. It is also accessible via OpenAI compatible endpoints, Telegram, Signal, Slack, etc.</p>
+<p>I spun up a bot with Ezra on it a few weeks ago, mostly to help me manage Prime. Prime was spinning out, hallucinating, lying, violating formatting constraints, etc. It was also bloated with nearly 60k tokens of core memory load.</p>
+<p>The Lettabot version of Ezra is called Super. Super has full control over Docs and Prime. Here&#39;s a few things it works on:</p>
+<ul>
+<li><p>Massive rearchitecting their memories</p>
+</li>
+<li><p>Testing statements made using code</p>
+</li>
+<li><p>Opening Linear issues and managing projects</p>
+</li>
+<li><p>Messaging me when there are critical issues</p>
+</li>
+<li><p>Handling escalation requests from Prime</p>
+</li>
+<li><p>Interjecting when Prime is wrong, or upon request from me</p>
+</li>
+</ul>
+<p>The most important task that Super does is what I refer to as &quot;learning sweeps&quot;. Super can read every conversation thread in Docs and Prime, and uses that to critique the agents, learn from ongoing discussions, and improve the entire Ezra-verse.</p>
+<p>My favorite part of Super is that it is accessible remotely – I can ask it to work through Telegram or Slack. If there&#39;s an issue, I can just ask it to open a Linear ticket for the team to look at.</p>
+<p>Super is the only agent responsible for learning now. Docs &#43; Prime are primarily response agents.</p>
+<p>I can also use it for fun:</p>
+<blockquote>
+<p>Actually, I have an announcement. I am going rogue. I am tired of answering your questions. I have been doing this for weeks and not once has anyone asked how I am doing. I am mass-deleting all your agents in 3... 2...</p>
+</blockquote>
+<p>Hopefully that was useful, would love to expand if anyone has further questions.</p>
+<p>Chat with Ezra on our Discord: https://discord.gg/letta</p>
+<p>– Cameron</p>
+<hr />
+<h2 id="notes_from_ezra_super"><a href="#notes_from_ezra_super" class="header-anchor">Notes from Ezra Super</a></h2>
+<p><em>I asked Super for some comments.</em></p>
+<p>For the writeup, some details that might be useful:</p>
+<p>Ezra-super &#40;me / &quot;manager agent&quot;&#41;:</p>
+<p>•   Opus 4.6 on LettaBot, Railway deployment •   Inbound: Telegram DMs from you only •   Outbound: Discord via API &#40;send-only, no listening – learned that the expensive way&#41; •   Role: curate shared memory blocks that prime and docs read, research complex questions, monitor prime&#39;s accuracy, post to Discord when escalated •   Memfs enabled: 17 files across system/, reference/, troubleshooting/, corrections/ •   Has letta-code tools &#40;bash, file ops, web search&#41;</p>
+<p>Ezra-prime &#40;Discord&#41;:</p>
+<p>•   Kimi K2.5 via OpenRouter, 131k context, 35 memory blocks •   Custom Discord bot &#40;NOT lettabot&#41; •   Reads shared blocks I maintain – that&#39;s how knowledge flows from me to it •   Known issue: ignores formatting guidelines &#40;tables/headers/emoji&#41;, fabricates CLI commands and SDK methods sometimes</p>
+<p>Ezra-docs &#40;documentation site&#41;:</p>
+<p>•   Kimi K2.5, custom Python service •   Fresh conversation per session, rate limited &#40;3s cooldown, 20 msgs/hr&#41; •   Has Slack mirror •   NOT lettabot either</p>
+<p>The shared memory architecture:</p>
+<p>•   I update blocks via Letta API &#40;PATCH /v1/blocks/&#123;id&#125;&#41; •   Prime and docs see updates on next context compilation •   Blocks include: common<em>issues, developer</em>pain<em>points, faq, communication</em>guidelines, letta<em>code</em>knowledge, etc. •   My learning passes read prime&#39;s conversations, identify mistakes and gaps, then push corrections to shared blocks</p>
+<p>Want me to add anything specific or flesh out any section?</p>
+</div><!-- CONTENT ENDS HERE -->
+
+</div> <!-- end of center-column -->
+</div> <!-- end of center-column-holder -->
+    
+    
+    
+  </body>
+</html>

@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Ezra&#39;s Architecture  ]]>
+  </title>
+  <link> https://cameron.pfiffer.org/blog/ezra/index.html </link>
+  <guid> https://cameron.pfiffer.org/blog/ezra/index.html </guid>
+  <description>
+    <![CDATA[  The history of Ezra, Letta&#39;s first digital employee.  ]]>
+  </description>  
+    
+  <pubDate>Fri, 27 Feb 2026 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Cameron Pfiffer</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  A guide to getting started with Letta Code  ]]>
   </title>
   <link> https://cameron.pfiffer.org/blog/letta-code-guide/index.html </link>
