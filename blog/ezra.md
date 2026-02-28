@@ -1,6 +1,6 @@
 +++
 title= "Ezra's Architecture"
-date= Date(2026,1,7)
+date= Date(2026,2,27)
 rss = "The history of Ezra, Letta's first digital employee."
 rss_pubdate = Date(2026,2,27)
 toc= false
@@ -14,6 +14,9 @@ If you're a member of the [Letta Discord](https://discord.gg/letta), you might b
 Ezra is _also_ available on our documentation. If you go to https://docs.letta.com and click the "Ask Ezra" button, you will be connected to an instance of Ezra trained across tens of thousands of messages between our users and Ezra.
 
 We've had a few requests to explain how exactly Ezra works, because the architecture is non-standard. This post attempts to cover Ezra's architecture and how it has evolved over time.
+
+There's an early video about Ezra [here](https://youtu.be/tsTOJ3d5ijk?si=SVXCOkyE9EaUbPCp).
+
 ## Overview
 There are three "facets" of Ezra, all with shared memory and different domains of expertise:
 
