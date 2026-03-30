@@ -209,10 +209,11 @@
 </html>
 <div class="franklin-content">
 <h1 id="a_guide_to_getting_started_with_letta_code"><a href="#a_guide_to_getting_started_with_letta_code" class="header-anchor">A guide to getting started with Letta Code</a></h1>
-<p>If you&#39;ve just installed <a href="https://docs.letta.com/letta-code">Letta Code</a>, you&#39;re about to have a great time. You may be wondering how to get started with models, tools, and general development flow.</p>
+<p><a href="https://docs.letta.com/letta-code">Letta Code</a> is a memory-first, model agnostic agent harness.</p>
+<p>You may be wondering how to get started with models, tools, and general development flow. I put together this guide with some general tips and tricks about things that differ from the agent harnesses you&#39;re used to.</p>
 <p>Installation:</p>
 <pre><code class="language-bash">npm install -g @letta-ai/letta-code</code></pre>
-<p>Here are some tips to use Letta effectively, as some things are different from other harnesses that you may also use &#40;Claude Code, Codex, OpenCode, etc.&#41;</p>
+<p>Let&#39;s get started.</p>
 <h3 id="agent_structure"><a href="#agent_structure" class="header-anchor">Agent structure</a></h3>
 <p>We typically recommend <strong>one agent per project or domain</strong>. Keep your agent count low. If you have a lot of agents, you are losing their greatest power – age. Older agents that work with you longer are better. Give them a chance to learn.</p>
 <p>Projects can be any code repository, an Obsidian folder, notes, etc. These are specific projects that an agent can specialize/memorize. Use this when you need focus, power, and specific knowledge.</p>
@@ -226,11 +227,17 @@
 <p>You&#39;ll be asked to provide a name.</p>
 <p>Select a pinned agent with</p>
 <pre><code class="language-julia">/agents</code></pre>
+<p>or when starting Letta Code with</p>
+<pre><code class="language-julia">letta -n &quot;Your Agent Name&quot;</code></pre>
 <p>You can also use this menu to select any agent in your organization by hitting tab twice &#40;to the &quot;All&quot; tab&#41;. If you have an existing agent you want to find and pin, this is also how you would do that.</p>
+<p><strong>Any Letta agent can be deployed in Letta Code&#33;</strong> Letta Code is an agnostic harness. If you have a companion agent or something not primarily used for code, it can still be deployed.</p>
+<p>Select existing agents when starting Letta Code via</p>
+<pre><code class="language-julia">letta --agent &lt;agent id&gt;</code></pre>
 <h3 id="model_selection"><a href="#model_selection" class="header-anchor">Model selection</a></h3>
-<p>I typically recommend Opus 4.5, but this can be quite expensive. I usually use Opus to do the initial learning of a project &#40;type <code>/init</code> in a new project&#41; and then switch to something like Sonnet 4.5 or GLM 4.7. Gemini 3 is decent but I usually go to Opus if I&#39;m going to use a premium model. I hate the GPT-5 series unless I&#39;m using it for a roleplaying/personal agent.</p>
-<p>Any time you want an agent to deeply understand something, go for Opus. If you have simple implementation tasks, GLM 4.7.</p>
-<p>GLM 4.7 is free on the Letta API so I usually recommend it if you want a lot of milage.</p>
+<p>Letta agents can be powered by any model at any time.</p>
+<p>Letta is also beta testing a auto model router with a ton of usage. Set your model to <code>letta/auto</code>.</p>
+<p>If you want to select your model manually, I typically recommend Opus 4.6, but this can be quite expensive. I usually use Opus to do the initial learning of a project &#40;type <code>/init</code> in a new project&#41; and then switch to something like GLM-5 or Kimi K2.5. Gemini 3 is decent but I usually go to Opus if I&#39;m going to use a premium model. 5.3-Codex is still my go-to for coding with OpenAI, and GPT 5.4 for personal agents.</p>
+<p>Any time you want an agent to deeply understand something, go for Opus. If you have simple implementation task, use GLM-5.</p>
 <p>Model selection is dependent on your preferences. You&#39;ll learn what you like and don&#39;t through use – try to explore&#33;</p>
 <p><strong>Model parameters</strong>: I don&#39;t tend to change these much. The defaults are usually fine.</p>
 <h3 id="initialization"><a href="#initialization" class="header-anchor">Initialization</a></h3>
@@ -239,21 +246,65 @@
 <p>This will guide your agent through learning about the project deeply. Initialization gives your agent everything it needs to get up and running on your project as quickly as possible.</p>
 <h3 id="memory_management"><a href="#memory_management" class="header-anchor">Memory management</a></h3>
 <p>Your agent may need to help your agent manage its memory. I typically do this through direct prompting, because I usually have a good sense of the memory architecture I want through experience.</p>
-<p><strong>Remembering</strong> If you are new, you should use the <code>/remember</code> command. This is a command with special prompting that you can use to have the agent remember a piece of content.</p>
+<p><strong>Remembering</strong></p>
+<p>Use the <code>/remember</code> command to help your agent understand something specific. This is a command with special prompting that you can use to have the agent remember a piece of content.</p>
 <p>You can provide a specific thing to remember:</p>
 <pre><code class="language-julia">/remember to always use uv instead of pip</code></pre>
 <p>If you do not provide a specific thing &#40;just <code>/remember</code>&#41;, the agent will do its best to understand what to remember from its current context.</p>
-<p><strong>Memory defragmentation</strong> Agents can sometimes accumulate &quot;gunk&quot; or have poorly organized memory architecture. You can fix this by asking your agent to use the <a href="https://docs.letta.com/letta-code/subagents#memory">memory</a> subagent, which will defragment your coding agent&#39;s memory.</p>
-<p>You can ask the agent to invoke this in your request, like</p>
+<p><strong>Reflection</strong></p>
+<p>A good default is to use the <a href="https://docs.letta.com/letta-code/subagents#reflection">reflection</a> subagent regularly. Reflection looks at recent conversations and work, then updates memory with durable lessons, preferences, and project knowledge. This is the best way to help an agent improve over time without manually curating every memory update.</p>
+<p>Good times to use reflection:</p>
+<ul>
+<li><p>after finishing a feature or bug fix</p>
+</li>
+<li><p>after a pull request is merged</p>
+</li>
+<li><p>when the agent made a mistake and you want it to learn from it</p>
+</li>
+<li><p>after a long exploratory conversation that surfaced useful preferences or project knowledge</p>
+</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-julia">Use the reflection subagent to capture what you should learn from this conversation</code></pre>
+<p><strong>Memory defragmentation</strong></p>
+<p>If memory has become messy, duplicated, or contradictory, use the <a href="https://docs.letta.com/letta-code/subagents#memory">memory</a> subagent. Unlike reflection, which extracts lessons, the memory subagent reorganizes and consolidates existing memory.</p>
+<p>Common defrag tasks:</p>
+<ul>
+<li><p>Consolidate scattered facts into coherent blocks &#40;e.g., merge 3 partial &quot;user preferences&quot; blocks into one&#41;</p>
+</li>
+<li><p>Remove outdated or contradictory information</p>
+</li>
+<li><p>Restructure hierarchy &#40;e.g., move project-specific facts from <code>identity.md</code> to <code>project/context.md</code>&#41;</p>
+</li>
+<li><p>Archive completed session state</p>
+</li>
+<li><p>Promote confirmed facts from archival memory → memfs &#40;the git-backed filesystem that&#39;s always in context&#41;</p>
+</li>
+</ul>
+<p>Invoke it like:</p>
 <pre><code class="language-julia">Use a memory agent to clean up and reorganize my memory blocks</code></pre>
-<p>The agent should invoke the <code>Task</code> tool to invoke a subagent. You can also customize your request, such as asking the agent to get the memory agent to consolidate project information, remove contradictions, etc. You can also ask the agent to remember to use the memory agent regularly in certain circumstances, such as after a pull request is submitted.</p>
+<p>Or be specific:</p>
+<pre><code class="language-julia">Consolidate everything about this project into reference/projects/
+Remove outdated session state
+Merge duplicate preferences</code></pre>
+<p>Ask your agent to use reflection regularly, and use memory defragmentation when things get messy.</p>
+<h3 id="memfs_context_repositories"><a href="#memfs_context_repositories" class="header-anchor">Memfs &#40;context repositories&#41;</a></h3>
+<p><a href="https://www.letta.com/blog/context-repositories">Context repositories</a> are Letta&#39;s new approach to memory. Memories are versioned and can be updated in parallel by an arbitrary number of subagents.</p>
+<p>Each agent has a <strong>context repository</strong>, which is a git repo stored in <code>~/.letta/agents/&lt;agent id&gt;/memory/</code>. Context repositories are synced across agents and can be deployed on any device.</p>
+<p>Enable memfs on an agent during boot using</p>
+<pre><code class="language-julia">letta --memfs</code></pre>
+<p>Or, from within the CLI with</p>
+<pre><code class="language-julia">/memfs enable</code></pre>
+<p>The quick way to get started with memfs is to also enable sleeptime, which will dispatch a reflection subagent on compaction events to store any information to long-term memory. Enable this from the CLI using <code>/sleeptime</code> and select &quot;Trigger Event&quot;.</p>
+<p><strong>What does my agent actually know?</strong> Type <code>/palace</code>. This will give you a webpage you can click around in. You can inspect memory commits and see what is currently in-context vs. external memory.</p>
+<p>I&#39;ll write another tutorial on effective memfs use, but using sleeptime should get you most of where you need to go without any work on your part.</p>
 <h3 id="skills"><a href="#skills" class="header-anchor">Skills</a></h3>
 <p><a href="https://agentskills.io/">Skills</a> are packages of procedural memory that help an agent how to perform a specialized task. In Letta Code, we typically recommend building or using existing skills to help your agent. Skills are significantly more flexible and powerful than Letta&#39;s built-in server-side tools.</p>
-<p>I recommend skills over custom server-side tools when using Letta Code agents.</p>
+<p>I recommend skills over custom server-side tools when using Letta Code agents. In general, <a href="https://www.letta.com/blog/our-next-phase">Letta will develop more actively</a> for cleint-side executed tools like skills.</p>
 <p>The quick way to get a skill is to ask the agent to make one&#33; We&#39;re big skill people here at Letta, and focus on continual learning of skills.</p>
-<p>Your agent can <a href="https://docs.letta.com/letta-code/skills">create skills</a> directly through the <code>/skill</code> command:</p>
-<pre><code class="language-julia">/skill # No prompt provided, agent will guess
-/skill create a skill to handle database migrations</code></pre>
+<p>Your agent can <a href="https://docs.letta.com/letta-code/skills">create skills</a> directly through the <code>/skill-creator</code> command:</p>
+<pre><code class="language-julia">/skill-creator # No prompt provided, agent will guess
+/skill-creator create a skill to handle database migrations</code></pre>
 <p>You may need to answer a few questions to build the skill.</p>
 <p>Skills often have code for the agent to use. It&#39;s a superpower.</p>
 <p>Places to get skills:</p>
@@ -280,7 +331,7 @@
 </li>
 <li><p>Use <code>/init</code> out of the gate. It helps.</p>
 </li>
-<li><p>GLM 4.7 for simple stuff. Opus for big stuff.</p>
+<li><p><code>letta/auto</code> for work. Opus or GPT 5.4 for planning and big stuff.</p>
 </li>
 <li><p>Keep your skills up to date. Every time you notice your agent solve a problem, ask it to update or create a new skill. Make sure it learns.</p>
 </li>
