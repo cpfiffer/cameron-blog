@@ -5,6 +5,10 @@
 
 A collection of talks and presentations I've given.
 
+## ATmosphere 2026
+
+[Slides (PDF)](/assets/slides/Atmosphere-2026.pdf)
+
 ## Self-Expanding Graphs (January 2025)
 Using structured output and knowledge graphs to solve problems with LLMs. Built with Neo4j, Modal, vLLM, and Llama.
 
